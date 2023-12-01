@@ -21,7 +21,7 @@ Esempio:
 	- “Contiene y?”
 	- “Contiene z?”
 
-**Operazioni binarie** (ossia da due elementi ne ottengo uno soltanto): ^e2148f
+**Operazioni binarie** (ossia da due elementi ne ottengo uno soltanto): pippo
 -   Unione $A\cup B\Leftrightarrow B\cup A=\{x|x\in A\vee x\in B\}$
 -   Intersezione $A\cap B\Leftrightarrow B\cap A=\{x|x\in A\wedge x\in B\}$
 *Su queste due operazioni sono valide sia la proprietà Commutativa sia quella Associativa*
