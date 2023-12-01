@@ -1,0 +1,119 @@
+---
+tag: Mate, Analisi
+---
+### Assiomi dei Numeri Reali
+- [ ] **D** Definizione di Numeri Reali
+- [ ] **D** C1 - Associatività dell'Addizione
+- [ ] **D** C2 - Commutatività dell'Addizione
+- [ ] **D** C3 - Esistenza elemento neutro
+- [ ] **T** Unicità Elemento Neutro additività
+- [ ] **D** Elemento Neutro Additivo
+- [ ] **D** C4 - Esistenza opposto additivo
+- [ ] **T** Unicità dell'opposto additivo
+- [ ] **D** Opposto di un numero reale
+- [ ] **D** C5 - Associatività della Moltiplicazione
+- [ ] **D** C6 - Commutatività della Moltiplicazione
+- [ ] **D** C7 - Esistenza elemento neutro
+- [ ] **T** Unicità dell'elemento neutro
+- [ ] **D** Elemento Neutro Moltiplicativo
+- [ ] **D** C8 - Esistenza del Reciproco
+- [ ] **T** Unicità dell'inverso moltiplicativo
+- [ ] **D** Reciproco di un numero reale
+- [ ] **D** C9 - Proprietà Distributiva
+- [ ] **D** O1 - Proprietà Riflessiva della Relazione $≤$
+- [ ] **D** O2 - Proprietà Antisimmetrica della Relazione $≤$
+- [ ] **D** O3 - Proprietà Transitiva della Relazione $≤$
+- [ ] **D** O4 - Proprietà di Linearità della Relazione $≤$
+- [ ] **D** O5 - Proprietà di Compatibilità con la Somma
+- [ ] **D** O6 - Proprietà di Compatibilità con la Moltiplicazione
+- [ ] **D** Assioma di Completezza
+### Conseguenze degli Assiomi
+- [ ] **D** Numero non negativo, non positivo, positivo, negativo
+- [ ] **T** Legge di Cancellazione per l'addizione
+- [ ] **T** Legge di Cancellazione per la Moltiplicazione
+- [ ] **T** $x \cdot 0 = 0 \cdot x = 0$
+- [ ] **T** $0≠1$
+- [ ] **T** Legge annullamento del Prodotto
+- [ ] **T** $x\cdot y ≠0 \Leftrightarrow x≠0 \wedge y≠0$ 
+- [ ] **T** Opposto di 0
+- [ ] **T** Reciproco di 1
+- [ ] **T** Opposto dell'Opposto
+- [ ] **T** Reciproco del Reciproco
+- [ ] **T** Opposto della Somma
+- [ ] **T** Reciproco del Prodotto
+- [ ] **T** $(-1)\cdot x = x \cdot (-1) = -x$
+- [ ] **T** $(-x) \cdot y = x \cdot (-y) = -(x \cdot y)\quad / \quad (-x)\cdot (-y) = x\cdot y$
+- [ ] **T** $x≤y \Leftrightarrow 0≤y-x$ 
+- [ ] **T** $x≤y \Leftrightarrow -y≤-x$ 
+- [ ] **T** $x≤0 \Leftrightarrow -x≥0$ 
+- [ ] **T** $x≤y \wedge z ≤w \Rightarrow x+z≤y+w$ 
+- [ ] **T** $x≥0 \wedge y≥0 \Rightarrow x+y≥0$
+- [ ] **T** $x\cdot x≥0$ 
+- [ ] **T** $1>0$ 
+- [ ] **T** $x>0 \Leftrightarrow x^{-1}>0$ 
+- [ ] **T** $x≤y\wedge z≤0 \Rightarrow x \cdot z ≥ y \cdot z$ 
+- [ ] **T** $0<x≤y \Rightarrow y^{-1}≤x^{-1}$ 
+- [ ] **T** $0≤x≤y \wedge 0≤z≤w \Rightarrow x\cdot z ≤ y \cdot w$ 
+- [ ] **T** $x≤0 \wedge y≤0 \Rightarrow x \cdot y≥0$ 
+- [ ] **T** $x≤0 \wedge y≥0 \Rightarrow x\cdot y ≤0$ 
+- [ ] **D** Valore assoluto di un numero reale
+- [ ] **T** $\begin{cases}|x|≥0\\ |x| = 0\Leftrightarrow x = 0\\ |x|^2 = x^2\\ -|x|≤ x ≤ |x|\end{cases}$  
+- [ ] **T** $x, y ≥0 \Rightarrow \begin{cases}x^2 = y^2 \Leftrightarrow x = y\\ x^2≤y^2 \Leftrightarrow x≤y\\ x^2<y^2 \Leftrightarrow x<y\end{cases}$ 
+- [ ] **T** $\begin{cases}|x|≤y \Leftrightarrow -y≤x≤y\\ |x|≥y \Leftrightarrow x≥y \vee x≤-y\\ |x\cdot y| = |x|\cdot |y|\\ |x+y|≤|x|+|y|\\ \left||x|-|y|\right|≤|x-y|\end{cases}$ 
+- [ ] **D** Massimo e Minimo di un sottoinsieme di $\mathbb R$ 
+- [ ] **T** Unicità del Massimo e Minimo
+- [ ] **T** min$A≤$ max$A$ 
+- [ ] **D** Maggiorante e Minorante di un sottoinsieme di $\mathbb R$ 
+- [ ] **D** Insieme Limitato Superiormente, Limitato Inferiormente, Limitato
+- [ ] **D** Estremo Superiore e Estremo Inferiore
+- [ ] **T** $x$ = max$A$ se e solo se $x \in A$ e $x$ è maggiorante di $A$. $x$ = min$A$ se e solo se $x \in A$ e $x$ è minorante di $A$
+- [ ] **D** Estremo Superiore e Estremo Inferiore di un sottoinsieme di $\mathbb R$ 
+- [ ] **T** Esistenza dell'estremo superiore
+- [ ] **T** Esistenza dell'estremo inferiore
+- [ ] **T** Caratterizzazione dell'Estremo Superiore
+- [ ] **T** Caratterizzazione dell'Estremo Inferiore 
+- [ ] **T** Se $A$ ha massimo, allora è superiormente limitato e sup$A$ = max$A$. Se è superiormente è limitato e sup$A\in A$, allora ha massimo e max$A$ = sup$A$ 
+- [ ] **T** inf$A≤$ sup$A$ 
+
+### Numeri Naturali, Interi e Razionali
+- [ ] **D** Insieme Induttivo
+- [ ] **D** Insieme dei numeri Naturali $\mathbb N$
+- [ ] **T** $A \subseteq \mathbb R$. Se $A$ è induttivo, allora $\mathbb N \subseteq A$ 
+- [ ] **T** $\mathbb N$ è induttivo
+- [ ] **T** Principio di Induzione
+- [ ] **T** min$\mathbb N$ = 0
+- [ ] **T** sup$\mathbb N$ = +$∞$ 
+- [ ] **T** $n \in \mathbb N \setminus \{0\} \Rightarrow n-1 \in \mathbb N$ 
+- [ ] **T** min$(\mathbb N \setminus \{0\}) = 1$  
+- [ ] **T** $m,n \in \mathbb N, \; m≤n \Rightarrow n-m \in \mathbb N$ 
+- [ ] **T** $m,n \in \mathbb N, \; m<n \Rightarrow m+1 ≤ n$
+- [ ] **T** Sia $A \subseteq \mathbb N$, allora $A$ ha minimo e se è superiormente limitato ha massimo
+- [ ] **T** $m,n \in \mathbb N\Rightarrow m+n \in \mathbb N,\; m\cdot n \in \mathbb N$ 
+- [ ] **T** $\mathbb N$ con $+$ e $\cdot$ verifica $C1, C2, C3, C5, C6, C7, C9$ ma non $C4, C8$ 
+- [ ] **D** Potenza di un Numero Reale
+- [ ] **D** Fattoriale
+- [ ] **T** Disuguaglianza di Bernoulli
+- [ ] **D** Coefficiente Binomiale
+- [ ] **T** Proprietà del Coefficiente Binomiale
+- [ ] **D** Numeri Interi
+- [ ] **T** $m,n \in \mathbb Z \Rightarrow m+n \in \mathbb Z, \; m\cdot n \in \mathbb Z$
+- [ ] **T** $\mathbb Z$ con $+$ e $\cdot$ verifica gli tutti gli assiomi di campo tranne $C8$
+- [ ] **T** inf$\mathbb Z$ = $-∞$ e sup$\mathbb Z$ = $+∞$ 
+- [ ] **T** $m,n \in \mathbb Z\Rightarrow |n-m|≥1$ 
+- [ ] **T** Sia $A \subseteq \mathbb Z$ allora se è superiormente limitato ha massimo, se è inferiormente limitato ha minimo
+- [ ] **D** Numeri Razionali
+- [ ] **T** $p,q \in \mathbb Q\Rightarrow p+q \in \mathbb Q, \; p\cdot q \in \mathbb Q$ 
+- [ ] **T** $\mathbb Q$ con le operazioni $+$ e $\cdot$ verifica tutti gli assiomi di Campo
+- [ ] **T** inf$\mathbb Q$ = $-∞$ e sup$\mathbb Q$ = $+∞$ 
+- [ ] **T** Non esiste $x \in \mathbb Q$ tale che $x^2 = 2$ 
+- [ ] **T** $\mathbb Q$ non è completo
+
+### Altre Proprietà
+- [ ] **T** Sia $x \in \mathbb R$. Se $\forall y \in \mathbb R^+, x≤y \Rightarrow x≤0$ 
+- [ ] **T** Proprietà di Archimede
+- [ ] $x \in \mathbb R \Rightarrow \exists n \in \mathbb N \colon 1/n < x$ 
+- [ ] **D** Parte intera
+- [ ] **D** Radice n-esima di un numero
+- [ ] **T** $x, y \in \mathbb R \Rightarrow \begin{cases}\exists q \in \mathbb Q : x < q <y \\ \exists z \in \mathbb R \setminus \mathbb Q : x<z<y\end{cases}$
+- [ ] **D** Intervallo
+- [ ] **D** Intervallo aperto, chiuso, limitato, illimitato
