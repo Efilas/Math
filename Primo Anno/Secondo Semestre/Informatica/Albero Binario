@@ -1,0 +1,87 @@
+''' Rispetto alla classe tree semplificata tradizionale
+introduciamo alcuni vincoli e alcuni controlli:
+- albero vuoto: i tre attributi sono None;
+- non è ammessa un'etichetta None su un albero non-vuoto;
+- un'etichetta None forza a None i due attributi per i figli
+- si garantisce che in un albero non vuoto i figli sono tutti di classe tree
+- __eq__ controlla che other sia un tree, in caso contrario restituisce False
+- se i controlli falliscono viene sollevata un'eccezione TreeExc con opportuna
+stringa d'errore
+'''
+
+class TreeExc(Exception):
+    pass
+
+class tree:
+    def __init__(self, label=None, sx=None, dx=None):
+        self.__label = label
+        self.__sx = sx
+        self.__dx = dx
+        # adesso cerca di garantire la consistenza della rappresentazione
+        if label is None:
+            if sx is not None or dx is not None:
+                raise TreeExc('All attributes must be None in an empty tree')
+        else: #l'albero non è vuoto; assicura che i figli siano tree
+            if sx is None:
+                self.__sx = tree()
+            if dx is None:
+                self.__dx = tree()
+            if not isinstance(self.__sx,tree):
+                raise TreeExc('First child is not a tree')
+            if not isinstance(self.__dx,tree):
+                raise TreeExc('Second child is not a tree')
+                
+    def label(self):
+        if self.__label is None:
+            raise TreeExc('There is no label in an empty tree')
+        return self.__label  
+    def is_empty(self):
+        return self.__label is None
+    def first_child(self):
+        if self.__label is None:
+            raise TreeExc('There is no first child in an empty tree')
+        return self.__sx
+    def second_child(self):
+        if self.__label is None:
+            raise TreeExc('There is no second child in an empty tree')
+        return self.__dx
+    def is_leaf(self):
+        if self.__label is None:
+            return False
+        return self.__sx.is_empty() and self.__dx.is_empty()
+    
+    def __str__(self,prof=0):
+        ret = ''
+        if self.__label is not None:
+            ret += '.'*prof+str(self.__label)
+            if not self.is_leaf():
+                ret += '\n'
+                ret += self.__sx.__str__(prof+1)
+                ret += '\n'
+                ret += self.__dx.__str__(prof+1)
+        else:
+            ret += '.'*prof
+        return ret
+    
+    def __repr__(self):
+        ret = 'tree('
+        if self.__label is not None:
+            ret += str(self.__label)
+            if not self.is_leaf():
+                ret += ', '
+                ret += self.__sx.__repr__()
+                ret += ', '
+                ret += self.__dx.__repr__()
+        ret += ')'
+        return ret
+
+    def __eq__(self,other):
+        '''sfrutta la codifica;
+ovviamente ricorsiva: == è __eq__
+il caso base è gestito implicitamente della selezione dinamica (quando __label è None)
+'''
+        if not isinstance(self,tree) or not isinstance(other,tree):
+            return False
+        return self.__label == other.__label and \
+               self.__sx == other.__sx and \
+               self.__dx == other.__dx
