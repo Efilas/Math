@@ -1,0 +1,4 @@
+Ci basta determinare la fattorizzazione $QR$ di $A$ e individuare il numero di elementi sulla diagonale di $R_1$ che sono maggiori di $\mathtt u$ (```eps``` della macchina) in valore assoluto (quello determina il rango di $A$), quindi: 
+$$A = \begin{pmatrix}Q_1 & Q_1\end{pmatrix}\begin{pmatrix}R_1\\ 0\end{pmatrix}\qquad \Rightarrow \qquad |R_{i,i}|>\mathtt u$$
+*In caso andrebbe benissimo modificare il testo dell'esercizio per poterlo semplificare, non ha senso cambiare il testo dell'esercizio se poi si ha che ci allontaniamo dalla soluzione.
+Ovviamente quest'esercizio è risolto in maniera sintetica, poi andrebbe spiegato meglio nei minimi dettagli*

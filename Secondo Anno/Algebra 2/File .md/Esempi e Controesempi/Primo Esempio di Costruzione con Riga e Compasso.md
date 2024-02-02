@@ -1,0 +1,1 @@
+![[Drawing 2023-11-25 14.40.34.excalidraw | center]]

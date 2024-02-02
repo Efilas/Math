@@ -1,0 +1,2 @@
+Consideriamo $$(x^2-1) \in \mathbb Z/_8[x]$$
+Abbiamo che $1$ ha quattro radici in $\mathbb Z/_8$, che sono proprio gli invertibili, tuttavia se facessimo $$(x-1)(x-3) = x^2 - 4x +3 \text{ che non è multiplo di } x^2-1$$

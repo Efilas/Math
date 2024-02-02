@@ -1,0 +1,2 @@
+$m_{\mathbb Z/_{n}}(d) = \phi(n)$
+$m_{\mathfrak S_3(d)}$=? Abbiamo che $m_{\mathfrak S_3(1)}=1$, $m_{\mathfrak S_3(2)}=3$, $m_{\mathfrak S_3(3)}=2$ e $m_{\mathfrak S_3(6)}=0$, quindi la somma è $6$, che è esattamente il numero degli elementi di $\mathfrak S_3$

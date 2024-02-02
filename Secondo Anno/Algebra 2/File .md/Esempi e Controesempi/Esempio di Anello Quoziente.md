@@ -1,0 +1,2 @@
+Sia $A = \mathbb Z$ e $a \sim b \Leftrightarrow a \equiv b \mod n$, cioè $n \mid (a-b)$. Questa è una relazione di equivalenza compatibile e quindi $A/_\sim = \mathbb Z/_n$ è un anello. Verifichiamo la compatibilità rispetto al prodotto (rispetto alla somma è già stata vista in Algebra 1)
+Siano quindi $a = a' + kn$ e $b = b' + hn$ con $h,k \in \mathbb Z$ Allora: $$\begin{align*} a\cdot b &=  (a'+kn)(b'+hn) = a'\cdot b' + n(khn + a'h + b'k)\end{align*}$$ Quindi $a\cdot b \sim a'\cdot b'$

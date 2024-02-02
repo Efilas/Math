@@ -1,0 +1,7 @@
+Sempre con Gauss, abbiamo che il Campo Elettrico vale: $$\overrightarrow E = \begin{cases}0 & r<R_1\\ -\frac{\sigma_1}{\varepsilon_0} \frac Qr \overrightarrow u_r & R_1<r<R_2\\ 0 & r>R_2\end{cases}$$
+Da questo otteniamo che: $$V = \begin{cases}c_1 & r<R_1\\ -\frac{\sigma_1 R_1}{\varepsilon_0} \log(r) +c_2 & R_1<r<R_2\\ c_3 & r>R_2\end{cases}$$
+Esattamente come sopra andiamo a porre gli stessi vincoli: $$V(R_1) =  0 \qquad V(R^+_1) = V(R^-_1) \qquad V(R_2^+) = V(R_2^-)$$
+Facendo i calcoli, *omessi perché sono sempre gli stessi*, otteniamo che: $$c_1 = 0 \qquad c_2 =  \frac{\sigma_1 R_1}{\varepsilon_0} \log(R_1) \qquad c_3 = \frac{\sigma_1R_1}{\varepsilon_0}\log\left(\frac{R_1}{R_2}\right)$$
+Da cui si ottiene che: $$V = \begin{cases}0 & r<R_1\\ - \frac{\sigma_1R_1}{\varepsilon_0}\log(r) +\frac{\sigma_1R_1}{\varepsilon_0}\log(R_1) & R_1<r<R_2\\ \frac{\sigma_1R_1}{\varepsilon_0} \log\left( \frac{R_1}{R_2}\right) & r>R_2\end{cases} \quad \Rightarrow \quad \fbox{$V = \begin{cases}0 & r<R_1\\ \frac{\sigma_1R_1}{\varepsilon_0} \log\left( \frac{R_1}{r}\right) & R_1<r<R_2\\ \frac{\sigma_1R_1}{\varepsilon_0} \log\left( \frac{R_1}{R_2}\right) & r>R_2\end{cases}$}$$
+
+![[Drawing 2023-10-30 23.33.27.excalidraw|center]]

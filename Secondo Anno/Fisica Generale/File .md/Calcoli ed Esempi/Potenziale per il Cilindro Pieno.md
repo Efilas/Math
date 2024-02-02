@@ -1,0 +1,4 @@
+Con Gauss abbiamo che il campo elettrico vale: $$\overrightarrow E = \begin{cases}\frac {\rho}{2 \varepsilon_0} r \overrightarrow u_r & r<R\\ \frac {\rho}{2 \varepsilon_0} \frac{R^2}{r} \overrightarrow u_r& r>R\end{cases}$$ 
+Allora otteniamo che il potenziale elettrico vale: $$V = \begin{cases}\frac {-\rho}{2 \varepsilon_0} \frac{r^2}{2} + c_1 & r<R\\ \frac {-\rho}{2 \varepsilon_0} R \log(r) + c_2 & r>R\end{cases}$$
+I vincoli per la determinazione delle costanti sono: $$V(R) = 0 \qquad V(R^+) = V(R^-)$$
+Da cui otteniamo che le costanti valgono: $$c_1 = -\frac{R^2}{2}\qquad c_2 = -R^2 \log(R)$$ Dalle quali otteniamo che il potenziale elettrico vale: $$\fbox{$V = \begin{cases}\frac{\rho}{2 \varepsilon_0} \frac{R^2-r^2}{2} & r<R\\ \frac{\rho}{2 \varepsilon_0} R^2 \log\left(\frac Rr\right) & r>R\end{cases}$}$$

@@ -1,0 +1,4 @@
+Sfruttiamo l'unico risultato che abbiamo, che è quello della convergenza asintotica.
+Sappiamo che la convergenza dei gradienti coniugati (CG) dipende da $\kappa(A)$ e da $\kappa(A+\alpha I)$ e più è piccolo $\kappa(A)$, più è veloce è la convergenza. Vogliamo vedere per quali $\alpha$ si ha $$\kappa(A + \alpha I< \kappa(A)$$
+Sapendo poi ché $A>0$ abbiamo che questa condizione è equivalente a chiedere che: $$\frac{\lambda_{max}(A+\alpha I)}{\lambda_{min}(A+\alpha I)}<\frac{\lambda_{max}(A)}{\lambda_{min}(A)}\qquad \xLeftrightarrow{[\cdots]} \qquad \alpha \lambda_{min}(A)<\alpha \lambda_{max}(A)$$
+Il che è sempre vero per $\alpha>0$ da cui segue che $\mathscr I = ]0, +∞[$

@@ -1,0 +1,1 @@
+Sia $A = \mathbb Z$ e siano $I = n\mathbb Z$ e $J = d \mathbb Z$ con $d$ divisore di $n$. Allora si ha che  $${\Large{^{\mathbb Z/_{n \mathbb Z}}}/_{d\mathbb Z/_{n \mathbb Z}}} \cong \mathbb Z/_{d \mathbb Z}$$

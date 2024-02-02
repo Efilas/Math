@@ -1,0 +1,2 @@
+Prendiamo $A[x] = \mathbb Z[x]$ e $Q[x] = \mathbb Q[x]$ e prendiamo $f = 2x$
+In $\mathbb Z[x]$ abbiamo che $f$ è scrivibile come prodotto di due elementi irriducibili $2$ e $x$, mentre in $\mathbb Q[x]$ questo non è vero, in quanto, essendo un campo, $2$ è invertibile, quindi $x$ è associato ad $2x$ quindi è irriducibile come prodotto di fattori irriducibili
