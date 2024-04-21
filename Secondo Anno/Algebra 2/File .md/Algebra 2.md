@@ -1755,14 +1755,14 @@ I non quadrati sono potenze di $x$ con esponente dispari, quindi il prodotto di 
 >Il polinomio $x^4+1$ è irriducibile in $\mathbb Z[x]$ ma è riducibile in $\mathbb Z/_p[x]$ per ogni $p$ primo
 
 **Dimostrazione**:
-Osserviamo che per il lemma almeno uno tra $-1,2-1$ è un quadrato
+Osserviamo che per il lemma almeno uno tra $-1,2-2$ è un quadrato
 Infatti, se non lo sono $-1$ e $2$, allora $-2$ lo è in quanto è prodotto di non quadrati.
-*Caso 1*: Se $1$ è un quadrato, allora $a^2 = 1$ in $\mathbb Z/_p \Rightarrow (x^2+a)(x^2-a) = x^4 + 1$
+*Caso 1*: Se $-1$ è un quadrato, allora $a^2 = -1$ in $\mathbb Z/_p \Rightarrow (x^2+a)(x^2-a) = x^4 + 1$
 *Caso 2*: Se $2$ è un quadrato, allora $a^2 = 2$ in $\mathbb Z/_p$
-I due fattori dovranno necessariamente essere della forma $$(x^2 + bx + a)(x^2 - bx + a)$$
+I due fattori dovranno necessariamente essere della forma $$(x^2 + bx + 1)(x^2 - bx + 1)$$
 Notiamo che il coefficiente di secondo grado è $$+1 -b^2 +1 = 0 \Rightarrow b = a$$
 Allor apossiamo scrivere $$x^4 + 1 = (x^2 + ax + 1)(x^2-ax +1)$$
-*Caso -2*: Se abbiamo che $-2 = a^2$ in $\mathbb Z/_p$, allora abbiamo che: $$(x^2 + ax +1)(x^2-ax+1) = x^4+(-1-a^2-1)x^2 + 1 = x^4 + 1$$
+*Caso -2*: Se abbiamo che $-2 = a^2$ in $\mathbb Z/_p$, allora abbiamo che: $$(x^2 + ax -1)(x^2-ax-1) = x^4+(-1-a^2-1)x^2 + 1 = x^4 + 1$$
 Mostriamo allora adesso che $x^4 + 1$ è irriducibile in $\mathbb Z[x]$
 Da un esercizio precedente sappiamo che la sua fattorizzazione in $\mathbb R[x]$ è: $$x^4 + 1 = (x^2 + \sqrt 2x + 1)(x^2 - \sqrt 2x + 1)$$
 Se si fattorizzasse anche in $\mathbb Q[x]$ come prodotto di due polinomi di grado $2$ avremmo che $$x^4 + 1 = fg \qquad \text{con }\deg(f) = \deg(g) = 2$$
