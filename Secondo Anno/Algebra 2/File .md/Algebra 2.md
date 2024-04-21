@@ -1600,7 +1600,7 @@ In particolare, se $v_f(g)$ è irriducibile, allora anche $g$ lo è
 >[!th]  **Teorema: Criterio di Eisenstein**
 >Sia $f \in A[x]$ primitivo con $f = a_0+a_1x + \cdots + a_n x^n$ tale che esista $\pi \in A$ irriducibile tale che:
 >	1) $\quad$ $\pi \mid a_0, \cdots , \pi \mid a_{n-1}$
->	2) $\quad$ $\pi \nmid a_0^2$
+>	2) $\quad$ $\pi^2 \nmid a_0$
 >Allora $f$ è irriducibile sia in $A[x]$ sia in $Q[x]$
 
 **Dimostrazione:**
