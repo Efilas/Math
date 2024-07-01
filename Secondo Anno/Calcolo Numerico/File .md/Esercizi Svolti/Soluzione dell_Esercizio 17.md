@@ -1,6 +1,0 @@
-Prima di procedere nell'effettivo con l'esercizio, cerchiamo di visualizzare la matrice: $$A = \begin{pmatrix}2 & \beta_1\\ \delta_2 & \ddots&\ddots\\ & \ddots& \ddots& \beta_{n-1}\\ &&\delta_n&2\end{pmatrix}\qquad \text{con }|\beta_i|, |\delta_i|≤2$$
-Per il primo punto ci basta dimostrare che la matrice è dominante diagonale, cioè: $$\begin{cases}|2+\alpha| > |\beta_i| + |\beta_i| & i \in \{2,...,n-1\}\\ |2+\alpha|>|\beta_1| & i=1\\ |2+\alpha|>|\delta_n| & i=n\end{cases}$$
-Sappiamo però per ipotesi che $|\beta_i|<2$ e $|\delta_i|<2$ $\forall i$. Quindi ci basta porre: $$\begin{cases}|2+\alpha|>2+2 & i \in \{2,...,n-1\}\\ |2+\alpha|>2 & i \in \{1,n\}\end{cases}$$
-Se sono verificate queste condizioni, allora la matrice è dominante diagonale, quindi per il teorema il metodo di Gauss-Seidel è convergente. *Possiamo limitarci alla prima in quanto è più restrittiva*
-$$\begin{align*}|2+\alpha|>4 &\Rightarrow 2+\alpha>4 \Rightarrow \alpha>2\\
-&\Rightarrow -2-\alpha>4 \Rightarrow -\alpha>6 \Rightarrow \alpha<-6\end{align*}$$

@@ -1,0 +1,3 @@
+Per Gauss, abbiamo che il campo elettrico vale $$\overrightarrow E = \frac{1}{2 \pi \varepsilon_0} \frac \lambda r \overrightarrow u_r$$ da cui otteniamo che il potenziale elettrico vale: $$V = \frac{-\lambda}{2 \pi \varepsilon_0}\log(r) + c$$
+L'unico vincolo che possiamo porre è che $$V(1) = 0 \quad\Rightarrow \quad c = 0$$
+Da cui otteniamo che: $$\fbox{$V = \frac{-\lambda}{2 \pi \varepsilon_0} \log(r)$}$$

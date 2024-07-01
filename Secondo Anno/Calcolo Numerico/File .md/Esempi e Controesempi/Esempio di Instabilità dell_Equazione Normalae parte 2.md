@@ -1,2 +1,0 @@
-*Riprendiamo l'esempio precedente*
-Con la fattorizzazione $QR$ otteniamo che: $$A = \begin{pmatrix}3 & 3\\ 4 & 4\\ 0 & \alpha\end{pmatrix} = \begin{pmatrix}\frac35 & 0\\ \frac 45 & 0\\ 0 & 1\end{pmatrix}\begin{pmatrix}5 & 5\\ 0 & \alpha\end{pmatrix} \qquad \Rightarrow \qquad \kappa_F(R_1) = \|R_1\|_F \cdot \|R^{-1}\|_F = \Theta \left(\frac 1 \alpha\right)$$

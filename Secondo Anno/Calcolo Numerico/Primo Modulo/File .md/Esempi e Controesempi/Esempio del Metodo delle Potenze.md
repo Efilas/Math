@@ -1,0 +1,9 @@
+Sia $A$ la matrice: $$A = \begin{pmatrix}\lambda_1\\ & \ddots\\ && \lambda_n\end{pmatrix}\qquad |\lambda_1|>|\lambda_2|> \cdots > |\lambda_n|\quad \lambda_ i \in \mathbb R$$
+*Facciamo il caso diagonale per questioni di semplicità, non ha senso utilizzare il metodo delle potenze, però serve per rendere le idee.*
+Iniziamo a moltiplicare. Sia $v \in \mathbb R^n$ e facciamo $Av, A^2v,..., A^kv,...$
+Esplicitando le componenti otteniamo che: $$v = \begin{pmatrix}v_1\\ \vdots \\ v_n\end{pmatrix}\qquad \Rightarrow \qquad Av = \begin{pmatrix}\lambda_1 v_1\\ \vdots \\ \lambda_n v_n\end{pmatrix}\quad A^2v = \begin{pmatrix}\lambda_1^2v_1\\ \vdots\\ \lambda_n^2 v_n\end{pmatrix}\quad \cdots\quad A^kv = \begin{pmatrix}\lambda_1^kv_1\\ \vdots \\ \lambda_n^k v_n\end{pmatrix}$$
+Raccogliamo adesso $\lambda_1^k$, allora diventa: $$\begin{pmatrix}\lambda_1^kv_1\\ \lambda_2^kv_2\\ \vdots\\ \lambda_n^kv_n\end{pmatrix} = \lambda_1^k \begin{pmatrix}v_1\\ \frac{\lambda_2^k}{\lambda_1^k}v_2\\ \vdots\\ \frac{\lambda_n^k}{\lambda_1^k}v_n\end{pmatrix}\xrightarrow{k \rightarrow +∞} \lambda_1^∞ \begin{pmatrix}v_1\\ 0 \\ \vdots\\0\end{pmatrix}\qquad \qquad \left(\left|\frac{\lambda_2}{\lambda_1}\right|<1\right)$$
+*Naturalmente mandare $k$ a $+∞$ è eccessivo, perché alle volte è sufficiente un $k$ più piccolo*
+In questo modo otteniamo che $$\begin{pmatrix}v_1\\ 0\\ \vdots\\ 0\end{pmatrix} \text{ è autovettore per }\lambda_1$$
+Quindi in particolare si ottiene che: $$\frac{A^kv}{\lambda^k}\xrightarrow{k \rightarrow +∞} e_1v_1$$
+In questo modo faccio quindi saltare fuori l'autovettore legato all'autovalore più grande

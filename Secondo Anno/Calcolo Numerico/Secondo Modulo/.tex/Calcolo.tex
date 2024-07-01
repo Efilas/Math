@@ -1,0 +1,3273 @@
+\documentclass[11pt,a4paper,twoside]{article}
+\usepackage[italian]{babel}
+\usepackage{amsthm}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\graphicspath{ {./Immagini/} }
+\usepackage{xcolor}
+\usepackage{extarrows}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{tikzrput}
+\usepackage[object=vectorian]{pgfornament}
+
+\usepackage{fourier-orns}
+\usepackage{fancyhdr}
+\renewcommand{\headrule}{%
+\vspace{-8pt}\hrulefill
+\raisebox{-2.1pt}{\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+
+\newtcbtheorem
+	[number within = subsection]% init options
+	{defn}% name
+	{Definizione}% title
+	{%
+		colback=teal!5,
+		colframe=teal!90!black!95,
+		fonttitle=\bfseries,
+	}% options
+	{def}% prefix
+
+\newtcbtheorem
+	[use counter from = defn, number within = subsection]% init options
+	{thm}% name
+	{Teorema}% title
+	{%
+		colback=blue!5,
+		colframe=blue!90!black!95,
+		fonttitle=\bfseries,
+	}% options
+	{th}% prefix
+
+\newtcbtheorem
+	[use counter from = defn, number within = subsection]% init options
+	{prop}% name
+	{Proposizione}% title
+	{%
+		colback=red!5,
+		colframe=red!90!black!95,
+		fonttitle=\bfseries,
+	}% options
+	{pr}% prefix
+
+\newtcbtheorem
+	[use counter from = defn, number within = subsection]% init options
+	{lemma}% name
+	{Lemma}% title
+	{%
+		colback=red!5,
+		colframe=red!90!black!95,
+		fonttitle=\bfseries,
+	}% options
+	{le}% prefix
+
+\newcommand{\vareps}{\varepsilon}
+\newtheorem{es}{Esempio}
+
+\newtheorem*{cons}{Considerazioni Aggiuntive}
+
+\theoremstyle{definition}
+\newtheorem*{oss}{Osservazione}
+\newtheorem*{att}{Attenzione}
+\newtheorem*{ese}{Esercizio}
+
+\newenvironment{sol}
+	{\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Soluzione]}
+	{\end{proof}}
+
+\tcolorboxenvironment{ese}{
+	colframe=black}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\title{Calcolo Numerico - Secondo Modulo}
+\author{Emanuele Fava}
+\date{}
+
+\pagestyle{headings}
+
+\begin{document}
+
+\thispagestyle{empty}
+\topskip 0pt
+\vspace*{\fill}
+
+\tikzset{pgfornamentstyle/.style={draw = black, fill = teal!50}}
+\unitlength=1cm
+
+\begin{center}
+\begin{picture}(10,10)%
+	\color{white}%
+		\put(0,0){\framebox(10,10){%
+		\rput[tl](-3,5){\pgfornament[width=6cm]{71}}%
+		\rput[bl](-3,-5){\pgfornament[width=6cm,,symmetry=h]{71}}%
+		\rput[tl](-5,5){\pgfornament[width=2cm]{63}}%
+		\rput[tr](5,5){\pgfornament[width=2cm,,symmetry=v]{63}}%
+		\rput[bl](-5,-5){\pgfornament[width=2cm,,symmetry=h]{63}}%
+		\rput[br](5,-5){\pgfornament[width=2cm,,symmetry=c]{63}}%
+		\rput[bl]{-90}(-5,3){\pgfornament[width=6cm]{46}}%
+		\rput[bl]{90}(5,-3){\pgfornament[width=6cm]{46}}%
+		\rput(0,0){\huge \color{black} Calcolo Numerico - II}%
+		\rput[t](0,-0.5){\pgfornament[width=5cm]{75}}%
+		\rput[b](0,0.5){\pgfornament[width=5cm]{69}}%
+		\rput[tr]{-30}(-1,2.5){\pgfornament[width=2cm]{57}}%
+		\rput[tl]{30}(1,2.5){\pgfornament[width=2cm,symmetry=v]{57}}}}%
+\end{picture}
+\end{center}
+
+\vspace*{\fill}
+
+\newpage
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\nouppercase{\rightmark\hfill\leftmark}}
+\fancyhead[RO]{\nouppercase{\leftmark\hfill\rightmark}}
+\fancyfoot[LE,RO]{\hrulefill\raisebox{-2.1pt}{\quad\thepage\quad}\hrulefill}
+\setlength{\headheight}{16pt}
+
+% Optional TOC
+\tableofcontents
+\newpage
+\newpage
+%--Paper--
+
+\section{Ancora sugli Autovalori}
+\subsection{Iterazione QR}
+
+In questa prima parte l'idea è di finire quello che era stato appena iniziato alla fine del modulo scorso. Andiamo a capire cosa c'è dietro alla funzione $\mathtt{eig(A)}$.\\
+Prima di proseguire facciamo un richiamo.
+
+\begin{defn}{Decomposizione di Schur}{}
+		Sia $A \in \mathbb C^{n \times n}$, allora esistono $Q \in \mathbb C^{n \times n}$ unitaria e $R \in \mathbb R^{n \times n}$ triangolare superiore tali che:
+		\[ A = QRQ^H \]
+\end{defn}
+
+Questo è vero per ogni matrice simmetrica e gli elementi sulla diagonale di $R$, cioè $R_{i,i}$, contengono gli autovalori di $R$ (generalmente senza ordine).
+
+Noi vogliamo costruire una procedura per arrivare a questa scomposizione. Notiamo che possiamo fare a meno dell'ipotesi di diagonalizzabilità, in quanto è difficile trovare gli autovettori.
+
+L'idea per la \textbf{Iterazione QR} (che dal nome si può capire coinvolga la fattorizzazione QR) è quella di determinare una successione $\{T_k\}_{k \in \mathbb N}$ con $T_0=A$ e $T_k = U_k^HAU_k$ con $U$ \underline{unitaria} tale che:
+\[ T_k \xrightarrow{k \to + \infty} T\]
+In modo che $T$ sia triangolare superiore con tutti gli autovalori di $A$ sulla diagonale principale.
+
+\begin{oss}
+	Si richiede che $U$ unitarie in modo che tutte le trasformazioni siano più stabili
+\end{oss}
+
+"Numericamente" parlando, quello che vogliamo fare è annullare tutti i termini posti sotto alla diagonale principale.\\
+\textit{Perché non usiamo Gauss?} Perché non abbiamo trasformazioni unitarie, quindi sono trasformazioni non del tutto accurate. \textit{Perché non usiamo la fattorizzazione QR?} Perché con la fattorizzazione QR facciamo trasformazioni solo da destra, e non da entrambe le parti, quindi gli autovalori non è detto che siano gli stessi. Con la fattorizzazione di Schur invece ci assicuriamo di trovare una matrice triangolare simile a quella di partenza.
+
+Andiamo a scrivere una versione base dell'algoritmo di Iterazione QR.
+
+\begin{tabular}{l}
+	\\
+	\textbf{Algoritmo di Iterazione QR}\\
+	\hline
+	Sia $T_0 = A$\\
+	Per $k = 0,1,...$\\
+	$\quad$ $T_k = Q_kR_k$\\
+	$\quad$ $T_{k+1} := R_kQ_k$\\
+\end{tabular}
+
+\begin{oss}
+	Per evitare confusioni, facciamo delle osservazioni. All'interno del ciclo i due comandi, seppur incredibilmente simili, sono profondamente diversi. Nel comando sopra noi stiamo facendo la fattorizzazione QR: è infatti nota la matrice $T_k$ e stiamo ricavando $Q_kR_k$. Nel comando sotto invece noi stiamo definendo $T_{k+1}$ (lo si può vedere infatti dall'utilizzo di ":="); qui sono note $R_k$ e $Q_k$
+\end{oss}
+
+Vediamo ora come sono collegati queste linee dell'algoritmo:\\
+Dalla prima abbiamo che:
+\[T_k = R_kQ_k \qquad \Rightarrow \qquad Q_k^HT_k = R_k\]
+Tutto questo funziona, cioè posso calcolare inverse di matrici, in quanto sto utilizzando matrici quadrate in $\mathbb C$. Andando poi a sostituire nella seconda linea dell'algoritmo si ha che:
+\[ T_{k+1} = R_k Q_k = Q_k^H T_k Q_K \]
+Cioè abbiamo ottenuto una trasformazione unitaria che rende simili $T_k$ e $T_{k+1}$, quindi gli autovalori sono necessariamente gli stessi.\\
+Se andiamo a mettere insieme tutte le iterazioni abbiamo che:
+\[ T_{k+1} = \underbrace{Q_k^H Q_{k-1}^H \cdots Q_0^H}_{U_k^H} T_0 \underbrace{Q_0 \cdots Q_{k-1} Q_k}_{U_k} = U_k^H T_0 U_k \]
+
+Inoltre $U_{k+1}$ è ancora unitaria in quanto prodotto di matrici unitarie.\\
+Ovviamente per $k \to +\infty$ si ottiene che: $T = U^HT_0U$
+
+\begin{oss}
+	Il costo computazionale di ogni iterazione dell'algoritmo è $\mathcal O(n^3)$, cioè è estremamente costoso (ad ogni iterazione facciamo una fattorizzazione QR)
+\end{oss}
+
+Andiamo a vedere dei risultati di convergenza per l'Iterazione QR.
+
+\begin{thm}{}{}
+	Sia $A \in \mathbb C^{n \times n}$ con $|\lambda_1|>|\lambda_2|>\cdots > |\lambda_n|$ autovalori semplici in modulo e $\lambda_i$ autovalori di $A$ (quindi $A$ diagonalizzabile). Allora:
+	\[ \lim_{t \to +\infty} T_k = T \]
+	Con $T$ matrice triangolare superiore avente sulla diagonale gli autovalori $\lambda_i$
+\end{thm}
+
+\begin{oss}
+	Se $A$ è normale, allora $T$ è diagonale.
+\end{oss}
+
+\begin{cons}
+	Abbiamo delle ipotesi restrittive, per le quali $\lambda_i$ siano semplici in modulo, ma in un certo senso richiama il metodo di convergenza degli autovalori. Infatti questo è un risultato che si basa proprio sulle stesse ipotesi.\\
+	Volendo la convergenza si può esser dimostrata anche con ipotesi meno restrittive.
+\end{cons}
+
+Per la dimostrazione sarà utile richiamare il metodo delle potenze, anche in una sua forma molto base.
+
+\begin{tabular}{l}
+	\\
+	\textbf{Algoritmo del Metodo delle Potenze}\\
+	\hline
+	Sia $x_0 \in \mathbb C^n$, con norma $1$\\
+	Per $k = 0,1,...$\\
+	$\quad$ $y = Ax^{(k)}$\\
+	$\quad$ $x^{(x+1)} = \frac y{\|y\|}$\\
+	$\quad$ $\lambda^{(K+1)} = (x^{(k+1)})^H A x^{(k+1)}$\\
+	\\
+\end{tabular}
+
+Quest'idea può essere generalizzata anche al caso di una matrice con $\ell$ colonne. In tal caso, l'algoritmo prende il nome di \textbf{Iterazione del Sottospazio}. In questo caso l'algoritmo diventa
+
+\begin{tabular}{l}
+	\\
+	\textbf{Algoritmo dell'Iterazione del Sottospazio}\\
+	\hline
+	Sia $U_0 \in \mathbb C^{n \times \ell}$, con colonne ortonormali\\
+	Per $k = 0,1,...$\\
+	$\quad$ $Y = AU^{(k)}$\\
+	$\quad$ $[U^{(k+1)}, R] = \mathtt{QR}(Y)$\\
+	$\quad$ $\Lambda^{(K+1)} = (U^{(k+1)})^H A U^{(k+1)}$\\
+	\\
+\end{tabular}
+
+Facciamo un minimo di chiarezza su alcune cose che sono state usate.\\
+Quando facciamo $[U^{(k+1)}, R] = \mathtt{QR}(Y)$, abbiamo utilizzato la notazione di Matlab, in modo da non creare confusione con $Y = QR$ oppure con $U^{(k+1)}R = Y$. Sostanzialmente quello che è facciamo è fare la fattorizzazione QR (ridotta) della matrice $Y$. \textit{Utilizzare la fattorizzazione QR non è la sola, volendo di potevano usare anche altre}.\\
+La matrice $\Lambda$ è una matrice quadrata che sta in $\mathbb C^{\ell \times \ell}$, la cui diagonale tende ad approssimare un gruppo di autovalori di $A$. In particolare approssima gli $\ell$ autovalori più grandi di $A$ (sempre in modulo).
+
+Per far vedere che l'iterazione QR coincide con l'iterazione del sottospazio basta prendere $\ell = n$. Infatti:
+\[T_k = U_k^H AU_k \quad \text e \quad T_k = Q_k R_k\]
+Mettendo tutto insieme si ha che:
+\[Q_kR_k = U^H_k A U_k \in \mathbb C^{n \times n}\]
+Portando a sinistra $U_k$ si ha che:
+\[ \underbrace{U_kQ_k}_{U_{k+1}}R_k = AU_k \quad \Rightarrow \quad U_{k+1} R_k = AU_k \]
+Che è esattamente quanto fatto nella fattorizzazione QR.
+
+\begin{oss}
+	Se gli autovalori non sono distinti, allora troviamo un autospazio
+\end{oss}
+
+Torniamo un secondo indietro alla fattorizzazione QR. Se per un certo $r$ si ha che $|\lambda_r| = |\lambda_{r+1}|$ e abbiamo gli autovalori sulla diagonale ordinati per modulo, allora si ha che:
+\[ (T_k)_{(r:r+1, r:r+1)} = \begin{pmatrix} t_{r,r} & t_{r, r+1}\\ t_{r+1,r} & t_{r+1, r+1}\end{pmatrix} \]
+Cioè all'interno della matrice c'è un blocco $2 \times 2$:
+\[ T_k = \begin{pmatrix}\ddots \\ & \square\\ && \ddots\end{pmatrix}\]
+In questo caso non possiamo sperare che $t_{r+1, r}$ tenda a zero. Quindi rimarrà un blocco all'interno della matrice. Però i suoi autovalori saranno una approssimazione di $\lambda_r$ e $\lambda_{r+1}$.\\
+Tutto questo è vero anche quando ci sono più blocchi di quella forma e con dimensioni $\ell \times \ell$, non necessariamente $2 \times 2$.
+
+L'iterazione QR serve molto per l'approssimazione di basi dell'autospazio. Infatti, supponiamo di avere una matrice con $\mu$ auotovalore con molteplicità algebrica $4$ per esempio. Il metodo delle potenze mi da solo un autovettore. Se invece prendo una matrice con $4$ colonne, ottengo una base di $V_\mu$.
+
+\begin{oss}
+	L'iterazione QR di base è \underline{molto} costosa, con un costo pari a $\mathcal O(n^3)$ per iterazione. Inoltre non sapendo neanche quante iterazioni faccia, non sappiamo neanche dare una stima dall'alto. Nel migliore dei modi. Il suo costo computazionale arriverebbe a $\mathcal O(n^4)$, un costo incredibilmente eccessivo. Dobbiamo quindi trovare un modo per alleggerire il costo computazionale.
+\end{oss}
+
+\subsection{Ottimizzazione dell'Iterazione QR}
+
+Per poter alleggerire il costo computazionale possiamo lavorare sotto due aspetti:
+\begin{enumerate}
+	\item Abbassare il costo di ogni iterazioni
+	\item Abbassare il numero di iterazioni
+\end{enumerate}
+
+Cominciamo dal primo punto.\\
+Se $T_k$ fosse di tipo Hessenberg Superiore (Triangolare superiore con la prima diagonale sotto quella principale non nulla), allora la fattorizzazione costerebbe molto di meno $\mathcal O(n^2)$.
+Supponiamo quindi che $T_k$ sia Hessenberg Superiore. Quello che vogliamo fare allora è azzerare tutti gli elementi sotto la diagonale principale. Ci basta utilizzare Givens. \textit{Supponiamo $T_k \in \mathbb C^{4 \times 4}$ per rappresentare il tutto graficamente}
+
+\[
+	T_{k} = \begin{pmatrix} \times & \times & \times & \times\\
+	{\color{green} \times} & \times & \times & \times\\
+	& {\color{green} \times} & \times & \times\\
+	&& {\color{green} \times} & \times\end{pmatrix}
+\]
+
+Posso allora scrivere $Q_k$ matrice di rotazione di Givens e scrivere $Q_k^T T_k = R_k$, che, come detto prima, ha un costo pari a $\mathcal O(n^2)$. Quindi si ha che:
+\[ T_k = Q_k R_k \]
+Per creare $T_{k+1}$ ho:
+\[T_{k+1} = R_k Q_k = Q_k^H T_k Q_k\]
+Questa matrice è ancora di tipo Hesenberg superiore. Quindi quando all'iterazione $k$-esima ottengo una matrice Hessenberg Superiore, anche tutte quelle successive lo sono.\\
+Facciamo allora in modo che $T_0$ sia di tipo Hessenberg Superiore. Cioè determiniamo $\hat Q_0$ tale che:
+\[T_0 = \hat Q_0^H A \hat Q_0 \text{ di tipo Hessenberg Superiore con } \hat Q_0 \text{ unitaria}\]
+La nuova iterazione diventa allora:
+
+\begin{tabular}{l}
+	\\
+	\textbf{Secondo Algoritmo di Iterazione QR}\\
+	\hline
+	Sia $T_0 = \hat Q_0^HA \hat Q_0$\\
+	Per $k = 0,1,...$\\
+	$\quad$ $T_k = Q_kR_k$\\
+	$\quad$ $T_{k+1} := R_kQ_k$\\
+\end{tabular}
+
+\begin{oss}
+	Abbiamo trovato gli autovalori, come troviamo gli autovettori?
+\end{oss}
+
+Per poterli trovare mi basta prendere un vettore $v \in \mathbb C^n$ casuale e applicare il metodo delle potenze inverse traslate, in quanto ho già una stima molto buona dell'autovalore, cioè:
+\[ (A- T_{j,j}I)x = v \qquad T_{j,j} = \sigma\]
+\textit{Ma questa matrice è singolare, come posso fare?} E questo il punto. Numericamente parlando, la matrice $A-T_{j,j}I$ non è singolare, perché $T_{j,j}$ non è esattamente l'autovalore, è solo un'ottima approssimazione. Quella matrice è estremamente vicina all'essere singolare, ma non lo è. Proprio per questo motivo, ci basta una sola iterazione del metodo delle potenze inverse traslate per trovare la direzione giusta.\\
+\textit{Con il caso diagonale si ha che}:
+\[
+	\begin{pmatrix}
+		\lambda_1 - T_{j,j}\\
+		& \ddots\\
+		&& \lambda_n - T_{j,j}
+	\end{pmatrix} x = v \qquad \Leftrightarrow x =
+	\begin{pmatrix}
+		\frac{v_1}{\lambda_1 - T_{j,j}}\\
+		\vdots\\
+		\frac{v_n}{\lambda_n - T_{j,j}}
+	\end{pmatrix}
+\]
+
+Se $T_{j,j}$ è molto vicino a $\lambda_k$ con $k \in \{1,...,n\}$, allora si ha che:
+\[\lambda_k - T_{j,j} \approx 0 \qquad \Rightarrow \qquad \frac{v_k}{\lambda_k - T_{j,j}} \to + \infty\]
+Tutti gli altri invece saranno dei numeri reali. Si ottiene quindi che:
+\[x = \begin{pmatrix}x_1\\ \vdots \\ +\infty\\ \vdots \\ x_n\end{pmatrix}\qquad \Rightarrow \qquad \frac x{\|x\|} = \begin{pmatrix}0\\ \vdots\\ 1 \\ \vdots \\0\end{pmatrix}\]
+
+Prima di vedere il secondo punto, vediamo il criterio di arresto. Molto semplicemente possiamo prendere:
+\[ \max_j \frac{|(T_k)_{j,j+1}|}{|(T_k)_{j,j}| + |(T_k)_{j+1, j+1}|}<tol\]
+Infatti, se vogliamo che tutti gli elementi sotto la diagonale vadano a zero, possiamo equivalentemente chiedere che il più grande di essi vada a zero.
+
+Vediamo ora il secondo punto, cioè come poter accelerare l'algoritmo.
+Possiamo pensare di fare qualcosa di simile al metodo delle potenze inverse traslate, cioè prendendo lo shift $\sigma$ vicino a quel parametro che vogliamo azzerare. Il procedimento è sostanzialmente lo stesso, solo che una volta raggiunta la convergenza, ripetiamo lo stesso procedimento con un altro valore $\mu$. Cioè, dopo la prima convergenza con $\mu = (T_k)_{n,n}$ si passa a $(T_k)_{n-1,n-1}$ e così via.\\
+Abbiamo quindi che l'algoritmo diventa
+
+\begin{tabular}{l}
+	\\
+	\textbf{Terzo Algoritmo di Iterazione QR}\\
+	\hline
+	Sia $T_0 = \hat Q_0^HA \hat Q_0$ e $\mu \in \mathbb C$\\
+	Per $k = 0,1,...$\\
+	$\quad$ $T_k - \mu I = Q_kR_k$\\
+	$\quad$ $T_{k+1} := R_kQ_k + \mu I$\\
+	\\
+\end{tabular}
+
+Anche se non ci sono matrici inverse, il metodo corrisponde per filo e per segno con il metodo delle potenze inverse.
+
+\begin{oss}
+	All'inizio prendiamo $\mu = (T_0)_{n,n}$ e rimarrà lo stesso finché l'elemento $|(T_k)_{n,n-1}|$ non sarà sufficientemente piccolo. A quel punto si prenderà $\mu = (T_k)_{n-1,n-1}$
+\end{oss}
+
+\begin{oss}
+	Questa procedura lascia lo spettro della matrice invariato. Infatti:
+	\begin{align*}
+		T_{k+1} &= R_kQ_k + \mu I \xlongequal{\star} Q^H_k(T_k - \mu I)Q_k + \mu I = Q_k^H T_k Q_k - \underbrace{\mu Q_k^H Q_k}_{\mu I} + \mu I = Q_k^H T_k Q_k
+	\end{align*}
+	Dove in $\star$ si è utilizzato che $Q^H_k(T_k - \mu I) = R_k$
+\end{oss}
+
+\begin{oss}
+	La velocità di convergenza segue la stessa logica del metodo delle potenze inverse traslate:
+	\[\left| \frac{\lambda_{p-1} -\mu}{\lambda_p -\mu} \right|^k\]
+	Dove abbiamo ordinato gli auto valori in modo decrescente $|\lambda_1 - \mu|\geq |\lambda_2 - \mu|\geq \cdots \geq |\lambda_n-\mu|$
+\end{oss}
+
+L'utilizzo di questa strategia accelera di molto. Con l'utilizzo di quest'algoritmo così semplice, potrebbero sorgere un sacco di problemi di continuo, per esempio se gli autovalori non sono semplici in modulo o altro ancora, ma nel corso del secolo scorso sono stati fatti nuovi algoritmi per risolvere a questi problemi.\\
+Un esempio, con le matrici si può utilizzare Shur per arrivare ad avere una matrice triangolare a blocchi.
+
+\subsection{Analisi di Stabilità}
+
+Quando creo $U$ per la decomposizione di Schur e trovo $T$ che approssima $R$, sono \underline{effettivamente} quelle di $A$? Oppure sono almeno vicine?\\
+La risposta è si, infatti il seguente teorema dice:
+
+\begin{thm}{}{}
+	Supponiamo che l'iterazione QR converga dopo $\overline k$ iterazioni, allora le matrici $T_{\overline k}$ e $U_{\overline k}$ ottenute dall'iterazione soddisfano:
+	\[ T_{\overline k} = Q^H(A + E)Q \quad \text{con }\|E\|_2 = \mathcal O(u \| A\|_2) \]
+	Con $Q$ matrice unitaria e:
+	\[ U^H_{\overline k} U_k = I+E \quad \text{con }\|E\|_2 = \mathcal O(u) \]
+	Con $u$ valore eps della macchina.
+\end{thm}
+
+Non daremo una vera e propria dimostrazione del teorema, ma faremo delle osservazioni.
+
+\begin{oss}
+	La prima affermazione può essere riscritta come: $\exists Q \in \mathbb C^{n \times n}$ unitaria tale che $Q^H T_{\overline k} Q= A+E$ molto vicino ad $A$.
+	In maniera analoga, $U_{\overline k}$ è molto vicina all'essere una matrice unitaria.\\
+	Quindi il risultato che ottengo è molto robusto, cioè una matrice "praticamente" unitaria e una matrice ottenuta dalla decomposizione di Schur di una matrice molto vicina ad $A$
+\end{oss}
+
+\subsection{Risultati di Perturbazione}
+
+Concludiamo l'argomento degli autovalori con un risultato di perturbazione (che ritornerà utile in seguito).
+Prima di fare ciò, richiamiamo il teorema di Bauer-Fike:
+
+\begin{thm}{Toerema di Bauer-Fike}{}
+	Per ogni $\lambda$ autovalore della matrice perturbata, esiste un autovalore $\overline \lambda$ della matrice $A$ tale che:
+	\[|\lambda - \overline \lambda| \leq \kappa(X) \|E\|\]
+\end{thm}
+
+In questo modo, si fa dipendere l'accuratezza della precisione degli autovettori (ne bastano due quasi allineati per rovinare tutto). Il bello di questo risultato è che è generale, però molto debole.
+
+Esiste un altro teorema che serve per tenere conto dei singoli autovalori.
+
+\begin{thm}{}{}
+	Sia $A \in \mathbb C^{n \times n}$ e siano $(\lambda, x, y)$ rispettivamente un autovalore semplice in modulo di $A$ con i rispettivi autovettori destro e sinistro di norma euclidea unitaria. Allora esiste un intorno dell'origine in cui sono definite le funzioni $\lambda(\varepsilon)$ e $x (\varepsilon)$ tali che:
+	\begin{itemize}
+		\item[(\textit i)] $\lambda(0) = \lambda$ e $x(0) = x$
+		\item[(\textit{ii})] $(A+\varepsilon E) x(\varepsilon) = x(\varepsilon)\lambda(\varepsilon)$ con $E \in \mathbb C^{n \times n}$ di norma unitaria e $\lambda(\varepsilon)$ semplice in modulo
+		\item[(\textit{iii})] $\lambda'(0) = \frac{y^H Ex}{y^Hx}$ da cui segue che:
+			\[ \lambda(\varepsilon) = \lambda + \varepsilon \frac{y^HEx}{y^Hx} + \mathcal O(\varepsilon^2) \quad \text{per }\varepsilon \to 0\]
+	\end{itemize}
+\end{thm}
+
+\begin{oss}
+	In questo contesto, posso definire $\lambda{\varepsilon}$ che ci dice come varia $\lambda$ al variare di $A$. Notiamo che $\lambda(\varepsilon)$ è proprio autovalore di $A + \vareps E$. In questo modo abbiamo sganciato $E$ dalla sua norma e per questo possiamo prendere $E$ con norma $1$. Posso allora definire $\lambda(\vareps)$ autovalore di $(A + \vareps E)$ con autovettore $x (\vareps)$.\\
+	Queste sono certamente perturbazioni più specifiche, però sono fatte con continuità, in quanto ho:
+	\[ (\lambda(\vareps),x(\vareps)) \xrightarrow{\vareps \to 0} (\lambda, x)\]
+	Per il terzo punto, invece, c'è uno sviluppo di Taylor che spiega l'andamento di $\lambda$ al variare di $\vareps$ (in un intorno di $0$). A che cosa ci serve?
+	\[ |\lambda - \lambda(\vareps)| = \vareps\frac{y^HEx}{y^Hx} \]
+	Qui abbiamo che $\vareps$ rappresenta $\| E \|$ del teorema di Bauer-Fike, mentre la frazione rappresenta il ruolo di $\kappa(X)$. Detto così però non ci dice granché. Andiamo a svilupparlo:
+	\[ \left| \frac{y^HEx}{y^Hx} \right| \leq \frac{\|y\| \cdot \|E\| \cdot \|x\|}{|y^Hx|} = \frac 1{|y^Hx|}\]
+	Quindi l'unica cosa che ci da fastidio è il denominatore
+\end{oss}
+
+\begin{oss}
+	Se $A$ è Hermititana, cioè $A^H=A$, allora segue che $y=x$, da cui segue che:
+	\[\frac 1{y^Hx} = \frac 1{\|x\|^2 = 1}\]
+	Quindi non è amplificato. Una cosa simile si ottiene anche per $A$ normale.
+\end{oss}
+
+\begin{oss}
+	Sia $A$ un blocco di Jordan. In questo caso il teorema non si applica in quanto $\lambda$ non è semplice in modulo.
+\end{oss}
+
+\begin{es}
+	Supponiamo di avere \[ A = \begin{pmatrix} \lambda & 1\\ 0 & \lambda \end{pmatrix}\]
+	Si vede facilmente che i suoi autovettori destro e sinistro sono:
+	\[x = \begin{pmatrix} 1\\ 0\end{pmatrix} \quad \Rightarrow \quad \begin{pmatrix} \lambda & 1\\ 0 & \lambda \end{pmatrix} \begin{pmatrix}1 \\ 0\end{pmatrix} = \begin{pmatrix}\lambda \\ 0\end{pmatrix} = \lambda  \begin{pmatrix} 1\\ 0\end{pmatrix} \]
+	\[ y = \begin{pmatrix}0\\ 1\end{pmatrix} \quad \Rightarrow \quad \begin{pmatrix} 0 & 1\end{pmatrix} \begin{pmatrix} \lambda & 1\\ 0 & \lambda \end{pmatrix} = \begin{pmatrix} 0 & \lambda\end{pmatrix} = \lambda \begin{pmatrix} 0 & 1\end{pmatrix}\]
+	Da cui segue subito che $y^Hx = 0$, da cui segue subito che:
+	\[\frac 1{|y^Hx|} = + \infty\]
+\end{es}
+
+\begin{oss}
+	Risultati del tutto analoghi possono essere ottenuti perturbando anche $x$
+\end{oss}
+
+\begin{oss}
+	Se $A$ ha autovalore $\lambda$ con un blocco di Jordan di dimensione al più $p$, allora vale:
+	\[ |\lambda(A + \vareps E) - \lambda(A)| \leq \gamma e^{\frac 1p}\]
+\end{oss}
+
+\newpage
+
+\section{Definizioni Generali}
+\subsection{Buona Posizione di un problema dato}
+
+Supponiamo di avere una funzione $f$, un dato $x$ e vogliamo calcolare $y = f(x)$.\\
+Supponiamo di avere $\overline x \approx x$ e volgiamo capire quanto $\overline y = f(\overline x)$ sia vicino (o lontano) a $y$
+
+\begin{defn}{Distanza in Senso Assoluto}{}
+	Diremo che $\overline y$ è \textbf{vicino} a $y$ \textbf{in senso assoluto} se:
+	\[ |\overline y - y| \simeq C(x)|\overline x - x| \]
+	Dove $C(x) \in \mathbb R$ è detto \textbf{Numero di Condizionamento Assoluto}
+\end{defn}
+
+In prima approssimazione, se $f$ è sufficientemente regolare, allora si ha che:
+\[\overline y - y = f(\overline x)- f(x) = \frac{f(\overline x) - f(x)}{\overline x - x}(\overline x - x) \simeq f'(x)(\overline x - x)\]
+
+Da cui segue che $C(x) = |f'(x)|$
+
+\begin{defn}{Distanza in Senso Relativo}{}
+	Diremo che $\overline y$ è \textbf{vicino} a $y$ \textbf{in senso relativo} se:
+	\[ \frac{|\overline y - y|}{|y|} \simeq \kappa(x) \frac{|\overline x - x|}{|x |} \]
+	Dove $\kappa(x) \in \mathbb R$ è detto \textbf{Numero di Condizionamento Relativo}
+\end{defn}
+
+In questo caso abbiamo:
+\[\frac{|\overline y -y|}{|y|} \approx \frac{|f'(x)|}{|y|}\cdot \frac{|\overline x - x|}{|x|}|x| = \frac{|f'(x)| \cdot |x|}{|f(x)|} \frac{|\overline x - x|}{|x|}\]
+Da cui segue che:
+\[\kappa(x) \approx \frac{|f'(x)|\cdot |x|}{|f(x)|}\]
+
+Diremo che un problema è \textbf{Ben posto} (nel senso che dipende con continuità dai dati) se $C(x)$ è moderato (buona condizione in senso assoluto) o se $\kappa(x)$ è moderato (buona condizione in senso relativo)
+
+\begin{es}
+	Sia la funzione $f(x) = \sqrt x$, segue immediatamente che:
+	\[ f'(x) = \frac 12 \frac 1{\sqrt x}\]
+	Da cui si ottiene che:
+	\[C(x) = \frac 12 \frac{1}{\sqrt x}\qquad \text e \qquad \kappa(x) = \frac 12 \frac 1{\sqrt x}\frac {|x|}{\sqrt x} = \frac 12\]
+	Quindi la nostra funzione è ben posta in senso relativo ma è mal posta in senso assoluto
+\end{es}
+
+In generale, quando ci sono dei problemi mal posti, si utilizzano dei metodi fatti apposta per questo tipo di problemi. Ma noi in generale vedremo principalmente quelli ben posti.
+
+\subsection{Consistenza, Stabilità e Convergenza di un Metodo}
+
+Consideriamo un problema \underline{ben posto} del tipo:
+\[F(x, d) = 0\]
+dove $d$ rappresenta i dati dati del problema e $x$ rappresenta la sua soluzione (non necessariamente scalare, può essere anche vettore). Questo problema, scritto in questo modo, si dice che è scritto in \textbf{Forma Implicita}. Un problema è scritto invece in \textbf{Forma Esplicita} se è della forma $x = f(d)$. In generale dovremo abituarci a vedere i problemi scritti in forma implicita, perché nella maggior parte dei casi non ne vedremo una forma esplicita.
+
+Un metodo numerico corrisponde a risolvere il problema dato con una successione del tipo:
+\[ F_n(x_n, d_n) = 0\]
+Ovviamente si cerca una successione tale che $x_n \to x$ per $n \to +\infty$. Sappiamo anche che $F_n \approx F$ e $d_n \approx$ sono delle approssimazioni dei dati iniziali (a volte si prende direttamente gli stessi dati)
+
+Diamo ora delle definizioni formali per questi concetti appena introdotti:
+
+\begin{defn}{Consistenza}{}
+	Supponendo che il dato $d$ sia ammissibile per $F_n$, il metodo $F_n(x_n, d_n)$ si dice \textbf{consistente} se: \[F_n(x,d) \xrightarrow{n \to + \infty} 0\]
+	Cioè se:
+	\[ F_n(x, d) - F(x, d) \xrightarrow{n \to +\infty}0\qquad \Leftrightarrow \qquad F_n \xrightarrow{n \to +\infty} 0 \]
+\end{defn}
+
+In parole semplici abbiamo che tende a $0$ quando mettiamo la soluzione esatta. \textit{Ovviamente si ha che $F_n(x_n, d_n)$, perché è la soluzione esatta del sistema perturbato}
+
+\begin{defn}{Consistenza Forte}{}
+	Un metodo si dice fortemente consistente se:
+	\[ F_n(x, d) = 0, \; \forall n \in \mathbb N \]
+\end{defn}
+
+\begin{es}
+	Le iterazioni stazionarie sono esempi di metodi iterativi fortemente consistenti.
+	\[ x_{n+1} = P^{-1}Nx_n + P^{-1}b \quad \Leftrightarrow \quad F_n(x_n, d) = 0\]
+	Infatti:
+	\[ x^* = P^{-1}Nx^* + P^{-1}b \quad \Rightarrow F_n(x^*, d)=0 \]
+\end{es}
+
+\begin{oss}
+	Tutti i metodi di punto fisso sono metodi fortemente consistenti, con $x_{n+1} = \phi (x_n)$
+\end{oss}
+
+\begin{oss}
+	Tutti i problemi del tipo $F(x, d) = 0$ con limiti, derivate e integrali non possono essere fortemente consistenti.
+\end{oss}
+
+\begin{defn}{Stabilità e buona posizione di un problema}{}
+	Il metodo $F_n(x_n, d_n)$ si dice \textbf{Stabile} o \textbf{ben posto} se per ogni $n$ fissato abbiamo:
+	\begin{itemize}
+		\item[(i)] esiste $x_n$ per ogni dato $d_n$
+		\item[(ii)] la soluzione è unica e le soluzioni sono riproducibili
+		\item[(iii)] $x_n$ dipende con continuità dai dati, cioè:
+			\[\forall \mu > 0, \exists C_n = C_n(\mu, d_n): |\delta d_n| < \mu \Rightarrow |\delta x_n|\leq C_n|\delta d_n|\]
+			Dove si ha che $\delta d_n$ è la perturbazione relativa a $d_n$ e $\delta x_n$ relativa a $x_n$
+	\end{itemize}
+\end{defn}
+
+Notiamo che qui gioca molto il ruolo del numero di condizionamento.
+
+\begin{defn}{Convergenza}{}
+	Il metodo $F_n(x_n, d_n) = 0$ si dice \textbf{convergente} se:
+	\[\forall \vareps > 0, \exists n_0 = n_0(\vareps), \exists \delta >0 : \forall n > n_0(\vareps), \forall d_n : |d-d_n|>\delta \Rightarrow |x-x_n|<\vareps\]
+	Dove si ha che $x = x(d)$ e $x_n = x_n(d)$
+\end{defn}
+
+Questi tre concetti sono strettamente collegati fra loro. Infatti:
+
+\begin{thm}{Equivalenza di Lax-Rightmayer}{}
+	Sia $F(x,d)=0$ un problema ben posto e sia $d_n \xrightarrow{n \to +\infty} d$. Sia $F_n(x_n, d_n) = 0$ metodo consistente. Allora il metodo è stabile se e solo se è convergente.
+\end{thm}
+
+\begin{cons}
+	Quello che sostanzialmente dice questo teorema è che se il metodo è consistente, allora convergenza e stabilità sono equivalenti, cioè ne basterà uno per avere entrambi.\\
+	È un concetto simile alla "robustezza" del metodo
+\end{cons}
+
+\begin{proof}
+	Limitiamo la dimostrazione solo al caso lineare con $Lx-d = 0$ e $L_nx_n - d_n = 0$\\
+	Osserviamo che se abbiamo un metodo consistente, allora abbiamo che:
+	\[ F_n(x, d) = L_n x - d \xrightarrow{n \to + \infty} 0 \]
+	Cioè abbiamo che:
+	\[ L_nx - Lx \to 0\quad \Rightarrow \quad (L_n - L)x \to 0 \quad \Rightarrow \quad L_n \to L \]
+	Nel caso volessimo lavorare anche con dati perturbati avremmo che (per $n \to +\infty$):
+	\begin{align*}
+		L_nx - d_n = L_nx -d +d -d_n = (L_nx - d) + (d-d_n) = (L_n - L)x + (d-d_n) \to 0
+	\end{align*}
+
+	Mostriamo la prima implicazione, cioè che la stabilità implica la convergenza:
+	\[ x-x_n = L^{-1}_nL_nx - L^{-1}_nL_nx_n + L^{-1}_nLx - L_n^{-1}Lx = L^{-1}_n(L_nx - Lx) + L^{-1}_n(Lx - L_nx_n)\]
+	Ora dobbiamo mostrare che tutta questa quantità tende a $0$.\\
+	Noi però sappiamo che $L_nx_n - d_n = 0$, quindi abbiamo che $x_n = L^{-1}_nd_n$. Sappiamo anche che il metodo è stabile, per cui, per le definizioni che abbiamo dato, abbiamo che $|L_n^{-1}|$ è limitato.
+	\textit{Questo era vero anche perché }$x_n = f(d_n) \Rightarrow f'(d) = L^{-1}_n$\\
+	Segue quindi che:
+	\[ |x-x_n| \leq |L^{-1}_n| \cdot |L_nx - Lx| + |L^{-1}_n| \cdot |Lx - L_nx_n|\]
+	La prima quantità tende a zero per la definizione di consistenza, la seconda tende a zero perché per ipotesi avevamo che $|d-L_nx_n| \to 0$.\\
+	Quindi tutto tende a $0$
+
+	Mostriamo ora l'implicazione opposta, cioè che la convergenza implica la stabilità.\\
+	Prendiamo $|x_n(d + \delta d) - x_n(d)|$. Vogliamo vedere quanto questa quantità sia piccola:
+	\begin{align*}
+		|x_n(d + \delta d) - x_n(d)| &= |x_n(d + \delta d) - x_n(d) + x(d) - x(d) + x(d + \delta d) - x(d + \delta d)| =\\
+		&= {\big |\big(}x_n(d + \delta d) - x(d + \delta d){\big )} - {\big (}x_n(d) - x(d){\big)} - {\big (}x(d) - x(d + \delta d){\big )\big |} \leq\\
+		&= |x_n(d + \delta d) -x(d + \delta d)| + |x_n(d) - x(d)| + |x(d) - x(d + \delta d)|
+	\end{align*}
+	Abbiamo per ipotesi che il metodo è convergente e, poiché sono soluzioni esatte sullo stesso dato, abbiamo che le prime quantità sono rispettivamente minori di $\vareps_1$ e $\vareps_2$.
+	Abbiamo anche che il metodo è ben posto, quindi per un $n$ sufficientemente grande si ha che la terza quantità è più piccola di $C_1|\delta d|$. Mettendo tutto insieme si ha che la quantità iniziale è più piccola di:
+	\[ |x_n(d + \delta d) - x_n(d)|<\vareps_1 + \vareps_2 + C_1|\delta d| \]
+	A questo punto abbiamo sostanzialmente finito, perché per un $n$ sufficientemente grande si ha che:
+	\[ \vareps_1, \vareps_2 < C_2|\delta d| \]
+	Da cui, mettendo tutto insieme, la quantità iniziale è più piccola di $C_3|\delta d|$. Quindi la soluzione ottenuta dal metodo dipende dai dati
+\end{proof}
+
+\newpage
+
+\section{Approssimazione per Interpolazione}
+\subsection{Prime Definizioni}
+
+Cerchiamo di capire prima quale sia il problema che puntiamo a risolvere. Sostanzialmente i problemi che risolviamo con l'approssimazione per interpolazione sono due:
+\begin{enumerate}
+	\item Date coppie di numeri o di valori $\{(x_i, y_i)\}_{i \in \{1,...,n\}}$, vogliamo determinare una funzione $\tilde f$ opportuna che approssima il comportamento degli $y_i$, per esempio mediante \textbf{interpolazione}, cioè passando per alcuni dei punti considerati, cioè $y_i = \tilde f(x_i)$ per qualche $i$. Se invece passa per tutte, la funzione si dice \textbf{Interpolante}.
+		\begin{center}
+			\begin{tikzpicture}[domain = 0:3]
+				\draw[->] (0,0) -- (3,0) node[right]{$x$};
+				\draw[->] (0,0) -- (0,2) node[left]{$y$};
+				\draw[loosely dotted, thick] plot (\x, {0.666*\x + 0.1*sin(10 * \x r)});
+				\draw (0,0) -- (3,2);
+			\end{tikzpicture}
+		\end{center}
+		Di solito chiaramente si punta a qualcosa di facile
+	\item Data una funzione $f: I \to \mathbb R$ con dei punti $x_0,...,x_n \in I$ (possibilmente distinti), voglio trovare una funzione $\tilde f$ più facile da gestire tale che:
+		\[ \forall i \in \{0,1,...,n\}, \tilde f(x_i) = f(x_i \]
+\end{enumerate}
+Notiamo subito che i due problemi sono equivalenti, in quanto mi basta chiamare $y_i = f(x_i)$.
+
+Perché tutto questo? Perché non tutte le funzioni sono facili da studiare. Prendiamo per esempio:
+\[ f(x) = \int_0^t \sin^2 t e^{\frac{t^2}{2}+2}dt \]
+
+Le funzioni $\tilde f$ che stiamo cercando possono essere di vario tipo, per esempio possono essere polinomiali:
+\[\tilde f(x) = a_0 + a_1x + \cdots + a_nx^n\]
+Oppure possono essere circolari:
+\[\tilde f(x) = a_0 + a_1 e^{ix} + \cdots + a_n e^{i nx}\]
+O addirittura possono razionali:
+\[\tilde f(x) = \frac{p_x(x)}{q_n(x)}\]
+Noi ci limiteremo solo alle interpolazioni complete (cioè di tutti i nodi) di polinomi.
+
+Supponiamo ora $x_i \neq x_j, \forall i,j$ tutti nodi distinti.
+
+\begin{thm}{}{}
+	Date le coppie $\{(x_i, y_i)\}_{i \in \{0,1,...,n\}}$ con $x_i \neq x_j$, esiste ed è unico il polinomio di grado $n$ tale che:
+	\[ p_n(x_n) = y_n \]
+	Questa è la condizione di interpolazione
+\end{thm}
+
+\begin{proof}
+	Cominciamo con il dimostrare prima l'unicità.\\
+	Supponiamo esista anche $q_n \in \mathbb P_n$ tale che $q_n(x_i) = y_i = p_n(x_i)$. Definisco poi:
+	\[ d_n(x) = q_n(x) - p_n(x) \]
+	polinomio di grado minore uguale a $n$. Si sa facilmente che $d_n(x_i) = 0$ per ogni $i$, quindi ha almeno $n+1$ zeri.\\
+	Ma questo è un polinomio di grado al massimo $n$, quindi necessariamente è identicamente nullo, quindi:
+	\[ p_n(x) = q_n(x) \]
+
+	Dimostriamone ora l'esistenza.\\
+	Vogliamo che sia verificata la condizione di interpolazione di $p_n(x) = a_0 + a_1x + \cdots + a_nx^n$, cioè:
+	\[
+		\begin{matrix}
+			x_0: & a_0 + a_1x_0 + a_2x_0^2 + \cdots + a_nx_0^2 &= y_0\\
+			x_1: & a_0 + a_1x_1 + a_2x_1^2 + \cdots + a_nx_1^2 &= y_1\\
+			\vdots & \vdots & \vdots\\
+			x_n: & a_0 + a_1x_n + a_2x_n^2 + \cdots + a_nx_n^2 &= y_n\\
+		\end{matrix}
+	\]
+	Notiamo però che questo non è altro che un sistema lineare:
+	\[
+		\begin{pmatrix}
+			1 & x_0 & x_0^2 & \cdots & x_0^n\\
+			\vdots & \vdots & \vdots & & \vdots\\
+			1 & x_n & x_n^2 & \cdots & x_n^n
+		\end{pmatrix}
+		\begin{pmatrix}a_0\\ \vdots \\ a_n\end{pmatrix} = \begin{pmatrix}y_0 \\ \vdots \\ y_n\end{pmatrix}
+	\]
+	\textit{Questa matrice prende il nome di matrice di Vandermonde }$V_n(x)$\\
+	Si vede facilmente che la matrice non è singolare per $x_i$ distinti.\\
+	Si può dimostrare poi che il suo determinante è:
+	\[\det (V_n(x)) = \prod_{0\leq j \leq i\leq n}(x_i - x_j)\]
+\end{proof}
+
+\begin{oss}
+	Il numero di nodi è legato al grado del polinomio. Per trovarlo ci servono $n+1$ condizioni, quindi per creare la matrice ci servono $n+1$ nodi.
+\end{oss}
+
+\begin{thm}{}{}
+	Posto $cond_\infty(V_n(\underline x)) = \|V_n(\underline x)\|_\infty \cdot \|V_n(\underline x)^{-1}\|_\infty$ e posto:
+	\[\kappa_{n, \infty}:= \inf_{\underline x \geq 0}cond_\infty (V_n(x))\]
+	Allora si ha che:
+	\[\kappa_{n, \infty}\geq 2^n\quad \text{per }x_i\geq 0, n\geq 2\]
+	Dove $\underline x$ è il vettore con tutti i nodi.
+\end{thm}
+
+\begin{cons}
+	Questo teorema ci da l'idea di quanto tale matrice sia sensibile.\\
+	Inoltre, sfruttare questa strategia per trovare tale polinomio è una pazzia, in quanto basta $n=10$ per creare danni. Va sfruttato solo per $n$ piccolo
+\end{cons}
+
+\begin{oss}
+	Con Matlab abbiamo la funzione \emph{\texttt{polifit}} che permette di determinare il polinomio interpolante (a cui diamo le coppie). Inoltre, se è il caso, ci dice anche se la matrice è ben condizionata oppure mal condizionata. Ci da anche la possibilità di determinare il polinomio interpolante anche se il numero delle coppie che diamo è minore del grado del polinomio
+\end{oss}
+
+Analizziamo proprio quest'ultimo caso. Sia quindi di avere una matrice $\mathbb R^{(m+1)\times (n+1)}$con $m<n$, allora in questo caso abbiamo che la matrice è alta e della forma:
+\[ \begin{pmatrix} 1 & x_0 & \cdots & x_0^m\\ 1 & x_1 & \cdots & x_1^m\\ \vdots & \vdots & & \vdots\\ 1 & x_n & \cdots & x_n^m \end{pmatrix} \]
+Da cui segue che il polinomio interpolante è:
+\[ p_n (x) = a_0 + a_1x + \cdots + a_mx^m\]
+In questo caso, riprendendo la notazione che avevamo usato in precedenza, siamo nel caso di un sistema lineare sovradeterminato $V_n \underline a = \underline y$ con $\underline a \in \mathbb R^{m+1}$ e $\underline y \in \mathbb R^{n+1}$. Quello che si fa è sostanzialmente minimizzare le distanze dei vari punti, cioè trovare $\min \|\underline y - V_x \underline a\|$, quindi applicare il metodo dei minimi quadrati.
+
+Nel caso in cui invece $m>n$, abbiamo una matrice larga, quindi siamo in un problema sottodeterminato, da cui segue che la soluzione non è unica.
+
+\begin{att}
+	Queste funzioni non passano per tutti i nodi, per questo ci dovranno essere delle approssimazioni. In questo caso non ci sarà interpolazione.
+\end{att}
+
+Da qui in avanti studieremo solo il caso completo e studieremo vari modi per arrivare allo \underline{stesso} polinomio.
+
+\subsection{Forma di Lagrange}
+
+\begin{defn}{Polinomi in Forma di Lagrange}{}
+	Siano $x_0,...,x_n \in I$ nodi distinti. Definiamo il \textbf{Polinomio di Lagrange} il polinomio definito come:
+	\[  L_i(x) = \prod_{j = 0, j\neq i}^n \frac{x-x_j}{x_i-x_j} = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{x+1})\cdots (x-x_n)}{(x_i-x_0)\cdots (x_i-x_{i-1}) (x_i-x_{i+1})\cdots (x_i-x_n)} \]
+	Questo è un polinomio di grado $n$.
+\end{defn}
+
+\begin{oss}
+	Questo polinomio assume dei valori speciali nei nodi, infatti:
+	\[ L_i(x_j) = \begin{cases} 1 & \text{se }j = i \qquad \text{Qui si semplificano tutti i termini}\\
+	0 & \text{se }j \neq i \qquad \text{Qui c'è un fattore al numeratore nullo}\end{cases} \]
+	Questo però non implica che la funzione sia limitata, sappiamo solo che certamente vale $L_i(x_j) = \delta_{i,j}$, con $\delta_{i,j}$ la delta di Kronecker.
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[->] (-1,0) -- (4,0);
+			\draw[->] (0, -0.5) -- (0,2);
+			\draw[green] (1,1) to[out = 0, in = 120] (2,0) to[out = 300, in = 210] (3,0);
+			\draw[blue] (1,0) to[out = 75, in = 240] (2,1) to[out = 60, in = 120] (3,0);
+			\draw[dashed] (0,1) node[left]{$1$} to (4,1);
+			\draw[dashed] (1,-0.5) node[below]{$x_0$} to (1, 2) (2,-0.5) node[below]{$x_1$} to (2, 2) (3,-0.5) node[below]{$x_2$} to (3, 2);
+		\end{tikzpicture}\\
+		Disegnati ci sono dei tratti di polinomi di Lagrange, in verde $L_0(x)$ e in blu $L_1(x)$
+	\end{center}
+	Già da qua si può vedere che anche questi non sono particolarmente buoni per il calcolo della funzione interpolante.
+\end{oss}
+
+\begin{oss}
+	I polinomi $\{L_0(x),...,L_n(x)\}$ rappresentano una base di $\mathbb P_n$.\\
+	Infatti, se prendiamo una loro combinazione lineare e la poniamo uguale a $0$ si ha che:
+	\[ \alpha_0 L_0(x) + \cdots + \alpha_n L_n(x) = 0 \]
+	In particolare, se calcoliamo questa combinazione lineare sui vari nodi $i$ si ha che tutti i termini $L_j(x_i)$  si annullano per come sono stati definiti, quindi:
+	\[ \alpha_0 L_0(x) + \cdots + \alpha_n L_n(x) = 0  = \alpha_i L_i(x_i) = 0\]
+	Ma sappiamo, sempre in quanto $L_i(x_i)$ è un polinomio di Lagrange, che $L_i(x_i)=1$, quindi:
+	\[ \alpha_i L_i(x) = \alpha_i = 0 \]
+	Per l'arbitrarietà di $i$, questo è vero per ogni nodo, da cui segue che tutti gli $\alpha_i$ sono nulli, quindi sono linearmente indipendenti. Possiamo dire che sono una base di $\mathbb P_n$ in quanto sono esattamente $n+1$ e la dimensione dello spazio vettoriale $\mathbb P_n$ è proprio $n+1$. Da cui segue che:
+	\[p_n(x) \in \mathbb P_n \quad \Rightarrow \quad p_n(x) = \sum_{i = 0}^n \beta_jL_j(x)\]
+\end{oss}
+
+Se $p_n$ è il polinomio interpolante, allora si ha che:
+\[\forall i \in \{0,...,n\}, p_n(x_i) = y_i\]
+Cioè:
+\[ p_n(x_i) = \sum_{j = 0}^n \beta_jL_j(x_i) = \beta_iL_i(x_i) = y_i \quad \Rightarrow \quad \beta_i = y_i \]
+Da cui si ottiene definitivamente che:
+\[ p_n(x) = \sum_{j = 0}^n y_jL_j(x_i) \]
+
+\begin{defn}{Polinomio Interpolante in forma di Lagrange}{}
+	Si definisce il \textbf{Polinomio Interpolante in forma di Lagrange} il polinomio:
+	\[ p_n(x) = \sum_{j = 0}^n y_jL_j(x) \]
+\end{defn}
+
+Vediamo un primo esercizio, tipico dell'esame:
+
+\begin{ese}
+	Siano $x = [0,1,3]$ e $y = [1,3,2]$ due vettori, vogliamo trovare la funzione interpolante di queste coppie di numeri e stimare con il polinomio interpolante i possibili valori di $xy = 2$
+\end{ese}
+
+\begin{sol}
+	Andiamo a calcolare quanto valgono i polinomi in forma di Lagrange:
+	\[ x_0 : L_0(x) = \frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x-1)(x-3)}{(-1)(-3)} = \frac 13 (x-1)(x-3) \]
+	\[ x_1: L_1(x) = \frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)} = \frac{x(x-3)}{(1)(-2)} = -\frac 12 x(x-3) \]
+	\[ x_2: L_2(x) = \frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)} = \frac{x(x-1)}{(3)(2)} = \frac 16 x(x-1) \]
+	Da cui segue che:
+	\[ p_2(x) = L_0(x) + 3L_1(x) + 2L_2(x) = -\frac76 x^2 + \frac{17}6x + 1\]
+	Quello che otterremo sarà:
+	\begin{center}
+		\begin{tikzpicture}[domain = -0.5:3.5]
+			\draw[->] (-1, 0) -- (4,0);
+			\draw[->] (0,-1) -- (0,3);
+			\draw[thin] plot[samples = 100] (\x, {0.333*(\x - 1)*(\x-3)}) node[right]{$L_0(x)$};
+			\draw[thin] plot[samples = 100] (\x, {-0.5*(\x)*(\x-3)}) node[right]{$L_1(x)$};
+			\draw[thin] plot[samples = 100] (\x, {0.166 *(\x)*(\x-1)}) node[right]{$L_2(x)$};
+			\draw[thick] plot[samples = 100] (\x, {-0.833*(\x)^2 + 2.833*(\x) +1});
+			\filldraw (0,1) circle(1pt) (1,3) circle(1pt) (3,2) circle(1pt);
+			\draw[thin, dashed] (0,3) -- (1,3) -- (1,0) (0,2) -- (3,2) -- (3,0);
+			\draw[dashed] (-0.5,1) -- (3.5,1);
+		\end{tikzpicture}
+	\end{center}
+	Per capire invece indicativamente i possibili valori di $xy = 2$, ci basta:
+	\[p_2(2) = L_0(2) + 3L_1(2) + 2L_2(2) = \frac {10}3\]
+\end{sol}
+
+\subsection{Analisi dell'Errore}
+
+Supponiamo di avere una famiglia crescente di nodi, cioè di avere $\{x_0^{(0)}\}$, $\{x_0^{(1)}, x_1^{(1)}\}$,... tutti contenuti in $[a,b]$. Diremo che c'è convergenza se con $n \to + \infty$. Nel dettaglio: data una funzione $f:[a,b] \to \mathbb R$, il polinomio di Lagrange nei nodi delle famiglie dei nodi converge se:
+\[p_n(x) \xrightarrow{n\to + \infty} f(x) \text{ uniformemente in } x \in [a,b]\]
+Affinché questa cosa avvenga, dobbiamo chiarire due questioni:
+\begin{itemize}
+	\item Fare la stima dell'errore con i nodi (che in un certo senso è quanto abbiamo già visto)
+	\item Studiare la convergenza all'aumentare dei nodi
+\end{itemize}
+
+Con il prossimo teorema, potremo chiarire parte della seconda questione:
+
+\begin{thm}{}{}
+	Siano $x_0,x_1,...,x_n$ punti distinti e sia $x^* \in [a,b]$ e $[a,b]$ intervallo contenente tutti i punti $\{x_i\}$. Supponiamo di avere $f \in C^{n+1}([a,b])$. Allora esiste $\xi \in ]a,b[$ tale che:
+	\[E_n(x^*) := f(x^*) - p_n(x^*) = \frac{f^{(n+1)}(\xi)}{(n+1)!}\omega(X^*)\]
+	Dove si ha che $\xi = \xi(x^*)$, $p_n$ è il polinomio interpolante di $f$ nei nodi $x_0,...,x_n$ e $\omega(x) = (x-x_0)\cdots(x-x_n)$, detto \textbf{Polinomio Normale}, di grado $n$
+\end{thm}
+
+\begin{cons}
+	Si può vedere come in questa dimostrazione, l'utilizzo dell'analisi è molto evidente.\\
+	Qui l'errore è definito come $f(x^*)-p_n(x^*)$ ed è puntuale, cioè dipende punto per punto, quindi si ha che necessariamente $\xi$ dipende dalla scelta del punto $x^*$. Inoltre, il fatto che ci sia al denominatore un $(n+1)!$ ci dice che l'errore tende ad essere molto piccolo, derivate e $\omega(x)$ permettendo, in quanto non possiamo sapere a priori che valori assumono. Quello che possiamo fare però è poterlo stimare con le norme infinite.
+\end{cons}
+
+\begin{proof}
+	Supponiamo di avere i punti distinti $x_i\neq x_j, \forall i,j$ e supponiamo anche $x^* \neq x_j, \forall j$. (Altrimenti si avrebbe banalmente che $E_n(x^*)=0$, perché è proprio interpolante)
+	Definiamo poi $F(x)$ come:
+	\[F(x) := f(x) - p_n(x) - \frac{f(x^*) - p_n(x^*)}{\omega(x^*)}\omega(x)\]
+	Notiamo subito che $F \in C^{n+1}([a,b])$, in quanto è somma, prodotto e composizione di funzioni di classe $C^{n+1}$. Andiamo a vedere che valore assume $F$ nei vari punti.\\
+	Sui nodi abbiamo che:
+	\[ F(x_i) = \underbrace{f(x_i) - p_n(x_i)}_0 - \frac{f(x^*) - p_n(x^*)}{\omega(x^*)} \underbrace{\omega(x^*)}_0 = 0 \qquad \forall i\]
+	Invece su $x^*$ si ha che:
+	\[ F(x^*) = f(x^*) - p_n(x^*) -\frac{f(x^*) - p_n(x^*)}{\omega(x^*)}\omega^* = 0 \]
+	Ne segue quindi che $F$ ha almeno $n+2$ zeri. Per il teorema di Rolle applicato su $F$, si ha che $F'$ ha almeno $n+1$ zeri. Riapplicandolo nuovamente, $F''$ ha almeno $n$ zeri. Andando avanti così si ottiene che $F^{(n+1)}$ ha almeno uno zero. Chiamiamo $\xi$ lo zero di $F^{(n+1)}$, cioè $F^{(n+1)}(\xi) = 0$\\
+	Ne segue quindi che:
+	\[ F^{(n+1)}(x) = f^{(n+1)}(x) - \underbrace{p_n^{(n+1)}(x)}_0 - \frac{f(x^*) - p_n(x^*)}{\omega(x^*)} \underbrace{\omega^{(n+1)}(x)}_0\]
+	Da cui:
+	\[ f^{(n+1)}(\xi) = \frac{f(x^*) - p_n(x^*)}{\omega(x^*)} (n+1)! \quad \Rightarrow \quad f(x^*)-p_n(x^*) = \frac{f^{(n+1)}(\xi)}{(n+1)!} \omega(x^*) \]
+\end{proof}
+
+\begin{oss}
+	Utilizzando il fatto che $\|f\|_\infty = \max |f(x)|$, con le norme e i valori assoluti abbiamo che:
+	\[ |E_n(x^*)| \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!} \omega(x^*) \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!} \| \omega\|_\infty \]
+\end{oss}
+
+\begin{oss}
+	In generale, sapendo che $\|\omega\|_\infty \leq |b-a|^{n+1}$, direttamente da $|x-x_i|\leq |b-a|$, si ha convergenza se:
+	\[\lim_{n \to +\infty} \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}(b-a)^{n+1} = 0 \]
+	Stiamo confrontando $\|f^{(n+1)}\|$ e $\frac{(b-a)^{n+1}}{(n+1)!}$ e sappiamo che il secondo tende a zero. Del primo a priori non lo sappiamo. Questa stima è \underline{molto} grossolana
+\end{oss}
+
+\begin{es}
+	Sia $f(x) = e^x$ con $x \in [a,b]$ e siano $x_0,x_1,...,x_n$ nodi distinti. Allora sappiamo che:
+	\[ \|f^{(n+1)}\|_\infty = e^b \]
+	Questo perché la funzione è strettamente crescente e $[a,b]$ è chiuso e limitato. Da questo segue che:
+	\[ \|E\|_\infty = \max_{x \in [a,b]}|E(x)| \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!} (b-a)^{n+1} = e^b \frac{(b-a)^{n+1}}{(n+1)!} \xrightarrow{n \to +\infty}0 \]
+	In questo caso si dice c'è compattezza uniforme in $[a,b]$
+\end{es}
+
+In generale non va sempre bene, ecco uno degli esempi più famosi.
+
+\begin{es}[Runge]\label{Runge}
+	Sia la funzione:
+	\[ f: [-5,5] \to \mathbb R\qquad f(x) = \frac 1{1 + x^2} \]
+	Immaginiamo di volerla interpolare, partendo da pochi punti si ha che:
+	\begin{center}
+		\begin{tikzpicture}[domain = -5:5]
+			\draw[->] (0,-0.5) -- (0, 2.5) node[left]{$y$};
+			\draw[->] (-5.5,0) -- (5.5,0) node[right]{$x$};
+			\draw[samples = 400] plot (\x, {(2)/(1 + (\x)^2)});
+			\draw[thick, samples = 400] plot (\x, {((0.25)/((\x)^2+1))*sin((10*\x + 1.6) r) + (2)/(1 + (\x)^2)});
+		\end{tikzpicture}
+	\end{center}
+	Più aumenta più notiamo che l'interpolazione tende ad allontanarsi a quella che effettivamente è la curva	\begin{center}
+		\begin{tikzpicture}[domain = -5:5]
+			\draw[->] (0,-0.5) -- (0, 2.5) node[left]{$y$};
+			\draw[->] (-5.5,0) -- (5.5,0) node[right]{$x$};
+			\draw[samples = 400] plot (\x, {(2)/(1 + (\x)^2)});
+			\draw[thick, samples = 1000] plot (\x, {(2)/((\x)^2+1) + (\x * 0.15)^2*sin((25* \x + 1.6) r)});
+		\end{tikzpicture}
+	\end{center}
+	Continuando ad interpolare, si avranno sempre dei punti che in cui la funzione interpolante esplode. Volendo è possibile dimostrare che vale:
+	\[ \lim_{n \to +\infty} |f(x) - p_n(x)| = \begin{cases} 0 & \text{se }|x|<3,63\\ + \infty & \text{se }|x|>3,63\end{cases} \]
+	Volendo ci sarebbe un modo per interpolare questa funzione, ma bisogna utilizzare i polinomi ortogonali, cosa che non faremo in questo corso.\\
+	Perché questo succede? Se la funzione fosse definita sul piano complesso avremmo che la funzione non è definita su $z = \pm i$. In questo caso $z$ prende il nome di \textbf{polo}. Qui chiaramente non possiamo studiare tutto, ma non possiamo neanche restringerci al dominio $[-5,5]$ perché in tal caso prenderemmo una palla centrata nell'origine di raggio $5$, che appunto comprende i punti in cui la funzione non è definita.
+\end{es}
+
+\subsection{Nodi non Equidistanti}
+
+Introduciamo questa sezione perché risultano molto importanti per la risoluzione di alcuni problemi
+
+\subsection{Nodi di Chebyshev}
+
+I nodi di Chebyshev consistono nel prendere una semicirconferenza e di prendere i punti equidistanti tra di loro sulla circonferenza, per poi proiettarli sull'asse delle ascisse:
+\[ \hat x_k = \cos\left( \frac{2k+1}{2k+2} \pi\right), \quad k \in \{0,...,n\} \]
+Graficamente abbiamo che:
+\begin{center}
+	\begin{tikzpicture}
+		\draw[thick] (2,0) arc (0:180:2cm);
+		\foreach \i in {1,...,10} {
+			\coordinate (N\i) at (\i*180/11:2);
+			\fill (N\i) circle (1pt) node[anchor=west]{};
+			\draw[thin] plot[ycomb,thin] (N\i);}
+		\draw (-2.5, 0) -- (2.5, 0);
+	\end{tikzpicture}
+\end{center}
+
+Se aumento il numero dei nodi, non li ho equispaziati su $[a,b]$ ma sull'arco di circonferenza con estremi $1$ e $-1$. A questo punto mi basta fare la trasformazione:
+\[ [-1,1] \to [a,b] \qquad \Rightarrow \qquad x_k = \frac{a+b}2 + \frac{b-a}2 \hat x_k\]
+Queste che abbiamo appena ottenuto sono le radici del polinomio di Chebyshev di grado $n+1$.
+
+\begin{defn}{Polinomi di Chebyshev}{}
+	I \textbf{Polinomi di Chebyshev} sono delle funzioni speciali definite come:
+	\[ T_n(\cos \theta) = \cos(n \theta)\qquad \theta \in [0, 2 \pi] \]
+	Dove $n$ è il grado del polinomio.
+	Se poniamo poi $x = \cos \theta$ allora abbiamo che:
+	\[ T_n(x) = \cos(n \arccos(x)) \qquad x \in [-1,1]\]
+\end{defn}
+
+\newpage
+
+Andiamo a vedere le proprietà di questi polinomi:
+\begin{itemize}
+	\item $|T_n(x)|\leq 1$, in quanto è un coseno
+	\item Vediamo adesso dei casi al variare di $n$:
+		\begin{align*}
+			n = 0: & \quad T_0(x) = 1\\
+			n = 1: & \quad T_1(x) = \cos \theta = x\\
+			n = 2: & \quad T_2(x) = \cos(2\theta)= 2\cos^2 \theta - 1 = 2\underbrace{\cos \theta}_{x} \underbrace{\cos \theta}_{T_1(x)} - \underbrace{1}_{T_0(x)} = 2x T_1(x) - T_0(x)
+		\end{align*}
+		Notiamo che abbiamo trovato una ricorrenza (che può essere dimostrata per induzione) tale che:
+		\[ T_{n+1}(x) = 2x T_n(x) - T_{n-1}(x) , \forall n \in \mathbb N\]
+	\item Il coefficiente direttore è $2^{n-1}$ e il rispettivo polinomio monico è:
+		\[ \mathring T_n(x):= \frac 1{2^{n-1}} T_n(x)\]
+	\item Sapendo che $T_n(x) = \cos(n \arccos(x))$, gli zeri di questo polinomio sono:
+		\begin{align*}
+			T_n(x) &= \cos(n \arccos(x)) = 0 \Rightarrow\\
+			& \Rightarrow n \arccos(x) = (2k-1)\frac \pi 2 & \text{con }k =1,2,...,n\\
+			& \Rightarrow \arccos(x) = \frac{2k-1}{2n} \pi & \text{con }k = 1,2,...,n\\
+			& \Rightarrow x = \cos \left( \frac{2k-1}{2n}\pi \right) & \text{con }k = 1,2,...,n
+		\end{align*}
+		Notiamo che se scaliamo a $T_{n+1}(x)$ otteniamo che gli zeri sono:
+		\[ \hat x_k = \cos\left( \frac{2k+1}{2n+2}\pi \right) \]
+		Che è esattamente quanto avevamo detto precedentemente.
+	\item Andiamo a capire quali sono i punti $z_k$ in cui la funzione assume valori massimi e valori minimi, cioè i punti $z_k$ tali che:
+		\[ T_n(z_k) = \pm 1 \]
+		Proseguendo in maniera del tutto analoga a quanto fatto precedente (con la sola eccezione che $k = 0,1,...,n$) si ha che:
+		\[ z_k = \cos\left( \frac kn \pi \right) \qquad k = 0,1,...,n\]
+\end{itemize}
+
+\begin{oss}
+	È fondamentale ricordarsi la ricorrenza che abbiamo trovato nel secondo punto, perché è quello che ci permette di dire che tutti i polinomi di Chebyshev sono effettivamente dei polinomi
+\end{oss}
+
+\begin{center}
+	\begin{tikzpicture}[domain = -1:1]
+		\draw[->] (-1.5,0) -- (1.5,0) node[right]{$x$};
+		\draw[->] (0, -1.5) -- (0, 1.5) node[left]{$y$};
+		\draw[samples = 100] plot(\x,{cos(5*rad(acos(\x)) r)}) node[right]{$T_n(x)$};
+	\end{tikzpicture}\\
+	Il grafico di $T_n(x)$ con $n = 5$
+\end{center}
+
+In Matlab possiamo definire questa funzione utilizzando gli "handle" $@$, attraverso la sintassi:
+\[\mathtt {f = @(x,n) (cos(5*acos(x)))}\]
+In questo modo abbiamo definito una funzione a due variabili che calcola il polinomio di Chebyshev di grado $n$ in $x$.
+
+\begin{thm}{}{}
+	È verificata:
+	\[ \forall \mathring p \in \mathbb P_n, \text{monico}, \|\mathring p\|_{\infty, [-1,1]} \geq \|\mathring T\|_{\infty, [-1,1]} = \frac 1{2^{n-1}} \]
+	O, equivalentemente:
+	\[ \min_{\mathring p \in \mathbb P_n} \max_{x \in [-1,1]} |\mathring p(x)| \geq \frac 1{2^{n-1}} = \max_{x \in [-1,1]} |\mathring T(x)| \]
+\end{thm}
+
+\begin{cons}
+	Quello che il teorema sostanzialmente ci sta dicendo è che tra tutti i polinomi monici di grado $n$, il polinomio di Chebyshev è quello con minima norma infinita e il suo valore massimo è pari a $\frac 1{2^{n-1}}$
+\end{cons}
+
+\begin{proof}
+	Dimostriamolo per assurdo.\\
+	Supponiamo per assurdo che esista un polinomio $\mathring p_n(x) \in \mathbb P_n$ tale che:
+	\[ |\mathring p_n(x)|< \frac 1{2^{n-1}} \]
+	E di conseguenza anche il suo massimo è minore di $\frac 1{2^{n-1}}$. Definiamo $d_n$ come:
+	\[ d_n(x) = \mathring T_n(x) - \mathring p_n(x) \]
+	Sappiamo che necessariamente $\deg(d_n) = n-1$, in quanto i coefficienti direttori di $\mathring T_n$ e $\mathring p_n$ è $1$, quindi si cancellano.
+	Nei punti $z_k$, che ricordiamo essere definiti come:
+	\[ z_k = \cos \left( \frac kn \pi \right) \]
+	Abbiamo che:
+	\[ T_n(z_k) = \pm 1\qquad \Rightarrow \qquad \mathring T_n(z_k) = \pm \frac 1{2^{n-1}} \]
+	Sapendo questa cosa, possiamo dire con tranquillità che:
+	\[ d_n(z_0) = \frac 1{2^{n-1}} - \mathring p_n(z_0) > 0\qquad d_n(z_1) = -\frac 1{2^{n-1}} - \mathring p_n(z_1)<0\qquad ...\]
+	In generale avremo che
+	\[ d_n(z_{2k}) = \frac 1{2^{n-1}} - \mathring p_n(z_{2k}) > 0\qquad d_n(z_{2k+1}) = -\frac 1{2^{n-1}} - \mathring p_n(z_{2k+1})<0\]
+	Ci sono quindi $n$ cambi di segno, questo significa che ci sono $n$ zeri (il polinomio è continuo; in particolare lo è quello di Chebyshev per la ricorrenza che avevamo trovato in precedenza). Però il grado del polinomio è $n-1$. Deve seguire necessariamente che $d_n$ è identicamente nullo.\\
+	Abbiamo trovato una contraddizione al fatto che tale $\mathring p_n$ esista, da cui segue che:
+	\[ |\mathring p_n(x)|\geq \frac 1{2^{n-1}}, \forall x \in [-1,1], \forall \mathring p_n \in \mathbb P_n \; \text{monici} \]
+\end{proof}
+
+\textit{Che cosa ce ne facciamo?}\\
+Tutto questo ci era servito per l'interpolazione. In particolare, riprendiamo l'errore di interpolazione prendendo $[a,b] = [0,1]$. Avevamo che l'errore era definito come:
+\[ |E(x^*)| \leq \left\| \frac{f^{(n+1)}}{(n+1)!} \right\|_\infty \cdot \|\omega\|_\infty \]+
+Dove $\omega$ era il polinomio nodale, cioè:
+\[\omega = \prod_{j = 0}^n (x-x_j)\]
+Allora abbiamo che $\omega$ è un polinomio monico di grado $\deg(\omega)=n+1$
+
+Se io volessi minimizzare l'errore il più possibile, ho due scelte:
+\begin{itemize}
+	\item Aumentare il grado di $\omega$
+	\item Diminuire $\|\omega\|_\infty$
+\end{itemize}
+
+È proprio a quest'ultimo punto che ci servono i polinomi di Chebyshev.\\
+Infatti, sfruttando il fatto che $\omega$ è monico, possiamo prendere:
+\[ \omega \equiv \mathring T_{n+1}\qquad \Leftrightarrow \qquad \mathring T_{n+1} = \arg \min_{\mathring p_{n+1}} \]
+In questo modo abbiamo che:
+\[ \|\omega\|_\infty = \|\mathring T_{n+1}\|_\infty = \frac 1{2^n} \]
+Quindi, se ho grado $n$, ho una norma piccolissima dell'errore, infatti:
+\[ |E(x^*)| \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1!)2^n}\]
+
+Però tutto questo è fatto nell'intervallo $[-1,1]$. \textit{Come possiamo generalizzarlo?}\\
+Possiamo fare come avevamo già fatto in precedenza, cioè, se $\hat x_j$ sono i nodi, allora:
+\[ x_j = \frac{a+b}2 - \frac{b-a}2 \hat x_j \]
+Ma la cosa è valida per un qualsiasi punto $x \in [a,b]$, infatti $\exists \hat x \in [-1,1]$ tale che:
+\[ x = \frac{a+b}2 - \frac{b-a}2 \hat x \]
+In questo modo, possiamo riscrivere $\omega$ come:
+\[ \omega(x) = \prod_{j = 0}^n(x-x_j) = \prod_{j =0}^n \left( \frac{b-a}2 \right)(\hat x-\hat x_j) = \left(\frac{b-a}2\right)^{n+1} \prod_{j = 0}^n(\hat x- \hat x_j)\]
+In questo modo abbiamo che:
+\[ \|\omega\|_{\infty,[a,b]} = \left(\frac{b-a}2\right)^{n+1} \left\| \prod_{j = 0}^n (\hat x - \hat x_j) \right\|_{\infty, [-1,1]} = \left(\frac{b-a}2\right)^{n+1} \cdot \frac 1{2^n} = \frac{(b-a)^{n+1}}{2^{2n+1}}\]
+
+\begin{oss}
+	In generale avevamo che $\|\omega\|_{\infty, [a,b]} \leq(b-a)^{n+1}$. Utilizzando i polinomi di Chebyshev abbiamo che tale stima si riduce drasticamente a:
+	\[ |E(x^*)|\leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}\cdot \frac{(b-a)^{n+1}}{2^{2n+1}} \]
+\end{oss}
+
+\begin{thm}{di Bernstein}{}
+	Supponiamo $f \in C^1([a,b])$. Allora il polinomio $p_n$ interpolante $f$ nei nodi di Chebyshev $x_0,x_1,...,x_n$ converge uniformemente su $[a,b]$ per $n \to + \infty$
+\end{thm}
+
+\begin{cons}
+	Il fatto che la funzione converga uniformemente implica che \underline{tutti} i punti tendono a $f(x)$. Inoltre più grande sarà il grado del polinomio, migliore sarà la convergenza
+\end{cons}
+
+\begin{es}
+	Riprendiamo l'esempio \ref{Runge} della funzione di Runge. Se utilizziamo i polinomi di Chebyshev ho che l'errore va a $0$ per $n \to + \infty$. Infatti:
+
+	\begin{center}
+		\begin{tabular}{c|c|c|c|c}
+			\textbf{Grado del Polinomio} & $5$ & $10$ & $20$ & $40$\\
+			\hline
+			$\mathbf{\|E\|_{\infty, [-5,5]}}$ & $0,5$ & $0,089$ & $0,015$ & $0,00028$
+		\end{tabular}
+	\end{center}
+\end{es}
+
+\begin{ese}[Prova 3/9/2019]
+	È data la funzione $f:[a,b] \to \mathbb R$ con $f>0$ e siano:
+	\[ m_0 = \min_{[a,b]}|f(x)|\qquad \text e \qquad M_k = \max_{[a,b]}|f^{(k)}(x)|\quad k = 0,1,... \]
+	\begin{enumerate}
+		\item Sia $p_n$ il polinomio interpolante con nodi di Chebyshev in $[a,b]$. Si stimi:
+			\[ r_k = \max_{[a,b]} \frac{|f(x) - p_{n-1}(x)|}{|f(x)|}\quad \text{cioè l'errore relativo} \]
+		\item Per $f(x) = \log (x)$ e per $[a,b] = [e, e^2]$, si determini $\beta$ tale che $r_n = \alpha \beta^n$ con $\alpha = \alpha(n)$ in modo moderato (\textit{che non scoppi})
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox 1 Sia $x \in [a,b]$, allora abbiamo che:
+	\[ \frac{|f(x)-p_{n-1}(x)|}{f(x)}\leq \frac{\|f^{(n)}\|_\infty}{n!\cdot m_0}\cdot \|\omega\|_\infty \]
+	Possiamo dire altro? Sappiamo che:
+	\[\|\omega\|_\infty = \left( \frac{b-a}2 \right)^n \cdot \frac 1{2^{n-1}}\]
+	Da cui segue che:
+	\[ \frac{|f(x)-p_{n-1}(x)|}{f(x)}\leq \frac{\|f^{(n)}\|_\infty}{n!\cdot  m_0}\cdot \|\omega\|_\infty = \frac{\|f^{(n)}\|_\infty}{n!\cdot m_0}\cdot \frac{(b-a)^n}{2^{2n-1}}\]
+
+	\fbox{2} Siano quindi $f(x) = \log x$ e $[a,b] = [e,e^2]$, allora si ha che:
+	\[ f'(x) = \frac 1x \quad f''(x) = -\frac 1{x^2}\quad f^{(3)}(x)=\frac 2{x^3}\quad f^{(4)}=-\frac 6{x^4}\]
+	Notiamo allora che, per ogni $n$, si ha che:
+	\[ r_n \leq \frac{\|f^{(n)}\|_\infty}{n! \cdot m_0}\cdot \frac{(b-a)^n}{2^{2n-1}} \]
+	Notiamo però che si ha che:
+	\[ |f^{(n)}|=\frac{(n-1)!}{x^n} \quad \Rightarrow \quad \|f^{(n)}(x)\|_{\infty, [a,b]} \leq \frac{(n-1)!}{e^n} \]
+	Cioè la maggiorazione non dipende da $x$. Avevamo che:
+	\[ m_0 = \min_{[e,e^2]} |f(x)| = |\log e| = 1\qquad b-a  = e(e-1) \]
+	Andando a sostituire si ha che:
+	\[ r_n \leq \frac{(n-1)!}{e^n}\cdot \frac 1{n!}\cdot \frac 11 \cdot \frac{e^n(e-1)^n}{2^{2n-1}} = \underbrace{\frac 2n}_\alpha \cdot \underbrace{\left( \frac{e-1}4 \right)^n}_{0\leq \beta \leq 1} = \alpha \beta^n \]
+	Notiamo poi che $\alpha \to 0$ per $n \to \infty$, quindi abbiamo finito
+\end{sol}
+
+\subsection{Analisi di Stabilità}
+
+Supponiamo di avere le coppie $(x_i,y_i)$ con $i \in \{0,...,n\}$, coppie di osservazioni ($y_i$ può essere $f(x_i)$ per una qualche $f$, ma non è strettamente necessario). Supponiamo di non conoscere $y_i$ in maniera esatta, ma di conoscere $\tilde y_i$ sua perturbazione. Avremo, utilizzando i polinomi in base di Lagrange, allora che:
+\[ \tilde p_n(x) = \sum_{i = 0}^n \tilde y_i L_i(x) \]
+In particolare, andando a fare la differenza tra i due polinomi:
+\[ p_n(x) - \tilde p_n(x) = \sum_{i = 0}^n y_i L_i(x) - \sum_{i = 0}^n \tilde y_i L_i(x) = \sum_{i = 0}^n (y_i - \tilde y_i)L_i(x)\]
+In particolare, andandone a prendere prima i valori assoluti e poi le norme infinito, avremo che:
+\begin{align*}
+	|p_n(x) - \tilde p_n(x)| &\leq \sum_{i = 0}^n |y_i - \tilde y_i| \cdot |L_i(x)| \leq \max_{i \in \{0,...,n\}} |y_i - \tilde y_i| \sum_{i = 1}^n L_i(x)\\
+	\|p_n(x) - \tilde p_n(x) \|_\infty &= \max_{x \in [a,b]} |p_n(x) - \tilde p_n(x)| \leq \max_{i \in \{0,...,n\}}|y_i - \tilde y_i| \cdot \max_{x \in [a,b]} \sum_{i = 0}^n |L_i(x)|
+\end{align*}
+In questo modo abbiamo che la massima perturbazione aumenta con il massimo di $|y - \tilde y|$ e da:
+\[ \Lambda_n := \max_{x \in [a,b]} \sum_{i = 0}^n |L_i(x)| \]
+Questa costante prende il nome di \textbf{Costante di Lebesgue}.
+
+\begin{defn}{Costante di Lebesgue}{}
+	Data una serie di coppie $(x_i, y_i)$ e $(\tilde y_i)$ le rispettive perturbazioni, con $x \in [a,b]$, si definisce la \textbf{Costante di Lebesgue} la costante:
+	\[ \Lambda_n := \max_{x \in [a,b]} \sum_{i = 0}^n|L_i(x)|\]
+	Questo rappresenta il fattore di amplificazione dell'errore / della perturbazione
+\end{defn}
+
+In sintesi si ha che:
+\[ \|p_n - \tilde p_n\|_\infty \leq \max_{x \in \{0,...,n\}} |y_i - \tilde y_i| \Lambda_n \]
+
+\begin{oss}
+	Facciamo diverse osservazioni:
+	\begin{itemize}
+		\item $\Lambda_n$ dipende \underline{solo} dai nodi scelti $\{x_0,...,x_n\}$ e non da $f(x_i) = y_i$
+		\item Si può dimostrare che $\Lambda_n$, a seconda dei nodi scelti, ha il seguente comportamento:
+			\[\begin{cases}
+				\Lambda_n \approx \frac{2^n}{n \log n} & \text{Se i nodi sono equivalenti}\\
+				\Lambda_n \approx \log n & \text{Se si usano i nodi di Chebyshev}
+			\end{cases}\]
+		\item Una $n$ grande può causare seri problemi
+	\end{itemize}
+\end{oss}
+
+Oltre a tutto questo $\Lambda_n$ è coinvolto anche in un risultato più qualitativo:
+
+\begin{thm}{}{}
+	Sia $f \in C^0([a,b])$, $p_n$ il polinomio di interpolazione relativo a $\{x_0,...,x_n\}$, allora:
+	\[ \|f - p_n\|_{\infty, [a,b]}\leq (1 + \Lambda_n) \inf_{q \in \mathbb P_n}\|f-q\|_{\infty, [a,b]} \]
+\end{thm}
+
+\begin{cons}
+	Quello che sostanzialmente il teorema ci sta dicendo è che la distanza del polinomio interpolante dal migliore polinomio $q$ cresce di un valore pari a $1 + \Lambda_n$ (per questo siamo sicuri che cresca, in quanto questo valore è sempre positivo). Sottolineiamo che $q$ nell'enunciato del teorema, non necessariamente è un polinomio interpolante, ma è il polinomio che meglio riduce la distanza di $f$ dal polinomio
+\end{cons}
+
+\begin{proof}
+	Sia $q_n \in \mathbb P_n$. Allora si ha che:
+	\[ f(x)-p_n(x) = f(x) - q_n(x) + q_n(x) - p_n(x) \]
+	In particolare si ha che:
+	\[ |f(x) - p_n(x)| \leq |f(x)-q_n(x)| + |q_n(x) - p_n(x)| \]
+	Sapendo che $q_n \in \mathbb P_n$, possiamo ancora interpolarlo e ottenere che:
+	\begin{align*}
+		|q_n(x) - p_n(x)| &= \left| \sum_{i = 0}^n q_n(x_i) L_i(x)- \sum_{i =0}^n f(x_i)L_i(x)\right| \leq \sum_{i = 0}^n |q_n(x_i) - f(x_i)|\cdot |L_i(x)|\\
+		&\leq \max_{i \in \{0,...,n\}} |q_n(x_i) - f(x_i)| \sum_{i = 0}^n |L_i(x)|\leq \max_{x \in \{a,b\}} |q_n(x) - f(x)|\sum|L_i(x)|\\
+		&= \|f-q_n\|_{\infty, [a,b]} \sum_{i = 0}^n |L_i(x)|
+	\end{align*}
+	Dalla disuguaglianza ad inizio dimostrazione abbiamo che:
+	\begin{align*}
+		\|f - p_n\|_{\infty} &\leq \max_{x \in [a,b]} |f(x) - q_n(x)| + \max_{x \in [a,b]} |q_n(x) - p_n(x)|\\
+		&= \|f-q_n\|_\infty + \|f-q_n\|_\infty \max_{x \in [a,b]} \sum_{i = 0}^n|L_i(x)|\\
+		&= \|f-q_n\|_\infty + \|f - q_n\| \Lambda_n = (1 + \Lambda_n)\|f-q_n\|_\infty
+	\end{align*}
+	Per l'arbitrarietà di $q_n$, si ha che vale $\forall q \in \mathbb P_n$, quindi anche per l'inf, da cui segue la tesi
+\end{proof}
+
+\begin{ese}
+	Sia $f(x) = \cos(\pi x)e^{2x}$ con $x \in [-\frac 14, \frac 14]$.
+	\begin{enumerate}
+		\item Determinare il polinomio interpolante a $f$ in $x_0 = -\frac 14$, $x_1=0$, $x_2 = \frac 14$
+		\item Supponendo $\tilde y_2 \approx 1,63$ (con $y_2 \approx 1,59$), stimare $\|p_2 - \tilde p_2\|_\infty$
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Per il primo punto possiamo fare come in uno degli esercizi/esempi precedenti.
+	\begin{align*}
+		L_0(x) &= \frac{(x-0)(x-\frac 14)}{(-\frac 14 - 0)(-\frac -14-\frac 14)} = 8x \left(1 - \frac 14\right) = 8x^2 - 2x \quad f(x_0) = \frac{\sqrt 2}2 e^{-\frac 12}\\
+		L_1(x) &= \frac{(x-\frac 14)(x+\frac 14)}{(0-\frac 14)(0+ \frac 14)} = -16\left( x^2 - \frac 1{16} \right) = -16x^2 + 1\quad f(x_1) = 1\\
+		L_2(x) &= \frac{(x + \frac 14)x}{(\frac 14 + \frac 14)(\frac 14)} = 8x^2 + 2x \qquad \qquad \qquad\qquad \qquad \quad \;\; f(x_2) = \frac{\sqrt 2}2 e^{\frac 12}
+	\end{align*}
+	Da questo segue che:
+	\[ p_2(x) = \frac{\sqrt 2}2 e^{-\frac 12}\left( 8x^2-2x \right) - (16x^2 - 1) + \frac{\sqrt 2}2 e^{\frac 12} ( 8^2 + 2 ) \]
+
+	\fbox{2} Dobbiamo cercare:
+	\[\max_{x \in [a,b]} |p_2(x) - \tilde p_2(x)|\qquad \text{con }\tilde p_2(x) = y_0L_0(x)  +y_1L_1(x) + \tilde y_2 L_2(x)\]
+	Infatti:
+	\[ \| p_2(x) - \tilde p_2(x) \|_\infty \leq \max_{i \in \{0,1,2\}}|y-\tilde y_i|\Lambda_n(x) = (y_2 - \tilde y_2)\Lambda_n(x) \approx 0,4 \Lambda_n \]
+	Con $\Lambda_n$ che ha una stima pessimistica. Otteniamo quindi che:
+	\begin{align*}
+		p_2(x) - \tilde p_2(x) = 0+0+(y_2-\tilde y_2) L_2(x) = (y_2 - \tilde y_2)L_2(x)
+	\end{align*}
+	In particolare otteniamo che:
+	\[ |p_2(x) - \tilde p_2| = |y_2-\tilde y_2|\cdot |L_2(x)| \quad \Rightarrow \quad \|p_2 - \tilde p_2\|_\infty = |y_2 - \tilde y_2|\|L_2\|_\infty = |y_2 - \tilde y_2| \approx 0,04 \]
+	Abbiamo che $\|L_2\|_\infty = 1$ in quanto se $L_2(x) = 8x^2 + 2x$, allora $L'_2(x) = 16x + 2$. Otteniamo un punto critico con $x= -\frac 18$, ed è un punto di minimo. Nell'intervallo $[-\frac 14, \frac 14]$, abbiamo che $\frac 14$ è punto di massimo, quindi:
+	\[ L_2\left(\frac 14\right) = \frac 12 + \frac 12 = 1 \]
+	Quindi tutto torna
+\end{sol}
+
+\begin{ese}
+	Siano $[a,b] = [-1,1]$, $x_0 = -\alpha, x_1 = 0, x_2 = \alpha$ e consideriamo $p_2$ associato a $\{x_0, x_1, x_2\}$
+	\begin{enumerate}
+		\item Maggiora l'errore di interpolazione in modo indipendente da $x$ (+ accumulato possibile) per $\alpha = 1$ e $f(x) = \sin x$
+		\item Dimostra che al variare di $\alpha \in [0,1]$, la migliore stima (ossia il valore di $\|\omega\|_\infty$, del polinomio nodale) sia per $\alpha = \frac {\sqrt 3} 2$
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Per quanto fatto in precedenza, sappiamo che:
+	\[ \|f-p_1\|_\infty \leq \frac{\|f^{(3)}\|_\infty}{3!} \|\omega\|_\infty = \frac{\|-\cos x\|_\infty}{6}\|\omega\|_\infty = \frac 16 \|\omega\|_\infty \]
+	Sappiamo poi che:
+	\[\omega x = (x-x_0)(x-x_1)(x-x_2) = (x+\alpha)(x)(x-\alpha) = x(x^2-\alpha^2) = x^3 - \alpha^2 x\]
+	In particolare il polinomio nodale è nullo se e solo se $x = \pm \frac \alpha{\sqrt 3}$. Abbiamo poi che:
+	\[ \omega\left( \pm \frac \alpha {\sqrt 3} \right) = \pm \frac{\alpha}{\sqrt 3} = \pm \frac \alpha{\sqrt 3} \left( \frac{\alpha^2}3 - \alpha^2 \right) =\sqrt \alpha {\sqrt 3}\left( -\frac 23 \alpha^2 \right) = \mp \frac 2{3 \sqrt 3}\alpha^3 \]
+	Abbiamo quindi che il suo valore assoluto è:
+	\[ \left| \omega \left( \pm \frac \alpha {\sqrt 3} \right) \right| = \frac{2 \alpha^3}{3 \sqrt 3}\]
+	Per $\alpha = 1$, abbiamo che:
+	\[ \left| \omega\left( \pm \frac 1{\sqrt 3} \right) \right| = \frac 2{3 \sqrt 3}>0 \]
+	Per $\omega(\pm 1)$ si ha che:
+	\[ \|f- p_2\|_\infty = \frac 16 \frac{2}{3 \sqrt 3} = \frac 1{9\sqrt 3} = \frac {\sqrt 3}{27} \approx 0,067 \]
+
+	\fbox{2} Qual è il miglior $\alpha$?\\
+	Sapevamo che $|\omega(\pm\frac \alpha{\sqrt 3})| = \frac 2{3 \sqrt 3}\alpha^3$, dobbiamo però confrontarlo con il valore che $\omega$ assume agli estremi. Cioè:
+	\[ |\omega(\pm 1)| = 1 - \alpha^2 \]
+	Questo valore è ben definito in quanto si ha che è sempre positivo, in quanto $|\alpha|<1$. Per la definizione di norma infinito segue che:
+	\[ \|\omega\|_\infty = \max\left\{ \frac 2{3 \sqrt 3}\alpha^3, 1 - \alpha^2 \right\} \]
+	\textit{Come si comporta però al variare di $\alpha?$}\\
+	Sappiamo che la prima quantità corrisponde ad una funzione crescente, mentre la seconda ad una decrescente. Visto che dobbiamo prendere il massimo dei valori delle due funzioni, l'$\alpha$ che ci conviene prendere è quello che fa assumere $\|\omega\|_\infty$ il valore minimo. In questo caso corrisponde con il punto in cui le due funzioni sono uguali. In questo modo quello che stiamo cercando è:
+	\[ \min_{\alpha} \|\omega(\alpha)\|_\infty \]
+	Non c'è bisogno di andare a risolvere l'uguaglianza per $\alpha$, basta far vedere che sostituendo $\alpha$ con il valore proposto, si ottiene che l'uguaglianza è verificata. Facendo i conti, otteniamo $\frac 14$ da entrambe le parti, quindi p verificata
+\end{sol}
+
+\subsection{Forma di Newton}
+
+Dalle sezioni precedenti, abbiamo visto che possiamo rappresentare i polinomi con la base delle singole potenze di $x$ $\{x^k : k \in \{0,...,n\}\}$, oppure in forma di Lagrange $\{L_i(x):i \in \{0,...,n\}\}$.
+
+\begin{defn}{Polinomi in forma di Newton}{}
+	Un polinomio è detto in \textbf{Forma di Newton} se è scrivibile come:
+	\[ p_n(x) = a_0 + \sum_{i = 1}^n a_i \prod_{j = 0}^{i-1}(x-x_j)\]
+\end{defn}
+
+Analizziamo questa definizione. Questo polinomio è equivalente a:
+\[ p_n(x) = a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1) + \cdots + a_n \prod_{k=0}^{n-1}(x-x_k)\]
+Con $x_0,...,x_n$ nodi di interpolazione del polinomio.
+
+Per trovare i coefficienti $a_i$ del polinomio, possiamo trovare l'interpolazione del tipo $p_n(x_i) = y_i$ (se abbiamo una funzione, ci basta porre $y_i = f(x_i)$), ci basta:
+\begin{align*}
+	x = x_0 &: p_n(x_0) = y_0 \quad \Rightarrow \quad a_0 = y_0\\
+	x=x_1 &: p_n(x_1) = y_1 \quad \Rightarrow \quad a_0 + a_1(x_1-x_0) = y_1\\
+	x=x_2 &: p_n(x_2) = y_2 \quad \Rightarrow \quad a_0 + a_1(x_2-x_0) + a_2(x_2-x_0)(x_2-x_1) = y_2
+\end{align*}
+E così via per ogni $i \in \{0,...,n\}$. Notiamo che in questo modo troviamo un sistema lineare triangolare inferiore:
+\[
+	\begin{pmatrix}
+		1 & 0 & 0 & 0 & \cdots & 0\\
+		1 & (x_1-x_0) & 0 & 0 & \cdots & 0\\
+		1 & (x_2-x_0) & \prod_{i = 0}^1(x_2-x_i) & 0 & \cdots & 0\\
+		\vdots & \vdots & \vdots & \ddots & & \vdots\\
+		1 & (x_n-x_0) & \prod_{i = 0}^1(x_n-x_i) & \prod_{i = 0}^2(x-x_i) & \cdots & \prod_{i = 0}^{n-1}(x-x_i)
+	\end{pmatrix}
+	\begin{pmatrix}a_0\\ a_1\\ a_2 \\ \vdots \\ a_n\end{pmatrix} =
+	\begin{pmatrix} y_0\\ y_1\\ y_2\\ \vdots\\ y_n\end{pmatrix}
+\]
+
+\begin{oss}
+	Il costo computazionale di un sistema lineare triangolare è $(n+1)^2$
+\end{oss}
+
+Possiamo dare un'altra definizione di polinomio di Newton.
+
+\begin{defn}{Polinomio di Newton}{}
+	Se definiamo:
+	\[ \varphi_0(x) = 1 \qquad \varphi_i(x) = \prod_{j = 0}^{i-1}(x-x_j)\quad i>0 \]
+	Allora possiamo definire il \textbf{Polinomio di Newton} come:
+	\[ p_n(x) = \sum_{i = 0}^n a_i \varphi_i(x) \]
+	Abbiamo in questo caso che $\{\varphi_i(x)\}$ è una base di polinomi
+\end{defn}
+
+\begin{oss}
+	Il polinomio $p_{n+1}(x)$ se gli aggiungiamo un nodo $x_{n+1}$ con Lagrange dovremmo ricominciare a calcolarlo da zero. Qui invece possiamo sfruttare il fatto che lo aggiungiamo in fondo:
+	\[ p_{n+1}(x) = a_0 + a_1(x-x_0) + \cdots + a_n \prod_{j = 0}^{n-1}(x-x_j) + {\color{blue} a_{n+1}\prod_{j = 0}^n (x-x_j)} \]
+	Cioè, riscrivendola per bene:
+	\[ p_{n+1}(x) = p_n(x) + \omega_n(x)\]
+	\textit{Tornando al sistema lineare, questo implica aggiungere una riga e una colonna in fondo}
+\end{oss}
+
+\begin{oss}
+	$a_n$ \underline{non} dipende dall'ordine dei nodi, in quanto è tutto legato alla produttoria
+\end{oss}
+
+I coefficienti $a_i$ vengono chiamati anche \textbf{Differenza Divisa}, in quanto possono essere ottenuti sfruttando dei "rapporti incrementali". In particolare vale la seguente proposizione:
+
+\begin{prop}{}{}
+	Posto $f[x_i] = f(x_i)$, si ha che:
+	\[ a_k \equiv f[x_0,...,x_k] = \frac{f[x_1,...,x_n] - f[x_0,...,x_{n-1}]}{x_k - x_0} \]
+\end{prop}
+
+Di questa proposizione non faremo la dimostrazione. Vediamo però che cosa significa. Sappiamo che per $x=x_0$ si ha che $a_0 \equiv f[x_0]$. Sfruttando la formula, possiamo calcolare $a_1$ come:
+\[ a_1 \cong f[x_0,x_1] = \frac{f[x_1]-f[x_0]}{x_1-x_0} \]
+\textit{Sappiamo che $f[x_i]=f(x_i)$}. Andando avanti in questo modo, possiamo calcolare $f[x_1,x_2]$ nel seguente modo:
+\[ f[x_1,x_2] = \frac{f[x_2]-f[x_1]}{x_2-x_1} \]
+Da cui poi $a_2$ come:
+\[ a_2 \cong f[x_0,x_1,x_2] = \frac{f[x_1,x_2] - f[x_0,x_1]}{x_2-x_0}\]
+Proseguendo in questo modo otteniamo tutti i valori $a_i$
+
+\begin{oss}
+	Riprendendo il polinomio in base di Newton, abbiamo che può essere scritto come:
+	\begin{align*}
+		p_n(x) &= a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1) + \cdots\\
+		&= a_0 + (x-x_0)\big( a_1 + (x-x_1) ( a_2 + \cdots) \big)
+	\end{align*}
+	In particolare, per $n= 3$ abbiamo che:
+	\[ p_3(x) = a_0 + (x-x_0)\big( a_1  + (x-x_1) (a_2 + (x-x_2)(a_3)) \big)\]
+	Visto che la valutazione del polinomio può essere estremamente lunga, esiste un metodo più efficace di valutare il polinomio, chiamato \textbf{Regola di Horner}.\\
+	Chiamiamo come $\pi_n = p_n(\hat x)$ il valori che $p_n$ assume quando lo valutiamo in $\hat x$. Definiamo $\pi_0 = a_n$ e poi continuo andando all'indietro con $\pi_k = (\hat x - x_{n-k})\pi_{k-1} + a_{n-k}$ con $k \in \{1,...,n\}$, cioè (riprendendo il caso $n = 3$)
+	\[ p_3(\hat x) = \overbrace{a_0 + (x-x_0)\big( \underbrace{a_1 + (x-x_1)(\overbrace{a_2 + (x-x_2)(\pi_0)}^{\pi_1})}_{\pi_2} \big)}^{\pi_3} \]
+	Sostanzialmente, questo è quello che c'è dietro alla funzione \texttt{polival} di Matlab
+\end{oss}
+
+\newpage
+
+\section{Interpolazione Composta}
+
+Riprendiamo in generale quanto fatto con l'interpolazione. Avevamo che potevamo maggiorare l'errore con:
+\[ |f(x^*) - p_n(x^*)| \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}(b-a)^{n+1} \]
+Esistono altri modi per migliorare ancora questa stima oltre ad aumentare il numero di nodi o cambiandoli direttamente?
+La cosa migliore sarebbe rimpicciolire l'intervallo, ma come facciamo se vogliamo interpolare esattamente su $[a,b]$?
+Possiamo suddividere l'intervallo e poi interpolare su ogni sottointervallo ottenuto.\\
+Più formalmente possiamo prendere una suddivisione $\sigma = \{x_0,...,x_n\}\in \Omega_{a,b}$ tale che:
+\[ a \equiv x_0 < x_1 < \cdots < x_n \equiv b\]
+E poi andare ad interpolare la funzione su ogni intervallo $I_j = [x_j, x_{j+1}]$ per $j \in \{0,...,n-1\}$. Tutto torna in quanto:
+\[ [a,b] = \bigcup_{j \in \{0,...,n-1\}} I_j\]
+Definiamo poi:
+\[ \mathcal X_{h,\ell} = \{v \in C([a,b]) : v|_{I_j} \in \mathbb P_\ell, j \in \{0,...,n-1\}\}\]
+Dove $\ell$ rappresenta il grado del polinomio, mentre $h$ rappresenta la lunghezza dell'intervallo con lunghezza maggiore.
+
+\begin{oss}
+	Possiamo dire che l'interpolazione funziona in quanto $v$ è continua in $[a,b]$, quindi c'è raccordo tra i nodi
+\end{oss}
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-1,0) -- (6,0);
+		\draw[->] (0,-1) -- (0,3);
+		\filldraw (1,1) circle(1pt) (2,1) circle(1pt) (3,1) circle(1pt) (4,1) circle(1pt) (5,2) circle (1pt);
+		\draw (1,1) to[out = 90, in = 90] (2,1) to[out = 90, in = 90] (3,1) to[out = 270, in = 270] (4,1) to [out = 90, in = 180] (5,2);
+		\draw[dashed] (1,1) -- (1,0) node[below]{$a$} (2,1) -- (2,0) (3,1) -- (3,0) (4,1) -- (4,0) (5,2) -- (5,0) node[below]{$b$};
+	\end{tikzpicture}\\
+	Basta che $v$ sia continua e che localmente sia un polinomio
+\end{center}
+
+\begin{oss}
+	I punti presi in $\sigma \in \Omega_{[a,b]}$ non necessariamente corrispondono con i nodi stessi, alcuni possono essere gli stessi. Volendo per distinguerli potrebbero essere indicati come $\xi_i$
+\end{oss}
+
+Possiamo andare a stimare l'errore per ogni intervallino.\\
+Supponiamo $f \in C^{\ell + 1}([a,b])$, allora applicando la formula dell'errore sugli intervalli $h_j = |I_j|$ abbiamo che:
+\[ f(x)-p_{h, \ell}(x) = \frac{f^{(\ell + 1)}(\xi_j)}{(\ell+1)!}\omega_\ell(x)\quad x \in I_j\]
+\textit{Dove abbiamo che $p$ è il polinomio interpolante di $f$ in tale intervallo e $\omega_\ell$ è il polinomio nodale in $I_j$}\\
+Posto:
+\[h = \max_j |I_j|\]
+Possiamo andare a cercare $P_{h, \ell} \in \mathcal X_{h, \ell}$ in modo tale che $P_{h, \ell}|_{I_j}$ corrisponda con il polinomio interpolante. Allora, per $x \in [a,b]$, avremmo che:
+\[|f(x)-P_{h, \ell}(x)| \leq \max_{I_j} \frac{|f^{(\ell+1)}(\xi_j)|}{(\ell+1)!} \|\omega_\ell\|_{\infty, I_j}\]
+Ma abbiamo che $\|\omega_\ell\|_{\infty, I_j}\leq h^{\ell+1}$, quindi l'errore finale può diventare:
+\[|f(x)-P_{h, \ell}(x)| \leq \max_{I_j} \frac{\|f^{(\ell+1)}\|_\infty}{(\ell+1)!} h^{\ell +1} \]
+In generale può essere molto molto più potente rispetto al caso generale.
+
+Se poi continuiamo ad aumentare il numero $m$ di sottointervalli, ho che $h \to 0$, quindi l'errore in questo modo va a $0$. Così facendo non ho bisogno di aumentare il grado
+
+\begin{oss}
+	Aumentando il numero degli intervalli, aumenta anche in maniera considerevole il costo computazionale in termini di valutazione della funzione $f$, pari a $m\cdot (\ell +1)$ volte
+\end{oss}
+
+\begin{oss}
+	Se i nodi della suddivisione sono equidistanti, allora posso prendere:
+	\[ h = \frac{b-a}m \]
+\end{oss}
+
+\begin{es}[Caso Lineare]\label{lineare}
+	Il caso lineare è quello che viene fatto da Matlab quindi si usa \texttt{plot}.\\
+	In questo caso abbiamo che $\ell =1$, quindi localmente ho:
+	\[ p_1(x) = y_1 + (x-x_i) + a_i\qquad \text{con }x \in [x_i,x_i+1], y_i = f(x_i) \]
+	Graficamente abbiamo che
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,0) -- (6,0);
+			\foreach \x in {0,...,4}{
+				\filldraw (\x, 0) circle (1pt) node[below]{$x_\x$};
+			}
+			\filldraw (6,0) circle (1pt) node[below]{$x_n$};
+			\draw[thick] (0,1) -- (1,2) -- (2,2.5) -- (3,1.5) -- (4,2);
+		\end{tikzpicture}
+	\end{center}
+	Localmente utilizzo l'errore di interpolazione e otteniamo che:
+	\[ |f(x)-p_1(x)| = \frac{|f''(\xi_i)|}{2!}|(x-x_i)(x-x_{i+1})| \leq \frac{\|f''\|_{\infty, [x_i, x_i+1]}}{2}\|\omega\|_{\infty, [x_i,x_i+1]}\]
+	Andiamo a rendere ancora più efficace questa stima raffinando il tutto. Visto che siamo con un polinomio di grado $1$, generalmente possiamo scrivere che $\|\omega\|_\infty \leq h_i^2$. Inoltre, visto che il polinomio nodale è una parabola (un polinomio di grado due) che deve passare per $(x_i,0)$ e $(x_{i+1}, 0)$ sappiamo che raggiunge il punto di massimo (o di minimo, ma è ininfluente perché prediamo il valore assoluto) precisamente a metà, cioè:
+	\[ \xi_i = x_{M, i} = \frac{x_i + x_{i+1}}2 \]
+	In questo modo, andando a sostituire abbiamo che:
+	\[ |\omega(x_{M, i})| = |(x_{M, i}-x_i)(x_{M, i}- x_{i+1})| = \left|\left( \frac {x_i - x_{i+1}}2 \right)^2\right| = \frac{h_1^2}4 = \|\omega\|_\infty\]
+	In questo modo abbiamo che:
+	\[ |f(x) - p_1(x)| \leq \frac{\|f''\|_{\infty, [x_i, x_i+1]}}2 \frac{h_i^2}4\qquad \text{per }x \in [x_i, x_{i+1}] \]
+	In questo modo abbiamo che:
+	\[ \|f-p_1\|_{\infty, [a,b]} \leq \frac{\|f''\|_{\infty, [a,b]}}{8}h^2 \]
+	Notiamo che è della forma:
+	\[ C \cdot h^{\ell + 1} \]
+\end{es}
+
+\begin{ese}
+	Sia $f(x) = \sin (x)$ con $[a,b] = [-\pi,\pi]$ e con $\ell = 2$.
+	\begin{enumerate}
+		\item Determina una stime per l'errore
+		\item Determinare un numero minimo di sottointervalli che assicuri un errore inferiore a $10^{-3}$
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Per quanto fatto nell'esempio precedente, abbiamo che localmente in $[x_i, x_{i+1}]$:
+	\[ |f(x) - p_2(x)| \leq \frac{\|f'''\|_\infty}{3!}\|\omega\|_\infty \]
+	Sapendo che $f(x) = \sin(x)$, abbiamo che $\|f'''(x)\| = 1$, quindi:
+	\[ \|f-P_{h,2}\|_{\infty, [\-pi, \pi]} \leq \frac 16 \|\omega\|_\infty \leq \frac 16 h^3 \]
+	Dove abbiamo usato che $\|\omega\|_\infty \leq h_i^3 \leq h^3$ dove $h$ è il massimo della lunghezza dei sottointervalli.
+
+	\fbox{2} Per avere un errore minore di $10^{-3}$, ci basta che sia verificata la condizione:
+	\[ \|f-P_{h,2}\|_\infty \leq \frac 16 h^3 < 10^{-3} \]
+	Se prendo i nodi equispaziati, ho che:
+	\[ h = \frac{b-a}m = \frac{2\pi}m \quad \text{Dove }m\text{ è il numero di sottointervalli presi}\]
+	In questo modo abbiamo che:
+	\[ \frac 16 \left(\frac{2pi}m\right)^3 < 10^{-3} \Rightarrow \frac{(2\pi)^3}{m^3} < 6 \cdot 10^{-3} \Rightarrow m^3 > \frac{(2\pi)^3}{6 \cdot 10^{-3}} = \frac{(2 \pi)^310^3}6 \]
+	Cioè abbiamo che:
+	\[ m > \frac{2 \pi}{\sqrt[3]{6}}10 \qquad \Rightarrow \qquad m> \left\lceil \frac{2 \pi}{\sqrt[3]{6}}10 \right\rceil\]
+\end{sol}
+
+\textit{È un'assunzione il fatto che abbiamo preso i nodi equidistanti?}
+\begin{oss}
+	Esiste tutta una classe di metodi che prende il nome di metodi \textbf{Adattivi} o \textbf{Adattativi} che consiste nel prendere tanti più sottointervalli e con lunghezza minore dove la funzione tende a crescere o decrescere più rapidamente. Nel nostro caso la scelta di nodi equidistanti va più che bene
+\end{oss}
+
+\textit{Come possiamo fare per generalizzare?}\\
+Su macchina possiamo effettivamente far vedere che l'ordine di convergenza è pari a $\ell + 1$
+
+\begin{oss}
+	In generale, abbiamo che, fissato l'ordine del polinomio composto, si ha che:
+	\[ \|f-P_{h, \ell}\|_\infty \leq C \cdot h^{\ell+1}\]
+	Quindi si ha convergenza di $P_{h,\ell}$ a $f$ per $h \to 0$ di ordine $\ell+1$
+\end{oss}
+
+\subsection{Stima dell'Errore di Convergenza}
+
+In generale sappiamo che:
+\[ \|f - P_{h,\ell}\|_\infty \approx C \cdot h^p \]
+Vogliamo verificare sperimentalmente che per $h \to 0$ si ha che $p$ tende a $\ell + 1$. Se abbiamo fatto tutto per bene abbiamo che possiamo confrontare $P_{h,\ell}$ con $P_{\frac h2,\ell}$ e possiamo studiarne gli errori. \textit{Devono essere necessariamente $h$ e $\frac h2$, sennò le cose non tornano}.
+\[ \frac{E(P_{\frac h2, \ell})}{E(P_{h, \ell})} = \frac{\|f - P_{\frac h2, \ell}\|_\infty}{\|f - P_{h, \ell}\|_\infty}\]
+Osserviamo che il polinomio quasi sicuramente non è lo stesso, ma la cosa è del tutto irrilevante. Andando avanti otteniamo che:
+\[ \frac{\|f - P_{\frac h2, \ell}\|_\infty}{\|f - P_{h, \ell}\|_\infty} = \frac{C (\frac h2)^p}{Ch^p} = \left( \frac 12 \right)p\]
+Utilizzando un logaritmo otteniamo che:
+\[ \log\left(\frac{\|f - P_{\frac h2, \ell}\|_\infty}{\|f - P_{h, \ell}\|_\infty}\right) = p \log\left(\frac 12\right)\]
+Da cui otteniamo che:
+\[ p = \frac 1{\log(\frac 12)} \log\left(\frac{\|f - P_{\frac h2, \ell}\|_\infty}{\|f - P_{h, \ell}\|_\infty}\right) \xrightarrow{h \to 0} \ell + 1\]
+
+Se così non dovesse essere, allora ci sono due possibilità:
+\begin{itemize}
+	\item Abbiamo sbagliato a fare i conti da qualche parte
+	\item Potrebbe non valere la relazione, per esempio se $f$ non è sufficientemente regolare
+\end{itemize}
+
+\subsection{Splines}
+Nel corso degli ultimi 50 anni si è voluto trovare una funzione che non solo fosse continua, ma anche regolare. \textit{In sintesi si voleva evitare:}
+\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-1,0) -- (6,0);
+		\draw[->] (0,-1) -- (0,3);
+		\foreach \x in {0,...,5}{
+			\filldraw (\x, 0) circle(1pt) (\x, {3-0.5*abs(\x - 3)}) circle(1pt);
+		};
+		\foreach \x in {0,...,4}{
+			\draw (\x, {3-0.5*abs(\x-3)}) to [out = 270, in = 270] ({\x+1} , {3-0.5*abs((\x + 1)-3)});
+		}
+	\end{tikzpicture}
+\end{center}
+\textit{Questa è continua ma evidentemente è non regolare}\\
+Si è voluto quindi creare le \textbf{Splines} per ovviare questo problema.
+
+\begin{defn}{Splines}{}
+	Dati $x_0,x_1,...,x_{k}$ $k+1$ nodi distinti ordinati in $[a,b]$, si dice \textbf{Spline} di grado $\ell$ relativa ai nodi $x_i$ una funzione $s_\ell$ tale che:
+	\[ \left. s_\ell\right|_{[x_i, x_{i+1}]} \in \mathbb P_l\qquad s_\ell \in C^{\ell-1}([a,b]) \]
+\end{defn}
+
+Possiamo indicare con $S_\ell = \{s_\ell\}$ lo spazio delle splines di grado $\ell$
+
+Andiamo a studiare i gradi di libertà dello spazio.\\
+Abbiamo $\ell +1$ coefficienti su $k$ intervalli (ogni intervallo ha $\ell+1$ coefficienti e ho $k$ intervalli) quindi iniziamo con l'avere $(\ell + 1)\cdot k$ variabili. Sui $k-1$ nodi interno ho delle $\ell$ condizioni, cioè il fatto che $s_\ell$ deve essere $C^0, C^1,...,C^{\ell-1}$, cioè, le derivate $i$-esime destre e sinistre di ogni punto devono coincidere:
+\[ p^{(m)}_j(x_i) = p^{(m)}_{j+1}(x_i) \]
+\textit{Dove $j \in \{0,...,k-1\}$ indica il polinomio associato all'intervallo $j$-esimo, $m \in \{0,...,\ell-1\}$ indica l'ordine della derivata e $i \in \{1,...,k-1\}$ indica il punto nodale}
+
+Mettendo tutto insieme abbiamo quindi che ogni funzione in $S_\ell$ ha $k + \ell$ coefficienti ancora liberi. Nell'esempio \ref{lineare}, che può essere visto come spline con $\ell = 1$, abbiamo una soltanto condizione libera, che corrisponde a $a_1$.
+
+Per il nostro problema, vogliamo scegliere una $s_\ell \in S_\ell$ che interpoli i dati, cioè:
+\[ s_\ell(x_i) = f(x_i)\qquad \forall i \in \{0,...,k\} \]
+Imporre tutto questo significa imporre altre $k+1$ condizioni, per cui arriviamo ad un totale di $\ell-1$ gradi di libertà, quindi ci sono un'infinità di funzioni che possono andare bene.
+
+Come possiamo trovare quella che vada per noi? Cioè come possiamo saturare le condizioni in modo da trovare quella giusta per noi? Ci sono varie possibilità:
+\begin{itemize}
+	\item \textbf{Spline Periodica}: Poniamo la condizione $s^{(j)}_\ell(a) = s_\ell^{(j)}(b), j \in \{1,...,\ell-1\}$
+	\item \textbf{Spline Naturali}: Poniamo la condizione $s^{(j)}_\ell(a) = 0 = s^{(j)}(b)$ per certi $j$ in modo che da avere $\ell-1$ condizioni. A volte può capitare che questo tipo di spline possa portare a cose incoerenti, per esempio gli estremi schiacciati quando non dovrebbe essere.
+\end{itemize}
+
+\subsection{Splines Lineare}
+
+Il caso delle splines lineare è il caso in cui si ha $\ell = 1$. In questo caso la spline è univocamente determinata dal fatto che deve interpolare $f$ nei $k+1$ nodi. Questo in un certo senso lo avevamo già fatto, in quanto questo corrisponde ad un polinomio lineare composto, che è esattamente quanto già visto in precedenza.\\
+Graficamente, quello che le spline $\ell = 1$ è:
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (0,0) -- (8,0);
+		\draw[->] (0,0) -- (0,2);
+		\filldraw (1,0) node[below]{$\cdots$} (2,0) circle (1pt) node[below]{$x_{i-2}$}(3,0) circle (1pt) node[below]{$x_{i-1}$}(4,0) circle (1pt) node[below]{$x_{i}$}(5,0) circle (1pt) node[below]{$x_{i+1}$}(6,0) circle (1pt) node[below]{$x_{i+2}$} (7,0)node[below]{$\cdots$};
+		\draw[thick, blue] (2,0) -- (3,0) -- (4,1.5) -- node[pos = 0.6, above right]{$\varphi_i(x)$} (5,0) -- (6,0);
+		\draw[dashed] (0,1.5) node[left]{$1$} -- (8, 1.5);
+	\end{tikzpicture}
+\end{center}
+La funzione $\varphi_i(x)$ prende il nome di "\textit{Hat function}" perché appunto sembra un cappellino. Notiamo poi che questo tipo di funzione è caratterizzata di essere continua e non nulla in un determinato intervallo. In particolare:
+\[
+	\varphi_i(x) = \begin{cases}
+		\displaystyle{\frac{x-x_{i-1}}{x_i-x_{i-1}}} & \text{per } x\in [x_{i-1}, x_i]\\
+		\displaystyle{\frac{x_{i+1}-x}{x_{x+1}-x_i}} & \text{per } x\in [x_i, x_{i+1}]\\
+		0 & \text{altrimenti}
+	\end{cases}
+\]
+Queste $\varphi_i$ hanno una regione piccola in cui non sono nulle.\\
+Inoltre posso definirle anche per $\varphi_k$ che ha solo la parte a sinistra (quella crescente) e $\varphi_0$ che ha solo quella destra (decrescente). Ma in questo modo posso definirle per tutte.
+
+Volendo si può dimostrare che queste funzioni rappresentano una base su $[a,b]$ per $S_1$, per cui abbiamo che:
+\[ s_1 = \sum_{i = 0}^k \alpha_i \varphi_i(x)\]
+Prendendo la condizione di interpolazione, abbiamo che e notando che $\varphi_i(x_j) = \delta_{i,j}$ (\textit{Secondo la delta di Kronecker}), abbiamo che:
+\[ f(x_j) = s_1(x_j) = \sum_{i = 0}^k \alpha_i \varphi_i(x_j) = \alpha_j \]
+In maniera del tutto naturale segue che:
+\[s_1(x) = \sum_{i = 0}^k f(x_i) \varphi(x)\]
+
+Rispetto a quanto veniva fatto con i polinomi di Lagrange e altro ancora, abbiamo che questi polinomi sono delle funzioni \underline{locali}. Questa cosa, quando si hanno delle perturbazioni, ha delle conseguenze fenomenali, perché permette una minore proliferazione delle perturbazioni sull'intero intervallo.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw (-2.5,0) -- (2.5,0);
+		\draw (-2,0) node[below]{$x_{i-2}$} (-1,0) node[below]{$x_{i-1}$} (0,0) node[below]{$x_i$} (1,0) node[below]{$x_{i+1}$} (2,0) node[below]{$x_{i+1}$};
+		\draw[thick] (-1,0) -- (0,1.5) -- (1,0);
+		\draw[thick, dashed] (-1,0) -- (-2,0) (1,0) -- (2,0);
+		\draw (-1,1.5) -- (0,0) -- (1,0) (-1,0) -- (0,0) -- (1,1.5);
+		\draw[dashed] (-1,1.5) -- (-2,0) -- (-1,0) (1,1.5) -- (2,0) -- (1,0);
+	\end{tikzpicture}
+\end{center}
+Possiamo notare con estrema semplicità che le funzioni coinvolte sono solamente $3$. Non c'è propagazione di errore
+
+\subsection{Splines Cubiche}
+
+Le spline cubiche (cioè con $\ell = 3$) sono $C^2$, quindi sono sufficientemente lisce e con calcolo non troppo costoso.
+
+Definiamo $M_i = s_3''(x_i) = s''(x_i)$ per $i \in \{0,...,k\}$. Queste saranno le nostre incognite. Notiamo che se la spline $s$ è un polinomio di terzo grado, allora la su derivata seconda è un polinomio di primo grado. Possiamo quindi definire:
+\[ s''(x) = M_i \frac{x-x_{i-1}}{x_i-x_{i-1}} + M_{i-1} \frac{x_i-x}{x_i-x_{i-1}} \quad \text{per }x \in [x_{i-1}, x_i]\]
+Per questioni di comodità, possiamo porre $h_i = x_i- x_{i-1}$. Integrando su quanto appena trovato, troviamo che:
+\[ s'(x) = \frac{M_i}{h_i} \frac 12 (x-x_{i-1})^2 - \frac{M_{i-1}}{h_i}\frac 12 (x_i-x)^2 c_i \]
+Integrando nuovamente abbiamo che:
+\[ s(t) = \frac{M_i}{h_i} \frac 16 (x-x_{i-1})^3 + \frac{M_{i-1}}{h_i} \frac 16 (x_i - x)^3 + c_i(x-x_{i-1}) + \tilde c_i \]
+Cerchiamo di eliminare $c$ e $\tilde c_i$ imponendo la condizione di interpolazione. Cioè imponiamo che:
+\[ s(x_{i-1}) = f(x_{i-1}) = f_{i-1} \]
+Allora in questo modo abbiamo che:
+\[ \underbrace{\frac{M_i}{h_i}\frac 16 (x_{i-1}-x_{i-1})^3}_0 + \frac{M_{i-1}}{h_i} \frac 16 (\underbrace{x_i - x_{i-1}}_{h_i})^3 + c_i(\underbrace{x_{i-1} - x_{i-1}}_0) + \tilde c_i = f_{i-1}\]
+Da cui segue che:
+\[ \tilde c_i = f_{i-1} - \frac 16 h_i^2 M_{i-1} \]
+Andiamo ad imporre l'altra condizione, cioè $s(x_i) = f_i$. In questo modo otteniamo che:
+\[ \frac{M_i}{h_i} \frac 16 h_i^3 + 0 + c_i h_i + \tilde c_i = f_i \]
+Da cui si ottiene che:
+\[ h_ic_i = f_i - \frac 16 h_i^2M_i - \tilde c_i = f_i - f_{i-1} + \frac 16 h_i^2 M_{i-1} - \frac 16 h^2_1 M_i \]
+Da cui:
+\[ c_i = \frac{f_i - f_{i-1}}{h_i} = \frac 16 h_iM_i - \frac 16 h_iM_i \]
+
+Andiamo ad imporre adesso la condizione di regolarità in modo da determinare i vari $M_i$, cioè imponiamo:
+\[ \left.s'\right|_{[x_{i-1},x_i]}(x_i) = \left. s' \right|_{[x_i, x_{i+1}]} (x_i)\qquad \forall i \in \{1,...,k-1\} \]
+Andando a sostituire l'espressione in $s'$ ad inizio pagina otteniamo che:
+\begin{align*}
+	s'(x) &= \frac{M_i}{h_i} \frac 12 (x-x_{i-1})^2 - \frac{M_{i-1}}{h_i} \frac 12 (x_i-x)^2 + c_i|_{[x_{i-1}, x_i]}\\
+	s'(x) &= \frac{M_{i+1}}{h_{i+1}} \frac 12 (x-x_{i})^2 - \frac{M_{i}}{h_{i+1}} \frac 12 (x_{i+1}-x)^2 + c_{i+1}|_{[x_{i}, x_{i+1}]}
+\end{align*}
+Andando ad imporre l'uguaglianza in $x_i$ abbiamo che:
+\begin{align*}
+	\frac{M_i}{h_i} \frac 12 h_i^2 + \frac{f_i - f_{i-1}}{h_i} + \frac 16 h_i M_{i-1} - \frac 16  h_i M_i &= - \frac 12 \frac{M_i}{h_{i+1}} h_{i+1}^2 + \frac{f_{i+1} - f_i}{h_{i+1}} + \frac 16 h_{i+1}M_i - \frac 16 h_{i+1} M_{i+1}\\
+	\frac 13 h_iM_i - \frac 16 h_iM_{i-1} + \frac{f_i - f_{i-1}}{h_i} &= -\frac 13 h_{i+1}M_i - \frac 16 h_{i+1} M_{i+1} + \frac{f_{i+1} - f_i}{h_{i+1}}
+\end{align*}
+In questo modo otteniamo che:
+\[\frac 16 h_I M_{i-1} + \left( \frac 13 h_i + \frac 13 h_{i+1} \right)M_i + \frac 16 h_{i+1}M_{i+1} = \frac{f_{i+1} - f_i}{h_{i+1}} - \frac{f_i - f_{i-1}}{h_i}\]
+Poiché questo è valido per ogni $i \in \{1,...,k-1\}$, abbiamo sostanzialmente un sistema lineare della forma:
+\[
+	\begin{pmatrix}
+		\ddots & \ddots & \ddots\\
+		& \ddots & \ddots & \ddots\\
+		&& \frac 16 h_i & \frac 13 (h_i + h_{i+1}) & \frac 16 h_i\\
+		&&& \ddots & \ddots & \ddots\\
+		&&&& \ddots & \ddots & \ddots
+	\end{pmatrix}
+	\begin{pmatrix}
+		M_0\\ \vdots\\ M_{i-1} \\ M_i \\ M_{i+1} \\ \vdots \\ M_{k}
+	\end{pmatrix} =
+	\begin{pmatrix}
+		\vdots \\ \vdots \\ \frac{f_{i+1} - f_i}{h_{i+1}} - \frac{f_i - f_{i-1}}{h_i} \\ \vdots \\ \vdots
+	\end{pmatrix}
+\]
+Questo è un sistema lineare $(k-1) \times (k+1)$, cioè abbiamo $k-1$ condizioni per $k+1$ incognite, infatti abbiamo $\ell -1 = 3-1 = 2$ gradi di libertà ancora da decidere per trovare $s_3$ in maniera univoca.
+
+\subsection{Completamento delle Condizioni}
+
+Abbiamo diversi modi per riempire le due condizioni:
+\begin{itemize}
+	\item \textbf{Spline Naturale}: In questo modo imponiamo $s_3''(a) = 0 = s_3''(b)$, in questo modo la funzione tende ad appiattirsi agli estremi. Ovviamente ha senso fare questa cosa se la funzione $f$ ha già questa caratteristica. Matematicamente parlando, questo è equivalente a imporre:
+		\[ s_3''(a) = M_0 = 0\qquad \text e \qquad s_3''(b) = M_k = 0 \]
+		In questo modo abbiamo che tutte le condizioni che ci servono per un sistema lineare non sovradeterminato (bisognerebbe dimostrare che non è singolare, ma va bene così)
+	\item \textbf{Spline Completa} o \textbf{Vincolata}: Supponiamo di conoscere $f'(a)$ e $f'(b)$ e ritorniamo nuovamente a $s'$ con $i = 1$:
+		\[ s'(x) = \frac{M_i}{h_i} \frac 12 (x-x_{i-1})^2 - \frac{M_{i-1}}{h_i} \frac 12 (x_i-x)^2 \]
+		Supponiamo $s'(x_0) = f'(x_0)$, allora abbiamo che:
+		\begin{align*}
+			\frac{M_1}{h_1} \frac 12 0 - \frac{M_0}{h_1} \frac 12 h_1^2 + \frac{f_1-f_0}{h_1}+ \frac 16 h_1M_0 - \frac 16 h_1 M_1 &= f'(x_0)\\
+			\left(\frac 16 h_1 - \frac 12 h_1\right)M_0 - \frac 12 h_1M_1 = f'(x_0) - \frac{f_1-f_0}{h_1}
+		\end{align*}
+		In questo modo abbiamo aggiunto una riga in cima alla matrice. Facendo poi una cosa simile per $i =k$, possiamo aggiungere una riga anche in fondo, in modo da avere un sistema lineare con matrice quadrata tridiagonale.
+	\item \textbf{"Not-a-Knot"}: In questo modo aggiungo un'ulteriore condizione su $s_3$ negli intervalli $[x_0, x_1]$ e $[x_{k-1}, x_k]$. La condizione aggiuntiva che andiamo ad imporre è:
+		\[ \left.s'''\right|_{[x_0, x_1]}(x_1) = \left.s'''\right|_{[x_1,_2]}(x_1) \]
+		Questa è una condizione che va a lavorare direttamente su $M_0$ e su $M_1$. In maniera del tutto analoga possiamo imporre:
+		\[ \left. s'''\right|_{[x_{k-2}, x_{k-1}]}(x_{l-1}) = \left.s'''\right|_{[x_{k-1,x_k}]}(x_{k-1}) \]
+		Poi sarebbe da controllare che i sistemi lineari ottenuti non siano singolari. \textit{Questo è quello che fa Matlab}
+\end{itemize}
+
+\subsection{Risultati di Convergenza e Regolarità}
+
+\begin{thm}{}{}
+	Sia $f:[a,b] \to \mathbb R$ e $s_3$ spline cubica naturale ($s_3''(a) = 0 = s_3''(b)$) o completa ($s'(a) = f'(a)$ e $s'(b) = f'(b)$) interpolante nei nodi assegnati in $[a,b]$. Allora $\forall g \in C^2([a,b])$ interpolante $f$ negli stessi nodi, che sia naturale o completa, vale:
+	\[ \int_a^b \left(s''_3(x)\right)^2dx \leq \int_a^b \left(g''(x)\right)dx\]
+	L'uguaglianza nel caso di spline completa si ha se e solo se $g = s_3$
+\end{thm}
+
+\begin{cons}
+	Quello che sostanzialmente il teorema ci dice è che qualunque funzioni $g \in C^2$ che abbia le stesse proprietà di $s_3$, $s_3$ è la più liscia di tutte. Lo si può vedere in particolare dal valore dell'integrale in quanto, rappresentando l'area sottesa dal grafico, più è piccola, più è schiacciata. In un certo senso, il valore dell'integrale al quadrato può essere interpretato come una norma tra funzioni, di cui $s_3$ ha la norma minore
+\end{cons}
+
+\begin{proof}
+	Come prima cosa facciamo vedere l'uguaglianza:
+	\[ (\star)\qquad \int_a^b (g''(x))^2 dx = \int_a^b (g''(x)-s''(x))^2dx + \int_a^b(s''(x))^2dx \]
+	In tal caso abbiamo che vale l'uguaglianza presente nel teorema, in quanto abbiamo sicuramente che:
+	\[ \int_a^b(g''(x) - s''(x))^2dx \geq 0 \]
+	Inoltre, assumendo che valga $(\star)$, vediamo il caso dell'uguaglianza. Abbiamo che:
+	\[ \int_a^b s''(x)dx = \int_a^b g''(x)dx \qquad \Leftrightarrow s''(x) = g''(x) \]
+	Ma da questo abbiamo anche che questi due valori sono uguale se e solo se:
+	\[ \forall x \in [a,b] \quad s'(x) = g'(x) + c \]
+	Assumendo una spline completa, abbiamo che:
+	\[ s'(a) = f'(a) = g'(a) + c \qquad \Rightarrow \qquad c = 0 \]
+	Da cui segue che $s'(x) = g'(x), \forall x \in [a,b]$. Continuando ad integrare abbiamo che:
+	\[ s'(x) = g'(x) \qquad \Rightarrow \quad s(x) = g(x) + c_1\]
+	Ma abbiamo che sia $s$ sia $g$ sono dei polinomi che interpolano $f$ nei nodi $x_i$, quindi:
+	\[ \forall x_i\quad s(x_i) = f(x_i) = g(x_i) + c_1\qquad \Rightarrow \qquad c_1 = 0 \]
+	Da cui segue l'uguaglianza dei due polinomi $s(x) = g(x), \forall x \in [a,b]$
+
+	Per verificare effettivamente la veridicità della disuguaglianza del teorema, mostriamo che l'uguaglianza $(\star)$ è effettivamente vera, cioè, dimostriamo:
+	\[ \int_a^b (g''(x))^2 dx = \int_a^b (g''(x)-s''(x))^2dx + \int_a^b(s''(x))^2dx \]
+	Quindi:
+	\begin{align*}
+		\int_a^b (g''(x))^2 dx & \xlongequal ? \int_a^b (g''(x)-s''(x))^2dx + \int_a^b(s''(x))^2dx\\
+		\int_a^b (g''(x))^2 dx & \xlongequal ? \int_a^b (g''(x))^2+(s''(x))^2 - 2g''(x)s''(x)dx + \int_a^b(s''(x))^2dx\\
+		0 & \xlongequal ? \int_a^b 2(s''(x))^2 - 2g''(x)s''(x)dx\\
+		0 & \xlongequal ? \int_a^b (s''(x))^2 - 2g''(x)s''(x)dx\\
+		0 & \xlongequal ? \int_a^b s''(x)(s''(x)-g''(x))dx\\
+		0 & \xlongequal ? \left[ s''(x)(s'(x) - g'(x)) \right]_a^b - \int_a^b s'''(x)(s'(x) - g'(x))dx
+	\end{align*}
+	Mostriamo ora che entrambi i membri sono nulli.
+	Il primo membro è uguale a:
+	\[ s''(b)(s'(b)-g'(b)) - s''(a)(s'(a) - g'(a)) \]
+	Se siamo nel caso di una spline naturale, allora abbiamo che $s''(a) = s''(b) = 0$, per cui è uguale a $0$. Se invece siamo nel caso di una spline completa, allora abbiamo che $s'(b) = f'(b) = g'(b)$ e $s'(a) = f'(a) = g'(a)$, per cui anche il secondo membro è uguale a $0$.\\
+	Ci resta da dimostrare che anche l'altra parte è nulla:
+	\begin{align*}
+		\int_a^b s'''(x)(s'(x) - g'(x))dx &= \sum_{i = 0}^{k-1} \int_{x_i}^{x_{i+1}} s'''(x)(s'(x) - g'(x))dx
+	\end{align*}
+	Ricordando tuttavia che la spline era di terzo grado, abbiamo che $\forall i, \forall [x_i, x_{i+1}]$ si ha che $s'''$ è costante, quindi possiamo portarlo fuori dall'integrale:
+	\begin{align*}
+		\int_a^b s'''(x)(s'(x) - g'(x))dx &= \sum_{i = 0}^{k-1} \int_{x_i}^{x_{i+1}} s'''(x)(s'(x) - g'(x))dx\\
+		&= \sum_{i = 0}^{k-1} s'''(x_i) \int_{x_i}^{x_{i+1}} (s'(x) - g'(x))dx\\
+		&= \sum_{i = 0}^{k-1} s'''(x_i) [s(x) - g(x)]_{x_i}^{x_{i+1}}
+	\end{align*}
+	Abbiamo però che $\forall i, s(x_i) = f(x_i) = g(x_i)$ e $s(x_{i+1}) = f(x_{i+1}) = g(x_{i+1})$, quindi ogni termine della somma è nullo e di conseguenza anche la somma. Quindi abbiamo verificato $(\star)$ e di conseguenza anche la disuguaglianza del teorema.
+\end{proof}
+
+\subsection{Risultati di Convergenza}
+
+\begin{thm}{}{}
+	Sia $f \in C^4([a,b])$ e si consideri una partizione $\sigma \in \Omega_{a,b}$ di ampiezza $h_i$. Sia $s_3$ la spline cubica interpolante $f$ completa (cioè che $s_3'(a) = f'(a)$ e $s_3'(b) = f'(b)$). Allora abbiamo che:
+	\[ \|f^{(r)} - s_3^{(r)}\|_\infty \leq c_r h^{4-r}\|f^{(4)}\|_\infty \qquad r \in \{0,1,2,3\} \]
+	Con $c_0 = \frac 5{384}$, $c_1 = \frac 1{24}$, $c_2 = \frac 38$ e $c_4 = \frac 12(\beta - \frac 1 \beta)$ dove $\beta =\frac 4{\min h_i}$ e $h = \max h_i$
+\end{thm}
+
+\begin{cons}
+	$c_3$ è l'unica costante che non varia in base alla scelta degli intervalli
+\end{cons}
+
+\begin{proof}
+	Per $r = 0$ avevamo da teoremi precedenti che:
+	\[ \|f-s_3\|_\infty \leq c_0 h^4 \|f^{(4)}\|_\infty \]
+	Questo è un risultato che ci aspettavamo con i polinomi di grado $3$, quindi $s_3$ approssima come $h^4$\\
+	Ma le spline non solo approssimano bene la funzione, ma le sue derivare approssimano bene le derivate della funzione stessa. In particolare abbiamo che:
+	\[ \|f' - s_3'\|_\infty \leq c_1 h^3 \|f^{(4)}\|_\infty \qquad r = 1 \]
+	Quindi anche la pendenza della funzione è ben approssimata. Ma non solo, anche la sua curvatura è ben approssimata, in quanto:
+	\[r = 2\qquad \|f'' - s_3'' \leq c_2 h^2 \|f^{(4)}\|_\infty\]
+	Normalmente con gli altri polinomi ci si fermerebbe solo al primo.
+\end{proof}
+
+\newpage
+
+\section{Approssimazione di Integrali}
+
+\subsection{Presentazione del Problema}
+
+Quello di cui ci occuperemo in questo capitolo è: Data una funzione $f:[a,b] \to \mathbb R$ funzione integrabile, io voglio approssimare \[\mathcal I(f) = \int_a^bf(x)dx\]
+Sarà possibile fare questo attraverso Formule di Quadratura e Interpolazione Numerica.
+
+Vogliamo quindi determinare $f_n \approx f$ dove $n$ è un qualche parametro e definiamo quindi:
+\[ \mathcal I_n(f) = \mathcal I(f_n) = \int_a^bf_n(x)dx \]
+In generale le formule di quadratura porteranno a formule del tipo:
+\[ \mathcal I(f_n) = \sum_{i = 0}^n \alpha_n f(x_i) \]
+Notiamo che questa è molto simile ad una media pesata, dove gli $\alpha_i$ sono i pesi e $f(x_i)$ sono gli elementi di cui vogliamo trovare la media. Notiamo anche che assomiglia molto anche ad un'interpolazione, infatti possiamo definire $x_i$ come i nodi. \textit{Infatti questa non è altro che un'applicazione dell'interpolazione}
+
+In generale avremo che l'errore sarà definito come:
+\[ E_n(f) = \mathcal I(f) - \mathcal I(f_n) = \int_a^b f(x)-f_n(x)dx \]
+In particolare, l'errore è un numero reale, quindi facendone il valore assoluto abbiamo che:
+\[ |E_n(f)| \leq \int_a^b |f(x) - f_n(x)|dx \leq (b-a)\|f-f_n\|_\infty\]
+
+Vediamo adesso delle formule di quadratura
+
+\subsection{Formula del Rettangolo o del Punto Medio}
+
+Prendiamo il polinomio interpolante di grado $n = 0$ tale che $p_o(x) = f(x_0)$ dove $x_0$ è il punto medio dell'intervallo $[a,b]$. Graficamente avremmo allora che:
+\begin{center}
+	\begin{tikzpicture}
+		\draw(-0.5,0) -- (4.5,0);
+		\filldraw[fill = blue, nearly transparent] (0,0) -- (4,0) -- (4,3) to[out = 180, in = 0] (0,1) -- (0,0);
+		\filldraw[fill = green, nearly transparent] (0,0) -- (4,0) -- (4,2) -- (0,2) -- (0,0);
+		\filldraw (0,0) circle (1pt) node[below]{$a$} (2,0) circle (1pt) node[below]{$x_0$} (4,0) circle (1pt) node[below]{$b$} (2,2) circle(1pt);
+		\draw[thick] (4,3) to [out = 180, in = 0](0,1);
+		\draw[dashed, thick] (0,2) -- (4,2);
+	\end{tikzpicture}
+\end{center}
+Abbiamo quindi che:
+\[\mathcal I_0(f) = \int_a^b f(x_0)dx = f(x_0)(b-a)\]
+
+\begin{prop}{}{}
+	Sia $f\in C^2([a,b])$, allora:
+	\[ E_0 = \frac 13 \left(\frac{b-a}2\right)^3 f''(\xi)\qquad \xi \in (a,b) \]
+\end{prop}
+
+\begin{cons}
+	Notiamo che l'errore dipende dalla regolarità di $f$. Infatti questo risultato è vero se $f \in C^2$ almeno. Altrimenti la cosa non è vera. Nulla vieta però che possa essere comunque utilizzato come metodo di approssimazione.
+\end{cons}
+
+\begin{proof}
+	Sviluppiamo $f$ in un intorno di $x_0$ con Taylor. Otteniamo allora che:
+	\[ f(x) = f(x_0) + f'(x_0)(x-x_0) + \frac 12 f''(\xi_x)(x-x_0)^2 \]
+	Integrando abbiamo che:
+	\[ E_0(f)= \int_a^b f(x) - f(x_0)dx = \int_a^b f'(x_0)(x-x_0)dx + \int_a^b\frac 12 f''(\xi_x)(x-x_0)^2dx \]
+	Andiamo a risolvere i due integrali, uno per volta:
+	\begin{align*}
+		\int_a^b f'(x_0)(x-x_0)dx &= \left[ f'(x_0) \frac 12 (x-x_0)^2\right]_a^b = \frac{f'(x_0)}2 \left[ \left( b-\frac{a+b}2 \right)^2 - \left(a - \frac{a+b}2\right)^2 \right]\\
+		&= \frac{(f'(x_0))}2 \left[\left( \frac{b-a}2 \right)^2 - \left( \frac{b-a}2 \right)^2\right] = 0
+	\end{align*}
+	Per poter risolvere l'altro integrale con facilità, ci tornerà questo lemma:
+	\begin{lemma}{Media Integrale}{}\label{Media Integrale}
+		Sia $f$ continua in $[a,b]$ e sia $g$ integrabile in $[a,b]$ con stesso segno in $[a,b]$ (cioè $g\leq 0$ oppure $g \geq 0$ in tutto l'intervallo). Allora:
+		\[\exists \xi \in ]a,b[ : \int_a^b f(x)g(x)dx = f(\xi) \int_a^bg(x)dx\]
+	\end{lemma}
+	\begin{proof}
+		Senza perdere di generalità supponiamo $g(x)\geq 0, \forall x \in [a,b]$. Allora abbiamo che:
+		\begin{align*}
+			\int_a^b f(x)g(x)dx &\leq \int_a^b \left(\max_{x \in [a,b]} f(x)\right)g(x)dx = \max_{x \in [a,b]} f(x) \int_a^b g(x)dx\\
+			\int_a^b f(x)g(x)dx & \geq \int_a^b \left(\min_{x \in [a,b]}f(x)\right)g(x)dx = \min_{x \in [a,b]} f(x) \int_a^b g(x)dx
+		\end{align*}
+		In questo modo abbiamo che:
+		\[ \min_{x \in [a,b]}f(x) \leq \frac{\displaystyle{\int_a^b f(x)g(x)dx}}{\displaystyle{\int_a^b g(x)dx}}\leq \max_{x \in [a,b]}f(x) \]
+		\textit{Possiamo dire questa cosa in quanto abbiamo che $g$ per ipotesi ha sempre lo stesso segno, quindi ha integrale non nullo. Se fosse stato nullo, allora anche $g$ era nulla, ma in tal caso il lemma sarebbe stato banalmente verificato}. Sapendo che $f$ è una funzione continua, $\exists \xi \in ]a,b[$ tale che:
+		\[ \frac{\displaystyle{\int_a^b f(x)g(x)dx}}{\displaystyle{\int_a^b g(x)dx}} = f(\xi) \]
+		A questo punto si moltiplica e abbiamo finito
+	\end{proof}
+	Eravamo rimasti che volevamo risolvere l'integrale:
+	\[ \int_a^b\frac 12 f''(\xi_x)(x-x_0)^2dx \]
+	Applichiamo il lemma, allora abbiamo che:
+	\[ \int_a^b\frac 12 f''(\xi_x)(x-x_0)^2dx = \frac 12 f''(\xi)\int_a^b(x-x_0)^2dx = \frac 12 f''(\xi)\left[ \frac 13(x-x_0)^3 \right]_a^b\]
+	A questo punto basta fare i conti e ritorna quanto annunciato nel teorema.\\
+	Notiamo che $f''(\xi_x)$ è continua in quanto per lo sviluppo di Taylor fatto a inizio dimostrazione abbiamo che $f''(\xi_x)$ è somma di funzioni continue.
+\end{proof}
+
+\subsection{Formula del Trapezio}
+
+In questo caso abbiamo $n = 1$, quindi abbiamo un polinomio lineare con nodi $x_0 = a$ e $x_1 = b$. Prendiamolo come polinomio di Lagrange, quindi:
+\[ p_1(f) = L_0(x)f(x_0) + L_1(x)f(x_1) = f(a)\frac{x-b}{a-b} + f(b)\frac{x-a}(b-a) \]
+Graficamente abbiamo che:
+\begin{center}
+	\begin{tikzpicture}
+		\draw(-0.5,0) -- (4.5,0);
+		\filldraw[fill = blue, nearly transparent] (0,0) -- (4,0) -- (4,3) to[out = 180, in = 0] (0,1) -- (0,0);
+		\filldraw[fill = green, nearly transparent] (0,0) -- (4,0) -- (4,3) -- (0,1) -- (0,0);
+		\filldraw (0,0) circle (1pt) node[below]{$a$} (4,0) circle (1pt) node[below]{$b$} (0,1) circle(1pt) (4,3) circle(1pt);
+		\draw[thick] (4,3) to [out = 180, in = 0](0,1);
+		\draw[dashed, thick] (0,1) -- (4,3);
+	\end{tikzpicture}
+\end{center}
+Andando quindi a calcolare l'integrale abbiamo che:
+\begin{align*}
+	\mathcal I_1(f) &= \int_a^b p_1(x)dx = \frac{f(a)}{a-b} \int_a^b(x-b)dx + \frac{f(b)}{b-a}\int_a^b(x-a)dx\\
+	&= \frac{f(a)}{a-b} \left[ \frac 12(x-b)^2 \right]_a^b + \frac{f(b)}{b-a} \left[\frac 12 (x-a)^2\right]_a^b = \frac 12 \frac{f(a)}{a-b}\left(-(a-b)\right)^2 + \frac 12 \frac{f(b)}{b-a}(b-a)^2\\
+	&= \frac 12 \frac{(b-a)^2}{b-a} (f(a) + f(b)) = \frac{(b-a)(f(a) + f(b))}2
+\end{align*}
+
+\begin{prop}{}{}
+	Se $f \in C^2([a,b])$, allora:
+	\[ E_1(f) = - \frac{(b-a)^3}{12} f''(\xi)\qquad \xi \in (a,b)\]
+\end{prop}
+
+\begin{cons}
+	Aumentando di grado non abbiamo guadagnato nulla
+\end{cons}
+
+\begin{proof}
+	Per $p_1$ polinomio di Lagrange vale:
+	\[ f(x) - p(x) =\frac{f''(\xi_x)}{2} \omega(x) \]
+	Dove $\omega$ è il polinomio nodale $\omega = (x-a)(x-b)$. Ma $\omega (x) \leq 0$ per $x \in [a,b]$.
+	Sapendo poi che $E_n(f) = \mathcal I(f) - \mathcal I(p_n)$ abbiamo che:
+	\[ E_1(f) = \int_a^b (f(x) - p_1(x))dx = \int_a^b \frac{f''(\xi_x)}2 \omega(x)dx \]
+	Utilizzando il lemma \ref{Media Integrale}.2, abbiamo che $\exists \xi \in [a,b]$ tale che:
+	\[ E_1 =  \frac{f''(\xi)}2 \int_a^b (x-a)(x-b)dx = [...] = -\frac{(b-a)^3}{12}f''(\xi)\]
+\end{proof}
+
+\subsection{Formula di Cavalieri - Simpson}
+
+Qui prendiamo tre nodi, il punto $a$, il punto $b$ e il punto medio.
+Usiamo $p_2$ polinomio di Lagrange di grado $2$. Seguendo gli ragionamenti visti abbiamo che:
+\[ \mathcal I_2 = \frac{b-a}2 f(a) + 4 f\left(\frac{a+b}2\right) + f(b) \]
+Otteniamo quindi che l'errore è:
+\[ E_2 = -\frac 1 {90} \left(\frac{b-a}2\right)^5 f^{(4)}(\xi) \]
+\textit{Questo nell'eventualità che $f \in C^4([a,b])$}
+\begin{center}
+	\begin{tikzpicture}[domain = -2:2]
+		\draw (-2.5, 0) -- (2.5,0);
+		\filldraw[fill = blue, nearly transparent] (-2,0) -- (2,0) -- (2,0.5) to[out = 150, in =30] (0,2.5) to[out = 210, in = 0] (-2,0.5) -- (-2,0);
+		\begin{scope}
+			\clip plot (\x, {-0.5*(\x)^2 +2.5});
+			\fill[fill = green, nearly transparent] (-2,0) -- (2,0) -- (2,4) -- (-2,4);
+			\draw[dashed] plot (\x, {-0.5*(\x)^2 + 2.5});
+		\end{scope}
+		\fill[fill = green, nearly transparent] (-2,0) -- (2,0) -- (2,0.5) -- (-2,0.5);
+		\draw[thick](2,0.5) to[out = 150, in =30] (0,2.5) to[out = 210, in = 0] (-2,0.5);
+		\filldraw (0,0) circle (1pt) node[below]{$x_1$} (-2,0) circle(1pt) node[below]{$a$} (2,0) circle (1pt) node[below]{$b$} (-2, 0.5) circle (1pt) (2,0.5) circle(1pt) (0,2.5) circle(1pt);
+	\end{tikzpicture}
+\end{center}
+Possiamo notare subito che c'è un enorme salto di qualità, abbiamo infatti un grado $5$ per l'intervallo e un grado $4$ per la derivata della funzione.
+
+\begin{defn}{Grado di Precisione}{}
+	Una formula di quadratura ha \textbf{Grado di Precisione} $k$ se è esatta per polinomi di grado al più $k$
+\end{defn}
+
+Confrontando quanto fatto con le altre formule abbiamo immediatamente che sia la Formula del Rettangolo ($p_0$ di Lagrange) sia la Formula del Trapezio ($p_1$ di Lagrange) hanno grado di precisione $1$ (con l'errore misurato con la derivata seconda). Mentre la formula di Cavalieri-Simpson ($p_2$ di Lagrange) ha grado di precisione $3$ (errore regolato dalla derivata quarta).\\
+Volendo può esser dimostrato che c'è una correlazione con il grado $k$ del polinomio: se il grado è $k$ pari, allora si ha un grado di precisione $k+1$, altrimenti si ha un grado $k$. \textit{Ne consegue che è più conveniente lavorare con polinomi di grado pari}.
+
+\subsection{Formule Quadratiche Composte}
+
+Tutti gli errori delle formule viste fin'ora hanno una parte del tipo $(b-a)^k$ per opportuno $k$. Possiamo allora immaginare di suddividere l'intervallo in tanti sottointervalli e di proseguire poi come con l'interpolazione.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw(-3,0) -- (3,0);
+		\filldraw (-3,0) circle (1pt) node[below]{$a$} node[above]{$x_0$}(-2,0) circle (1pt) node[above]{$x_1$} (-1,0) circle (1pt) node[above]{$x_2$} (0,0) circle (1pt) node[above]{$\cdots$} (1,0) circle (1pt) node[above]{$\cdots$} (2,0) circle (1pt) node[above]{$x_{m-1}$} (3,0) circle (1pt) node[above]{$x_m$} node[below]{$b$};
+	\end{tikzpicture}
+\end{center}
+Prendiamo tutti nodi equidistanti, quindi avremo che la loro distanza, o equivalentemente la lunghezza dei vari intervallini sarà:
+\[ H = |I_i| = frac{b-a}m \]
+Vediamo ora caso per caso come adattare le formule precedenti al caso composto.
+
+\textbf{Formula dei Rettangoli Composta}\\
+Se $\{x_i\}_{i \in\{0,...,m\}}$ sono i nodi, poniamo come $\{\hat x_i\}_{i \in \{1,...,m\}}$ i punti medi dei rispettivi intervalli $i$-esimi. Allora abbiamo che:
+\[ \mathcal I_{0,m} = Hf(\hat x_1) + Hf(\hat x_2) + \cdots + Hf(\hat x_n) = H(f(\hat x_1) + \cdots + f(\hat x_n)) \]
+In Matlab può essere scritto facilmente come \texttt{H*sum(|f($\xi$)|)}. Vediamo adesso l'errore:
+
+\begin{align*}
+	E_{0,m}(f) &= \sum_{i = 1}^m \left.E_0(f)\right|_{I_i} = \sum_{i = 1}^m \frac 1{24} H^3 f''(\xi_i) = \frac 1{24} H^3 \sum_{i = 1}^m f''(\xi_i)
+\end{align*}
+\textit{Per $\xi_i \in I_i$}. Ma sappiamo anche che $H =\frac{b-a}m$, per cui:
+\[ E_{0,m}(f) = \frac 1{24} H^3 \sum_{i = 1}^m f''(\xi_i) = \frac{H^2}{24} (b-a) \cdot \frac 1m \sum_{i = 1}^m f''(\xi_i) \]
+Ma questa adesso è una media, allora, se $f\in C^2([a,b])$ possiamo utilizzare la versione discreta della media integrale \ref{Media Integrale}.2 e abbiamo che $\exists \xi \in ]a,b[$ tale che:
+\[ \frac 1m \sum_{i = 1}^m f''(\xi_i) = f''(\xi) \]
+Per cui, andando a sostituire:
+\[ E_{0,m} = \frac{H^2}{24}(b-a) f''(\xi) \]
+
+\textbf{Formula dei Trapezi Composta}\\
+Qui abbiamo che i nodi sono gli stessi, non c'è bisogno di aggiungerne altri. L'integrale diventa quindi:
+\[ \mathcal I_{1,m} = \sum_{i = 0}^{m-1} \frac H2 (f(x_i) + f(x_{i+1})) = \frac 12 H(\underbrace{f(x_0) + f(x_1)}_{I_1} + \underbrace{f(x_1) + f(x_2)}_{I_2} + \cdots + f(x_{m-1}) + f(x_m) ) \]
+I nodi centrali sono presi due volte, quindi possiamo scrivere:
+\[\mathcal I_{1,m} = \frac 12 H (f(x_0) + 2f(x_1) + \cdots + 2f(x_{m-1}) + f(x_m))\]
+L'errore, seguendo gli stessi passaggi fatti prima, è:
+\[ E_{1,m} = -\frac{b-a}{12} H^2 f''(\xi) \qquad \xi \in ]a,b[\]
+
+\textbf{Formula di Cavalieri-Simpson Composta}\\
+Anche qui, come nel caso della formula normale, per ogni sottointervallo prendiamo gli estremi e il punto medio. Per questione di pura comodità, reindicizziamo tutti i nodi, in modo tale che:
+\[ x_0 = x_0\quad x_1 = \hat x_1 \quad x_2 = x_1 \quad x_3 = \hat x_2 \quad x_4 = x_2\quad \cdots\]
+Questo per semplificare di molto la somma dell'integrale. Abbiamo allora che:
+\[ \mathcal I_{2,m} = \frac H6 (\underbrace{f(x_0) + 4f(x_1) + f(x_2)} + \underbrace{f(x_2) + 4f(x_3) + f(x_4)}\cdots)\]
+Notiamo che gli indici pari sono presi $2$ volte, quelli dispari $4$ volte e gli estremi una volta soltanto, quindi può essere riscritto come:
+\[\mathcal I_{2,m} = \left( f(x_0) + 4 \sum_{k \text{ dispari}}f(x_k) + 2 \sum_{k\text{ pari}}f(x_k) + f(x_m)\right)\]
+\textit{In Matlab, per prendere solo quelli pari o quelli dispari, si può sfruttare il passo due, cioè} $\mathtt{a:2:b}$\\
+Il suo errore sarà quindi:
+\[ E_{2,m} = \frac{b-a}{180} \left(\frac H2\right)^4 f^{(4)}(\xi)\qquad \xi \in ]a,b[ \]
+
+\begin{oss}
+	Come nel caso dell'interpolazione, dove possibile è meglio utilizzare le formule adattive o adattative, con la scelta dei nodi opportuna in base alla pendenza/variazione della funzione
+\end{oss}
+
+\subsection{Stima computazionale dell'ordine di Convergenza}
+
+Sia $E_{\cdot, m} = cH^p$. Vogliamo assicurarci che il valore $p$ tenda al valore voluto (per esempio per la formula di Cavalieri-Simpson vorremmo che tendesse al valore voluto per $m\to \infty$). Dimostriamo che è vera. Consideriamo (come avevamo fatto per l'interpolazione) due suddivisioni di $[a,b]$ tali che una abbia il doppio dei nodi dell'altra, allora abbiamo che:
+\[ E_{\cdot,m} = cH^p = c\left( \frac{b-a}m \right)^p \qquad \text e \qquad E_{\cdot, 2m} = cH^p = c\left( \frac {b-a}{2m} \right)^p \]
+Allora posso dividere il primo per il secondo e ottenere:
+\[ \frac{E_{\cdot, m}}{E_{\cdot, 2m}} = \frac{\displaystyle{c\left(\frac{b-a}m\right)^p}}{\displaystyle{c\left(\frac{b-a}{2m}\right)^p}} = 2^p \]
+Da cui, mettendo i logaritmi, abbiamo che:
+\[ \log\left( \frac{E_{\cdot, m}}{E_{\cdot, 2m}} \right) = p \log(2)\qquad \Rightarrow \qquad p = \frac{1}{\log(2)}\log\left( \frac{C_{\cdot, m}}{E_{\cdot,2m}} \right)\xrightarrow{n \to +\infty} p\text{ teorico} \]
+
+\begin{ese}[Metodo dei Coefficienti Indeterminati]
+	Data la formula di quadratura aperta (cioè estremi esclusi):
+	\[ \int_{-2}^2 f(x)dx \approx \alpha_1 f(-\sqrt 2) + \alpha_2f(0) + \alpha_3 f(\sqrt 3) \]
+	Determinare $\alpha_1,\alpha_2, \alpha_3$ in modo che la formula ridotta risulti di grado di precisione $2$ (cioè esatta per polinomi di grado minore o uguale a $2$)
+\end{ese}
+
+\begin{sol}
+	Imponiamo l'esattezza della formula per polinomi di grado minore o uguale a $2$.\\
+	Per $n = 0$ prendiamo $p_0(x) = 1$, per $n = 1$ prendiamo $p_1(x) = x$ e per $n=2$ prendiamo $p_2(x) = x^2$. Andando a sostituire otteniamo che:
+	\begin{align*}
+		f = p_0 :\qquad & \alpha_1 \cdot 1 + \alpha_2 \cdot 1 + \alpha_3 \cdot 1= \int_{-2}^2 1dx = [x]_{-2}^2 = 4\\
+		f = p_1: \qquad & \alpha_1 \cdot (-\sqrt 2) + \alpha_2 \cdot 0 + \alpha_3 \cdot (\sqrt 2) = \int_{-2}^2 xdx = \left[\frac 12 x^2\right]_{-2}^2 = 0\\
+		f = p_2: \qquad & \alpha_1 \cdot 2 + \alpha_2 \cdot 0 + \alpha_3 \cdot 2 = \int_{-2}^2 x^2dx = \left[\frac 13\right]_{-2}^2 = \frac {16}3
+	\end{align*}
+	Mettendo tutto insieme abbiamo che:
+	\[ \begin{cases}
+		\alpha_1 + \alpha_2 + \alpha 3 = 0\\
+		-\sqrt 2 \alpha_1 + \sqrt 2 \alpha_3 = 0\\
+		2 \alpha_1 + 2 \alpha_3 = \frac {16}3
+	\end{cases} \Rightarrow \begin{cases}
+		\alpha_2 + \frac 83 = 4 \Rightarrow \alpha_2 = \frac 43\\
+		\alpha_1 = \alpha_3 \Rightarrow \alpha_1 = \frac 43\\
+		2\alpha_3 = \frac 83 \Rightarrow \alpha_3 = \frac 43
+	\end{cases}\]
+\end{sol}
+
+\begin{ese}
+	Determinare $\alpha_0, \alpha_1, \beta_0, \beta_1$ in modo che la seguente formula sia esatta per polinomi di grado minore o uguale a $3$:
+	\[ \int_0^h f(x)dx \approx h(\alpha_0 f(0) + \alpha_1f(h)) + h^2(\beta_0f'(0) + \beta_1f'(h))\]
+\end{ese}
+
+\subsection{Esercizi degli ultimi capitoli}
+
+\begin{ese}
+	Stimare l'integrale:
+	\[ \mathcal I= \int_{-1}^1 \frac 12 e^{-x^2} dx \]
+	Mediante la formula dei trapezi e di Cavalieri-Simpson e stimare l'errore della formula dei trapezi
+\end{ese}
+
+\begin{sol}
+	Abbiamo che la funzione in sé per sé è $f(x) = \frac 12 e^{-x^2}$.\\
+	Con la formula dei trapezi abbiamo che:
+	\[ \mathcal I_1 = \frac{b-a}2 (f(a)+f(b)) = \frac 22 (f(1)+f(-1)) = \frac 12 (e^{-1} + e^{-1}) = e^{-1} = \frac 1e \]
+	Con la formula di Cavalieri-Simpson abbiamo che:
+	\[ \mathcal I_2 = \frac{b-a}6 \left( f(a) + 4f\left( \frac{b-a}2 \right) + f(b) \right) = \frac 26 \left( \frac 12 e^{-1} + 4 \frac 12 + \frac 12 e^{-1} \right) = \frac 12 (e^{-1} + 2)\]
+	\textit{I numeri possiamo lasciarli così, non c'è bisogno di fare calcoli superflui}\\
+	Adesso possiamo calcolare l'errore:
+	\[ |E_1| = \left| -\frac{(b-a)^3}{12} f''(\xi) \right| \leq \frac 8{12} \|f''\|_\infty \]
+	Cerchiamo di stimare $\|f''\|_\infty$. Calcoliamo prima le derivate di $f$ poi maggioriamo $\|f''\|_\infty$ con il massimo delle funzioni che la compongono:
+	\[ f'(x) = -\frac 12 2x e^{-x^2}\qquad f''(x) = -e^{-x^2} + 2x^2 e^{-x^2} = e^{-x^2}(2x^2-1) \]
+	Abbiamo che, per $x \in [-1,1]$:
+	\[ \max_{x \in[-1,1]}e^{-x^2} = 1\qquad \max_{x \in [-1,1]}(2x^2-1) = 1 \]
+	Quindi possiamo maggiorare:
+	\[ \|f''\|_\infty \leq 1\cdot 1 = 1 \]
+	Da cui segue che:
+	\[ |E_1| = \left| -\frac{(b-a)^3}{12} f''(\xi) \right| \leq \frac 8{12} \|f''\|_\infty \leq \frac 23 \cdot 1 = \frac 23\]
+\end{sol}
+
+\begin{ese}
+	Stima il numero minimo di sottointervalli affinché il metodo di Cavalieri-Simpson composito dia un errore di alpiù $\vareps=10^{-4}$ per l'approssimazione di:
+	\[ \mathcal I = \int_0^\pi \left( e^{\frac 12 x} + \cos x \right) \]
+\end{ese}
+
+\begin{sol}
+	Notiamo che è richiesto solamente l'errore, quindi non è necessario trovare il valore di tale integrale. Anzi, risulterebbe in una perdita di tempo. Utilizziamo la formula per l'approssimazione dell'errore per la formula di Cavalieri-Simpson:
+	\[ E_{2,m} = -\frac{b-a}{180}\left(\frac H2\right)^4 f^{(4)} (\xi) \qquad \text{con }H = \frac{b-a}m\]
+	\textit{Avevamo già preso sottointervalli divisi in quantità uguali}. Facendo il valore assoluto di tale quantità abbiamo che:
+	\[ |E_{2,m}| = \frac \pi{180} \cdot \frac 1{16} \cdot \left(\frac \pi 4\right)^4 \cdot f^{(4)}(\xi)\]
+	\textit{Anche qui, non c'è il minimo bisogno di fare tutti tutti i conti.}
+	Andiamo, come prima, a calcolare tutte le derivate fino alla quarta:
+	\[ f'(x) = \frac 12 e^{\frac 12 x} - \sin x \quad f''(x) = \frac 14 e^{\frac 12 x} - \cos x \quad f'''(x) = \frac 18 e^{\frac 12 x} + \sin x \quad f^{(4)}(x) = \frac 1{16} e^{\frac 12 x} + \cos x\]
+	Poi cerchiamo di maggiorare $\|f^{(4)}\|_\infty$ nuovamente prendendo il massimo delle due funzioni che costituiscono la funzione $f$:
+	\[ \|f^{(4)}\|_\infty \leq \max_{x \in [0,\pi]} \frac 1{16}e^{\frac 12 x} + \max_{x \in [0,\pi]} \cos x = \frac 1{16} e^{\frac \pi 2} + 1\]
+	Adesso imponiamo il fatto che l'errore sia minore di $\vareps$:
+	\[ |E_{2,m}| = \frac \pi{180} \cdot \frac 1{16} \cdot \left(\frac \pi 4\right)^4 \cdot f^{(4)}(\xi) \leq \frac{\pi^5}{16 \cdot 180} \frac{1}{m^4}\left( \frac 1{16}e^{\frac \pi 2} + 1 \right) < \vareps \equiv 10^{-4}\]
+	Ricaviamo ora il numero minimo di sotto intervalli, risolvendo per $m$ dalla disuguaglianza sopra. In questo modo abbiamo che:
+	\[ m> \sqrt[4]{10^4 \cdot \frac{\pi^5}{16 \cdot 180} \left( \frac 1{16} e^{\frac \pi 2} + 1 \right) } \]
+	Cioè il numero minimo di intervalli è:
+	\[ m \geq \left\lceil \sqrt[4]{\frac{\pi^5}{16 \cdot 180} \left( \frac 1{16} e^{\frac \pi 2} + 1 \right)} \right\rceil \]
+\end{sol}
+
+\begin{ese}
+	Sia $h>0$ e sia $\mathcal I(f, h)$ definito come:
+	\[ \mathcal I(f,h) = \int_0^h f(x)dx \]
+	\begin{enumerate}
+		\item Calcolare $\mathcal I(f,h)$ e $\mathcal I_1(f,h)$ (cioè con la formula dei trapezi) e calcolare l'errore vero $\mathcal I(f,h) - \mathcal I_1(f,h)$ per $f(x) = x^2 + x^{5/2}$
+		\item Ripeti per $f(x) = x^2 + \sqrt x$. Valuta la differenza dell'errore per $h \to 0$, valutandone l'ordine di grandezza
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{$1$} Sia $f(x) = x^2 + x^{5/2}$, allora abbiamo che:
+	\[ \mathcal I(f,h) = \int_0^h x^2 + x^{5/2}dx = \left[ \frac 13 x^3 + \frac 27 x^{7/2} \right]_0^h = \frac 13 h^3 + \frac 27 h^{7/2} \]
+	\[ \mathcal I_1(f,h) = \frac{b-a}2 (f(a) + f(b)) = \frac h2(f(0) + f(h)) = \frac h2 (0+h^2 + h^{5/2}) = \frac 12 h^3 + \frac 12 h^{7/2} \]
+	Allora abbiamo che l'errore è:
+	\[ \mathcal I(f,h) - \mathcal I_1(f,h) = \left( \frac 13 - \frac 12 \right)h^3 + \left( \frac 27 - \frac 12 \right) h^{7/2} = -\frac 16 h^3 - \frac{3}{14}h^{7/2} = h^3\left(-\frac 16 - \frac 3{14} h^{\frac 12} \right) \]
+	Quindi abbiamo che per $h\to 0$, abbiamo che l'errore scendo come $h^3$
+
+	\fbox{$2$} Sia adesso $f(x) = x^2 + \sqrt x$. Allora abbiamo che:
+	\[ \mathcal I(f,h) = \int_0^h x^2 + \sqrt x dx = \frac 13 h^3 + \frac 23 h^{3/2} \]
+	\[ \mathcal I_1(f,h) = \frac h2(f(0) + f(h)) = \frac h2(h^2 + \sqrt h) = \frac 12 h^3 + \frac 12 h^{3/2} \]
+	Da cui segue direttamente che l'errore è:
+	\[ \mathcal I(f,h) - \mathcal I_1(f,h) = \left( \frac 13 - \frac 12 \right)h^2 + \left(\frac 23 - \frac 12\right)h^{3/2} = -\frac 16 h^3 + \frac 16 h^{3/2} = \frac 16 h^{3/2}(1-h^{3/2}) \]
+	Quindi per $h \to 0$ ho che l'errore scende come $h^{3/2}$. Rispetto a prima troviamo un errore minore rispetto a prima e rispetto a quanto il teorema ci dice. \textit{Perché?} In questa funzione viene a mancare l'ipotesi di $C^2$, infatti non è neanche $C^1$. Quindi non potevo aspettarmi un qualcosa del tipo $h^3 \equiv (b-a)^3$. L'errore scendo più lentamente rispetto a prima proprio per questo motivo
+\end{sol}
+
+\begin{ese}[Esame 8/1/2021]
+	È data la funzione $F(x):[\frac 12,1] \to\mathbb R$ definita come:
+	\[ F(x) = \int_0^x \frac{2t^2 - 3t +1}{t^2+1}dt \]
+	\begin{itemize}
+		\item Per $x \in [\frac 12, 1]$ determinare la formula di quadratura composita dei rettangoli per approssimare $F(x)$
+		\item Sfruttando il primo punto, usando solo 2 sottointervalli $m = 2$, proponi una procedura per l'approssimazione di $F$ nell'intervallo $[\frac 12, 1]$ mediante interpolazione con polinomi di grado $2$
+	\end{itemize}
+\end{ese}
+
+\begin{sol}
+	Per questioni di comodità poniamo:
+	\[ g(t) = \frac{2t^2 - 3t +1}{t^2+1} \]
+
+	\fbox{1} Per $x \in [\frac 12, 1]$, abbiamo che:
+	\[ F(x) = \mathcal I_{0,m} = H(g(\hat x_1) + g(\hat x_2) + \cdots + g(\hat x_m)) \]
+	Dove $\hat x_i$ sono i punti medi di ogni intervallo. Nel nostro caso abbiamo $a = 0$ e $b = x$, quindi la lunghezza dell'intervallo è variabile:
+	\[ H = \frac{b-a}m = \frac{x-0}m = \frac xm\]
+	Notiamo però che possiamo scrivere i vari punti medi in un altro modo:
+	\[
+		\hat x_1 = \frac H2 + a = \frac H2 \qquad \hat x_2 = \frac H2 + H + a = \frac 32 H
+	\]
+	Quindi possiamo ricavare la formula di quadratura come:
+	\[ \mathcal I_{0,m} = \frac xm \left( g\left( \frac H2 \right) + g\left( \frac 32 H\right) + \cdots + g\left( x-\frac H2 \right) \right) \]
+
+	\fbox{2} Abbiamo $F:[\frac 12, 1] \to \mathbb R$ e vogliamo approssimarlo con polinomi di grado $2$. Nel fare ciò, facciamo finta di non avere un integrale, ma di avere una funzione qualsiasi. In particolare, approssimiamo la funzione con polinomi di secondo grado. Possiamo prendere tre nodi equidistanti. In particolare possiamo prendere:
+	\[ x_0 = a = \frac 12 \qquad x_1 = \frac{b-a}2 = \frac 34 \qquad x_2 = b = 1 \]
+	In questo modo possiamo utilizzare i polinomi di Lagrange per approssimare la funzione. In particolare:
+	\[ p_2(x) = y_0L_0(x) + y_1L_1(x) + y_2L_2(x) \]
+	Il problema adesso sta nell'effettivo trovare $y_0,y_1,y_2$. Nel fare ciò possiamo approssimare l'integrale, infatti:
+	\[ y_0 = F(x_0) = \int_0^{\frac 12}g(t)dt\qquad y_1 = F(x_1) = \int_0^{\frac 34}g(t)dt\qquad y_2 = F(x_2) = \int_0^{1}g(t)dt \]
+	Il testo dell'esercizio ci impone di approssimare i vari integrali utilizzando la formula di quadratura dell'esercizio precedente e con soli due intervalli.\\
+	\textit{Facciamolo per bene per il primo, gli altri due è analogo}. Il primo intervallo è $[0,\frac 12]$. Visto che dobbiamo prendere due intervalli, possiamo prendere il punto medio $\frac 14$, in modo da avere due intervalli di stessa lunghezza $[0,\frac 14]$ e $[\frac 14, \frac 12]$. Visto che dobbiamo sostanzialmente applicare la formula dei trapezi su questi intervalli, dobbiamo prendere nuovamente i punti medi, $\frac 18$ per il primo e $\frac 38$ per il secondo.
+	\begin{center}
+		\begin{tikzpicture}
+			\foreach \x in {0,...,4}{
+				\filldraw (\x,0) circle(1pt) node(\x){};
+			}
+			\draw (0,0) -- (4,0);
+			\draw (0) node[below]{$0$} (1) node[below]{$\frac 18$} (2) node[below]{$\frac 14$} (3)node[below]{$\frac 38$} (4)node[below]{$\frac 12$};
+		\end{tikzpicture}
+	\end{center}
+	Applichiamo quindi la formula di prima sui due intervalli. Quindi abbiamo che:
+	\[ F(x_0) = \int_0^{\frac 12}g(t)dt \approx H(g(\hat x_1) + g(\hat x_2)) = \frac 14\left( g\left(\frac 18\right) + g\left( \frac 38 \right) \right) \equiv \hat F(x_0)\]
+	\textit{Poi ci sarebbero da fare conti ma non sono rilevanti}\\
+	Vediamo per $F(x_1)$ e $F(x_1)$.\\
+	Per $F(x_1)$ abbiamo che gli estremi sono $0$ e $\frac 34$, il punto medio e lunghezza dei sottointervalli $H$ è $\frac 38$ e i punti medi dei rispettivi sottointervalli sono $\frac 3{16}$ e $\frac 9{16}$. Da questo segue che:
+	\[ F_1(x) = \int_0^{\frac 34} g(t)dt \approx H(g(\hat x_1) + g(\hat x_2)) = \frac 38 \left( g\left(\frac 3{16}\right) + g\left( \frac 9{16} \right)  \right) \equiv \hat F(x_1) \]
+	Per $F(x_2)$ abbiamo che gli estremi sono $0$ e $1$, il punto medio e lunghezza dei sottointervalli è $H$ + $\frac 12$ e i rispettivi punti medi sono $\frac 14$ e $\frac 34$. Quindi abbiamo che:
+	\[ F(x_2) ) \int_0^1 g(t)dt \approx \frac 12 \left( g\left(\frac14\right) + g\left(\frac 34\right) \right) \equiv \hat F(x_2) \]
+	\textit{Non serve andare avanti con i conti}. Abbiamo quindi che il nostro polinomio è:
+	\[ p_2(x) = \hat F(x_0)L_0(x) + \hat F(x_1)L_1(x) + \hat F(x_2)L_2(x) \]
+	Dove abbiamo che:
+	\[ L_0(x) = \frac{(x-\frac 34)(x-1)}{(\frac 12- \frac 34)(\frac 12 - 1)}\qquad L_1(x) = \frac{(x-\frac 12)(x-1)}{(\frac 34 - \frac 12)(\frac 34 -1)}\qquad L_2(x) = \frac{(x - \frac 12)(x - \frac 34)}{(1-\frac 12)(1-\frac 34)} \]
+\end{sol}
+
+\begin{ese}[Esame 17/12/2019]
+	È data la funzione $f(x) = \sin(\pi x)$ ed i nodi $x_1 = \frac 14$ e $x_2 = \frac 12$. Determinare il polinomio di grado $3$ tale che:
+	\[ p(x_i) = f(x_i)\qquad p'(x_i) = f'(x_i)\qquad i \in \{1,2\} \]
+	Commentare poi sull'esistenza e sull'unicità di tale polinomio
+\end{ese}
+\begin{sol}
+	Sapendo che $f(x) = \sin(\pi x)$, possiamo subito calcolare la derivata come:
+	\[ f'(x) = \pi \cos(\pi x) \]
+	Sapendo che vogliamo un polinomio di terzo grado, possiamo già porre:
+	\[ p(x) = a_0 + a_1x + a_2x^2 + a_3x^3 \qquad p'(x) = a_1 + 2a_2x + 3a_3x^2 \]
+	Iniziamo ad imporre tutte le condizioni. Allora abbiamo che:
+	\[
+		\begin{cases}
+			p(x_1) = f(x_1)\\
+			p(x_2) = f(x_2)\\
+			p'(x_1) = f'(x_1)\\
+			p'(x_2) = f'(x_2)
+		\end{cases} \Rightarrow \quad \begin{cases}
+			a_0 + \frac 14 a_1 + \frac 1{16} a_2 + \frac 1{64} a_3 = \sin(\frac \pi 4) = \frac{\sqrt 2}2\\
+			a_0 + \frac 12 a_1 + \frac 14 a_2 + \frac 18 a_3 = \sin(\frac \pi 2) = 1\\
+			a_1 + \frac 24 a_2 + \frac 3{16} a_3 = \pi \cos (\frac \pi 4) = \frac{\sqrt 2}2\\
+			a_1 + \frac 22 a_2 + \frac 34 a_3 = \pi \cos(\frac \pi 2) = 0
+		\end{cases}
+	\]
+	Notiamo che questo è un sistema lineare, quindi possiamo scriverlo come:
+	\[
+		\begin{pmatrix}
+			1 & \frac 14 & \frac 1{16} & \frac{1}{64}\\
+			1 & \frac 12 & \frac 14 & \frac 18\\
+			0 & 1 & \frac 12 & \frac 3{16}\\
+			0 & 1 & 1 & \frac 34
+		\end{pmatrix}
+		\begin{pmatrix}
+			a_0\\ a_1\\ a_2\\ a_3
+		\end{pmatrix} =
+		\begin{pmatrix}
+			\frac{\sqrt 2}2\\ 1\\ \frac{\sqrt 2}2\\ 0
+		\end{pmatrix}
+	\]
+	Da qui ottengo i coefficienti del polinomio che stavo cercando se e solo se la matrice è non singolare. Per quanto fatto nel modulo precedente, se tale soluzione esiste, è anche unica. Quindi esiste ed è unico il polinomio. (Andrebbe effettivamente verificato che la matrice sia non singolare.)
+\end{sol}
+
+\begin{ese}
+	È data la funzione $f(x) = \log (2+x)$ con $x \in [-1,1]$ ed il polinomio interpolante $p_n$ di grado $n$ nei nodi di Chebyschev in $[-1,1]$.
+	\begin{itemize}
+		\item Ottieni una stima per $\|f-p_n\|_\infty$
+		\item Confronta la stima con una stima opportuna per $\|f-t_n\|_\infty$ dove $t_n$ è il polinomio di Taylor di grado $n$ di $f$ intorno all'origine
+	\end{itemize}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} In generale abbiamo che:
+	\[ \|f-p_n\|_\infty \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}\|\omega\|_\infty \]
+	Nel caso dei nodi di Chebyschev abbiamo che $\|\omega\|_\infty$ è minimizzato e vale:
+	\[ \|\omega\|_\infty = \frac 1{2^n} \]
+	Da cui segue che la stima per \[ \| f-p_n\|_\infty \] è:
+	\[ \|f-p_n\|_\infty \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}\|\omega\|_\infty = \frac {\|f^{(n+1)}\|_\infty}{(n+1)!} \frac 1{2^n}\]
+
+	\fbox{2} Abbiamo che il polinomio di Taylor di grado $n$ di $f$ centrato in $0$ è:
+	\[ f(x)= f(0) + f'(0)x + \frac{f''(0)}{2}x^2 + \cdots + \frac{f^{(n)}(0)}{n!} + \frac{f^{(n+1)}(\xi_x)}{(n+1)!} x^{n+1}\]
+	Segue quindi che:
+	\[ \|f-t_n\|_\infty \leq \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}\|x^{n+1}\|_\infty = \frac{\|f^{(n+1)}\|_\infty}{(n+1)!}  \]
+	Quindi la stima con Chebyschev è migliore rispetto a quella con Taylor, $\forall n \geq 1$
+\end{sol}
+
+\begin{ese}
+	Sono dai i nodi $x_0 = -1$, $x_1 = 0$ e $x_2 = 1$ e la funzione $f$ definita come:
+	\[ f(x) = x^2 \sin \left( \frac \pi 2 x \right) \]
+	\begin{enumerate}
+		\item Calcolare il polinomio di grado $n=2$ interpolante $f$ sui nodi nella forma:
+			\[ p(x) = \alpha_2 x^2 + \alpha_1 x + \alpha_0 \]
+			Mediante il metodo di Vandermonde
+		\item Calcolare il polinomio di grado $n = 1$ che minimizza la distanza di interpolazione (nel senso dei minimi quadrati) rispetto ad $f$, usando i nodi dati.
+		\item Supponendo $x_2 = x_1 + \vareps$ con $\vareps \in \mathbb R^+$, commenta sul condizionamento del problema al punto $1$ ed in particolare sulla possibile quasi singolarità della matrice.
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Costruiamo la matrice di Vandermonde con i nodi e poniamo il sistema lineare con i valori della funzione:
+	\[
+		\begin{pmatrix}
+			1 & -1 & 1\\
+			1 & 0 & 0\\
+			1 & 1 & 1
+		\end{pmatrix}
+		\begin{pmatrix}
+			\alpha_1 \\ \alpha_2 \\ \alpha_3
+		\end{pmatrix} =
+		\begin{pmatrix}
+			-1\\ 0\\ 1
+		\end{pmatrix}
+	\]
+	Per la soluzione basta quindi risolvere il sistema lineare
+
+	\fbox{2} Sia quindi il polinomio di grado $1$:
+	\[ p_1(x) = \alpha_0 + \alpha_1 x \]
+	Poniamo la condizione di interpolazione:
+	\[
+		p_1(x_i) = f(x_i) \qquad \Rightarrow \qquad
+		\begin{pmatrix}
+			1 & -1\\
+			1 & 0\\
+			1 & 1
+		\end{pmatrix}
+		\begin{pmatrix}
+			\alpha_0\\ \alpha_1
+		\end{pmatrix} =
+		\begin{pmatrix}
+			-1 \\ 0 \\ 1
+		\end{pmatrix}
+		\qquad \Leftrightarrow \qquad V \underline \alpha = \underline f
+	\]
+	Possiamo quindi applicare il metodo dei minimi quadrati con la matrice $V$ di dimensione $3 \times 2$.
+	\[
+		\min_{\underline \alpha}\|\underline f - V\underline \alpha\| \qquad \Rightarrow \qquad V^TV\underline \alpha = V^T \underline f
+	\]
+	Abbiamo quindi che:
+	\[
+		V^TV = \begin{pmatrix}
+			1 & 1 & 1\\
+			-1 & 0 & 1
+		\end{pmatrix}
+		\begin{pmatrix}
+			1 & -1\\
+			1 & 0\\
+			1 & 1
+		\end{pmatrix} =
+		\begin{pmatrix}
+			3 & 0\\
+			0 & 2
+		\end{pmatrix} \qquad V^T \underline f=
+		\begin{pmatrix}
+			1 & 1 & 1\\
+			-1 & 0 & 1
+		\end{pmatrix}
+		\begin{pmatrix} 1 & 0 & -1 \end{pmatrix} = \begin{pmatrix}0 \\-2 \end{pmatrix}
+	\]
+	Per cui abbiamo che:
+	\[
+		\begin{pmatrix}
+			3 & 0\\ 0 & 2
+		\end{pmatrix}
+		\begin{pmatrix}
+			\alpha_0\\ \alpha_1
+		\end{pmatrix} =
+		\begin{pmatrix}
+			0\\ -2
+		\end{pmatrix}
+		\qquad
+		\begin{pmatrix}
+			\alpha_0\\ \alpha_1
+		\end{pmatrix}=
+		\begin{pmatrix}
+			\frac 13 & 0\\
+			0 & \frac 12
+		\end{pmatrix} \begin{pmatrix} 0\\-2 \end{pmatrix}=
+		\begin{pmatrix}
+			0\\ -1
+		\end{pmatrix}
+	\]
+	Se volessimo rappresentare la soluzione ottenuta avremmo che:
+	\begin{center}
+		\begin{tikzpicture}[domain = -1:1]
+			\draw[->] (-1.5,0) -- (1.5,0);
+			\draw[->] (0,-1.5) -- (0,1.5);
+			\filldraw (0,0) circle(1pt) (-1,1) circle(1pt) (1,-1) circle(1pt);
+			\draw[dashed] plot (\x,-\x);
+		\end{tikzpicture}
+	\end{center}
+
+	\fbox{3} Riprendiamo la matrice e sostituiamo il terzo nodo con $x_2 = x_1 + \vareps = 0 + \vareps = \vareps$:
+	\[
+		V = \begin{pmatrix}
+			1 & -1 & 1\\
+			1 & 0 & 0\\
+			1 & \vareps & \vareps^2
+		\end{pmatrix}
+	\]
+	Per studiare la singolarità di questa matrice possiamo studiare la singolarità di un'altra matrice simile a $V$:
+	\[
+		V' = \begin{pmatrix}
+			1 & 0 & 0\\
+			1 & {\color{blue} -1} & {\color{blue} 1}\\
+			1 & {\color{blue} \vareps} & {\color{blue} \vareps^2}
+		\end{pmatrix}
+	\]
+	Per cui $V'$ è singolare solo se lo è anche il blocco in blu. Andiamo quindi a studiarne il determinante:
+	\[
+		\det\begin{pmatrix} -1 & 1\\ \vareps & \vareps^2 \end{pmatrix} = -\vareps^2 - \vareps = -\vareps(\vareps + 1) \to 0 \quad \text{per }\vareps \to 0
+	\]
+\end{sol}
+
+\begin{ese}[Esame 19/7/2022]
+	Sia $f(x) = \sqrt{(1-x^2)^3}$ per $x \in [-1,1]$:
+	\begin{enumerate}
+		\item Determinare il polinomio $p_2$ interpolante $f$ in modo esplicito
+		\item Determinare il polinomio $p_2$ con i nodi di Chebyschev
+		\item Per $n>2$ analizzare una stima dei punti precedenti per $n \to + \infty$
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Come negli esercizi precedenti con $x_0 = -1$, $x_1 = 0$ e $x_2 = 1$, da cui:
+	\[ p_2(x) = \alpha_2 x^2 + \alpha_1 x + \alpha_0 \]
+
+	\fbox{2} In maniera analoga con i nodi di Chebyschev.
+
+	\fbox{3} Sappiamo che $f \not \in C^\infty$, in particolare $f \not \in C^2$ e
+	\[ |f(x) - p_n(x)| = \frac{f^{(n+1)}(\xi)}{(n+1)!} \omega(x) \]
+	Da questa non possiamo discutere l'errore per $n \to +\infty$ per gli equispaziati. Per Chebyschev invece, abbiamo la convergenza uniforme per Bernsetein
+\end{sol}
+
+\subsection{Formule di Newton - Cotes}
+
+Volendo è possibile generalizzare le formule di quadratura anche per gradi qualsiasi di polinomi. Infatti, più in generale abbiamo che:
+\[ p_n(x) = \sum_{i = 0}^n f(x_i)L_i(x) \qquad \text{per }x_k = x_0 + hk \quad k \in \{1,...\} \]
+Per cui abbiamo che:
+\[\mathcal I_{n} = \int_a^b \sum_{i = 0}^n f(x_i)L_i(x)dx = \sum_{i = 0}^n f(x_i) \int_a^b L_i(x)dx = \sum_{i = 0}^n f(x_i)\alpha_i\]
+Dove abbiamo posto che:
+\[ \alpha_i = h\omega_i \]
+Con $\omega_i$ valori che possono essere registrati in tabelle. Infatti, facendo i conti, abbiamo che:
+\[ \int_a^b L_i(x)dx = \int_a^b \prod_{k = 0, k \neq i}^n \frac{(x-x_k)}{(x_i-x_k)}dx \]
+Sapendo che i nodi sono equispaziati abbiamo che $x_k = x_0 + kh$ con $h = |x_{i+1} - x_i|$. Inoltre un qualsiasi punto $x \in [a,b]$ può essere scritto come:
+\[ x = x_0 + ph \qquad p \in [0,n] \]
+Per cui possiamo scrivere i vari termini della produttoria possono essere scritti come:
+\[ \frac{(x-x_k)}{(x_i - x_k)} = \frac{(p-k)h}{(i-k)h} = \frac{p-k}{i-k} \]
+\textit{Qui $k$ e $i$ sono due indici}.\\
+Riprendendo il fatto che possiamo scrivere:
+\[ x = x_0 + ht \qquad \Rightarrow \qquad dx = hdt \]
+Per cui, andando a sostituire abbiamo che:
+\[ \int_a^b \prod_{k = 0, k \neq i}^n \frac{(x-x_k)}{(x_i-x_k)}dx = \int_0^n \prod_{k = 0, k \neq i}^n \frac{t-k}{i-k} dt  = \omega_i\]
+Quindi dipende esclusivamente dalla scelta dei nodi (se sono equispaziati), quindi posso scegliere degli $\omega_i$.
+
+Vediamone l'accuratezza.\\
+Per $n$ pari e per $f \in C^{(n+2)}([a,b])$ abbiamo che:
+\[ E_n(f) = \frac{M_n}{(n+2)!}h^{n+3} f^{(n+2)}(\xi)\qquad \xi \in (a,b) \]
+\textit{$M_n$ è una costante che dipende dai nodi}.\\
+Per $n$ dispari e per $f\in C^{(n+1)}([a,b])$ abbiamo che:
+\[ E_n(f) = \frac{N_n}{(n+1)!} h^{n+2} f^{(n+1)}(\xi) \qquad \xi \in (a,b) \]
+Per aumentare accuratezza non è saggio aumentare il numero di nodi $n$, meglio sfruttare le composite. Per scegliere il numero adatto di intervalli possiamo risolvere:
+\[ |cH^kf^{(k)}(\xi)|\leq |c| H^k \|f^{(k)}\|_\infty < \vareps\]
+Quindi:
+\[ m\geq \left( \frac{|c|\|f^{(k)}\|_\infty}{\vareps} (b-a)^k \right)^{1/k} \]
+
+\newpage
+
+\section{Approssimazione di Derivate (differenze finite)}
+
+\subsection{Somme in Avanti e in Indietro}
+
+Il problema che ci prefiggiamo di risolvere in questa sezione è: \textit{data una funzione $f:I \to \mathbb R$ e dato $x_i \in I$, supponendo che esista $f'(x_i)$ definito come:
+	\[ f'(x) = \lim_{h \to 0} \frac{f(x_i + h) - f(x_i)}{h} \]
+Vogliamo approssimare $f'(x)$ mediante il rapporto incrementale}.
+
+\begin{defn}{Differenze Finite in Avanti}{}
+	Definiamo le \textbf{Differenze Finite in Avanti} come:
+	\[ f^{FD}_i = \frac{f(x_i+ h) - f(x_i)}{h} \qquad h>0\]
+\end{defn}
+\textit{FD = Forward differences}. Quindi in questo caso abbiamo che $x_i + h$ sta sempre dopo $x_i$.
+\begin{center}
+	\begin{tikzpicture}[domain = 0.33:3]
+		\draw[->] (-1,0) -- (3,0);
+		\draw[->] (0,0) -- (0,3);
+		\draw[samples = 3000] plot (\x, {1/\x});
+		\filldraw (1,1) circle(1pt) (1.5,0.6667) circle(1pt) (1,0) circle(1pt) node[below]{$x_i$} (1.5,0) circle(1pt) node[below right]{$x_{i}+h$};
+		\filldraw (0,1) circle(1pt) node[above left]{$f(x_i)$};
+		\filldraw (0,0.66667) circle(1pt) node[left]{$f(x_i+h)$};
+		\draw[blue] (0.5, 1.333) -- (2,0.333);
+		\draw (0.5,1.5) -- (1.5,0.5);
+		\draw[dotted] (0,1) -- (1,1) -- (1,0);
+		\draw[dotted] (1.5,0) -- (1.5,0.6667) -- (0,0.66667);
+	\end{tikzpicture}
+\end{center}
+Valutiamone l'errore (con una funzione $f$ sufficientemente regolare). Con Taylor abbiamo che:
+\[ f(x_i + h) = f(x_i) + hf'(x_i) + \frac 12 h^2f''(\xi_i) \qquad \xi_i \in (x_i, x_i + h) \]
+Per cui abbiamo che:
+\[ f'(x_i) = \frac{f(x_i+h) - f(x_i)}h - \frac 12 h f''(\xi_i) \qquad \text{per }h \to + \infty \]
+L'errore quindi va a $0$ come $h^1$, quindi l'errore è un $\mathcal O(h^1)$
+
+Possiamo fare una cosa simile anche con le somme in indietro:
+
+\begin{defn}{Differenze Finite all'Indietro}{}
+	Definiamo le \textbf{Differenze Finite all'Indietro} come:
+	\[ f_i^{BD} = \frac{f(x_i) - f(x_i - h)}h \qquad h \geq 0 \]
+\end{defn}
+\textit{Qui abbiamo che $BD$ sta per Backward differences}. Graficamente abbiamo che:
+
+\begin{center}
+	\begin{tikzpicture}[domain = 0.33:3]
+		\draw[->] (-1,0) -- (3,0);
+		\draw[->] (0,0) -- (0,3);
+		\draw[samples = 3000] plot (\x, {1/\x});
+		\filldraw (1,1) circle(1pt) (1,0) circle(1pt) node[below]{$x_i$} (0.5,2) circle(1pt) (0.5,0) circle(1pt) node[below left]{$x_i - h$};
+		\filldraw (0,2) circle(1pt) node[left]{$f(x_1-h)$};
+		\filldraw (0,1) circle(1pt) node[left]{$f(x_i)$};
+		\draw[dotted] (0.5,0) -- (0.5,2) -- (0,2);
+		\draw[dotted] (0,1) -- (1,1) -- (1,0);
+		\draw (0.5,1.5) -- (1.5,0.5);
+		\draw[blue] (0.25,2.5) -- (1.25,0.5);
+	\end{tikzpicture}
+\end{center}
+
+Abbiamo quindi che l'approssimazione è analoga a quanto fatta in precedenza:
+\[ f(x_i-h) = f(x_i) - hf'(x_i) + \frac 12 h^2 f''(\hat \xi_i) \qquad \text{per } \hat \xi_i \in (x_i-h, x_i) \]
+Da cui segue che:
+\[ f'(x_i) = \frac{f(x_i) - f(x_i - h)}{h} + \frac 12 hf''(\hat \xi_i)\]
+Per cui abbiamo sempre che l'errore decresce come $\mathcal O(h^1)$
+
+Se invece prendiamo come estremi $x_i-h$ e $x_i+h$ abbiamo un risultato migliore. Infatti, sviluppando con Taylor fino al terzo ordine, abbiamo che, per $h\to+ \infty $:
+\begin{align*}
+	f(x_i + h) &= f(x_i) + hf'(x_i) + \frac 12 h^2 f''(x) + \frac 16 h^3 f'''(\xi_i)\\
+	f(x_i - h) &= f(x_i) - hf'(x_i) + \frac 12 h^2 f''(x) - \frac 16 h^3 f'''(\xi_i)
+\end{align*}
+
+\begin{center}
+	\begin{tikzpicture}[domain = 0.33:3]
+		\draw[->] (-1,0) -- (3,0);
+		\draw[->] (0,0) -- (0,3);
+		\draw[samples = 3000] plot (\x, {1/\x});
+		\filldraw (1,1) circle(1pt) (1.5,0.6667) circle(1pt) (1,0) circle(1pt) node[below]{$x_i$} (1.5,0) circle(1pt) node[below right]{$x_{i}+h$} (0.5,2) circle(1pt) (0.5,0) circle(1pt) node[below left]{$x_i - h$};
+		\filldraw (0,2) circle(1pt) node[left]{$f(x_1-h)$};
+		\filldraw (0,1) circle(1pt) node[above left]{$f(x_i)$};
+		\filldraw (0,0.66667) circle(1pt) node[left]{$f(x_i+h)$};
+		\draw[blue] (0.5, 1.333) -- (2,0.333);
+		\draw (0.5,1.5) -- (1.5,0.5);
+		\draw[dotted] (0.5,0) -- (0.5,2) -- (0,2);
+		\draw[dotted] (0,1) -- (1,1) -- (1,0);
+		\draw[dotted] (1.5,0) -- (1.5,0.6667) -- (0,0.66667);
+		\draw[blue] (0.25,2.5) -- (1.25,0.5);
+		\draw[green] (1.5,0.66667) -- (0.5,2);
+	\end{tikzpicture}
+\end{center}
+Andiamo a sottrarre termine a termine:
+\[ f(x_i + h) - f(x_1 - h) = 2h f'(x_i) + \frac 16 h^2 f'''(\xi_i) + \frac 16 h^3 f'''(\hat x_i)\qquad h\to 0 \]
+Ponendo gli ultimi addendi come $\mathcal O(h^3)$, abbiamo che:
+\[ f'(x_i) = \frac{f(x_i+h) - f(x_i - h)}{2h} + \mathcal O(h^2) \]
+Questa è un'approssimazione di ordine $2$, quindi l'errore va a $0$ come $h^2$
+
+Tutto questo risulta comodo nel caso in cui dobbiamo avere la derivata in qualche punto. Il metodo sfruttando come punti $x_i-h$ e $x_i+h$ non può essere sempre usato, come nel caso delle spline, in cui stiamo cercando la derivata in un estremo dell'intervallo.
+
+\subsection{Approssimazione di Derivate Seconde}
+
+In questo caso, rispetto a prima, ci basterà aumentare di un grado lo sviluppo di Taylor:
+\begin{align*}
+	f(x_i + h) &= f(x_i) + hf'(x_i) + \frac 12 h^2 f''(x) + \frac 16 h^3 f'''(\xi_i) + \frac 1{4!} h^4 f^{(4)}(\xi_i) \\
+	f(x_i - h) &= f(x_i) - hf'(x_i) + \frac 12 h^2 f''(x) - \frac 16 h^3 f'''(\xi_i)+ \frac 1{4!} h^4 f^{(4)}(\xi_i)
+\end{align*}
+Sommando i due termini abbiamo che:
+\[ f(x_i+h) + f(x_i-h) = 2f(x_i) + h^2 f''(x_i) + \frac 12 \frac 1{4!} h^4 f^{(4)}(\tilde \xi_i) \qquad \tilde \xi_i \in (x_i-h, x_i+h) \]
+Dividendo poi per $h^2$ e riordinando i termini abbiamo che:
+\[ f''(x_i) = \frac{(f(x_i-h) -2f(x_i) + f(x_i+h))}{h^2} - \frac 1{48} h^2 f^{(4)}(\tilde\xi_i)\]
+Da cui segue che:
+\[ f''(x_i) - \frac{f(x_i-h) -2f(x_i) + f(x_i+h)}{h^2} = \mathcal O(h^2)\]
+Per cui l'errore va a $0$ come $h^2$.
+
+\begin{oss}
+	Per il calcolo della derivata seconda bisogna fare una valutazione della funzione tre volte
+\end{oss}
+
+Questo metodo di approssimazione può essere utilizzato per l'equazione del moto, nel quale si approssima $\ddot u = f$ con $f = f(t), t \in [0,T]$, oppure per una diffusione di qualche tipo, con $u'' = f$, $f = f(x)$ e $x \in [a,b]$
+
+\newpage
+
+\section{Equazioni non Lineari}
+
+\subsection{Presentazione del Problema}
+
+Data una funzione $f:(a,b) \to \mathbb R$ vogliamo determinare un'approssimazione $\tilde x$ a $x^*$ zero di $f$ in $(a,b)$, cioè $f(x^*)=0$
+
+Facciamo un paio di osservazioni
+
+\begin{oss}
+	Questo problema può risultare complesso se teniamo conto del fatto che:
+	\begin{itemize}
+		\item Non è detto che esista sempre $x^*$
+		\item Se esiste, non è detto che sia unico (in quanto c'è la possibilità che troviamo lo zero sbagliato se ce ne sono più di $1$)
+		\item Se lo troviamo, non è detto che lo troviamo in forma chiusa, cioè $x^*=$qualcosa
+		\item Se lo troviamo in forma chiusa, non è detto che sia calcolabile o approssimabile
+	\end{itemize}
+\end{oss}
+
+Il problema è quindi numericamente difficile e la risoluzione ne genera molto interesse in quanto molti modelli ne fatto utilizzo. Si tratta quindi di un modello molto attuale.
+
+In questo corso ci limiteremo ad un caso scalare, ma volendo può essere apportato ad un caso più generale in ambito vettoriale in $\mathbb R^n$. Tuttavia in questo caso ci sono dei vincoli che per il momento è meglio lasciar perdere.
+
+\begin{oss}
+	La conoscenza del grafico della funzione $f$ può essere di gran aiuto, in quanto è in grado di darci delle prime informazioni:
+	\begin{center}
+		\begin{tikzpicture}[domain = -2.4:2.6]
+			\draw[->] (-3,0) -- (3,0);
+			\draw[->] (0,-1) -- (0,3);
+			\draw[samples = 1000] plot (\x, {0.25*(\x-2)^2*(\x+1)*(\x+2)-0.5});
+		\end{tikzpicture}
+	\end{center}
+\end{oss}
+
+\begin{oss}
+	Se riusciamo a scrivere una funzione come differenza di due funzioni, possiamo allora porre un sistema:
+	\[ f(x) = \varphi_1(x) - \varphi_2(x) = 0 \qquad \begin{cases}
+		y_1 = \varphi_1(x)\\
+		y_2 = \varphi_2(x)
+	\end{cases} \]
+	In questo modo la loro intersezione è esattamente lo zero della funzione
+\end{oss}
+
+Scriviamo un procedimento generale:\\
+Dato $x_0 \in [a,b]$, vogliamo determinare una successione $\{x_k\}_{k\geq 0}$ tale che sotto determinate ipotesi o condizioni si abbia che:
+\[ x_k \xrightarrow{k \to + \infty} x^* \]
+Questo è un metodo iterativo come quelli visti nel semestre scorso. In generale, in questo ambito ne vedremo molti iterativi, non ce ne sono molti diretti
+
+\begin{defn}{Convergenza Lineare}{}
+	Una successione $\{x_k\}_{k \geq 0}$ si dice che \textbf{Converge Linearmente} a $x^*$ se:
+	\[ \exists c \in [0,1]: \lim_{k \to + \infty} \frac{|x_{k+1} - x^*|}{|x_k-x^*|} = c \]
+\end{defn}
+
+È vero che è una condizione al limite, ma si spera che effettivamente decresca tale quantità
+
+\begin{defn}{Convergenza di Ordine $p>1$}{}
+	Si dice che una successione $\{ x_k \}_{k \geq 0}$ \textbf{Converge con ordine $p>1$} a $x^*$ se:
+	\[ \exists C>0: \lim_{k \to +\infty} \frac{|x_{k+1}-x^*|}{|x_k - x^*|^p} = C \]
+	In questo caso la quantità $C$ prende il nome di \textbf{Fattore Asintotico di Convergenza}
+\end{defn}
+
+Il nostro obiettivo sarà quindi quello di studiare metodi che abbiano una convergenza più veloce (quindi un valore $C$ più piccolo e un $p$ più grande)
+
+\begin{oss}
+	La convergenza può dipendere dal dato iniziale $x_0$ (infatti se è troppo lontana può convergere ad un altro punto, diverso da quello desiderato, oppure può capitare che non converga e basta). In tal caso si stratta di \textbf{Convergenza Locale}. Vedremo per esempio come con Newton il punto dovrà essere necessariamente vicino.\\
+	Se la convergenza invece non dipende da $x_0$, allora si tratta di \textbf{Convergenza Globale}
+\end{oss}
+
+\subsection{Condizionamento del Problema}
+
+Volendo possiamo scrivere la condizione $f(x) = 0$ come:
+\[ \varphi(x)- d = 0 \]
+Dove $\varphi$ non è altro che una funzione che differisce di una costante $d$ dalla funzione $f$ stessa. Allora potremo scrivere che:
+\[ x = \varphi^{-1}(d) \]
+Notiamo che questo è quanto avevamo fatto ad inizio semestre, ponendo $x = F(d)$, in particolare possiamo definire con:
+\[ C_{ABS} = F'(d) = (\varphi^{-1})'(d) = \frac 1{\varphi'(x^*)} = \frac 1{f'(x^*)} \]
+Dove avevamo che $f(x^*) = 0$
+
+Stiamo quindi studiando quanto le perturbazioni modificando la funzione stessa:infatti se abbiamo una funzione del genere:
+\begin{center}
+	\begin{tikzpicture}[domain = -1:3]
+		\draw[->] (-1.5,0) -- (3.5,0);
+		\draw[->] (0,-1.5) -- (0,1.5);
+		\draw[->] plot (\x, {0.125*(\x-1)^3});
+		\filldraw (1,0) circle(1pt) node[below]{$x^*$} (1.5,0.016) circle(1pt) node[below]{$\tilde x$};
+	\end{tikzpicture}
+\end{center}
+Qui abbiamo che $f(\tilde x)\approx 0$, in quanto abbiamo che la derivata prima è molto piccola in quel punto. Quindi siamo vicini a zero. In questo modo la possibile di confondere, o di sbagliare, ad individuare lo zero è molto alta.
+
+In tutti questi discorsi stiamo supponendo che $x^*$ sia semplice, in modo tale che $f'(x^*) \neq 0$. Altrimenti tutto questo non varrebbe. Infatti, se la sua molteplicità $m$ fosse maggiore di $1$, allora avremmo che:
+\[ f^{(k)}(x^*) = 0\qquad \forall k < m \]
+In maniera del tutto analoga per $\varphi$. Sviluppando per $x^*$ e ponendo $\delta x = x - x^*$ otteniamo che:
+\begin{align*}
+	d+\delta d &= \varphi(x^*) + \varphi'(x^*)(x-x^*) + \cdots + \frac{\varphi^{(m-1)}(x-x^*)}{(m-1)!} (x-x^*)^{m-1} + \frac{\varphi^{(m)}(x^*)}{m!}\\
+	d + \delta d &= \underbrace{\varphi(x^*)}_{d} + \frac{\varphi^{(m)}(x^*)}{m!}(\delta x)^m\qquad \Rightarrow \qquad \delta d = \frac{\varphi^{(m)}(x^*)}{m!}
+\end{align*}
+Da cui segue che:
+\[ \delta x = \left( \frac{\delta d \cdot m!}{\varphi^{(m)} (x^*)} \right)^{\frac 1m} \]
+
+\subsection{Metodo di Bisezione}
+
+Iniziamo questo paragrafo ricordando un teorema di Analisi Matematica $1A$:
+\begin{thm}{degli Zeri}{}
+	Sia $f \in X([a,b])$. Supponiamo $f(a)f(b)<0$, allora esiste $x^* \in (a,b)$ tale che $f(x^*) =0$
+\end{thm}
+
+\begin{cons}
+	Questo teorema ci dice già che come fare per trovare lo zero della funzione e ci da un metodo che funziona sempre.
+\end{cons}
+
+Andiamo a vedere come funziona:\\
+Definiamo con $a^{(0)} = a$, $b^{(0)} = b$ e $x_0 = \frac{a+b}2$ il loro punto medio.
+\begin{center}
+	\begin{tikzpicture}
+		\draw (-4,0) -- (4,0);
+		\filldraw (-4,0) circle(1pt) node[below]{$a^{(0)}$} (4,0) circle(1pt) node[below]{$b^{(0)}$} (0,0) circle(1pt) node[below]{$x_0$};
+	\end{tikzpicture}
+\end{center}
+Allora possiamo definire la ricorrenza cercata nel seguente modo:
+\begin{itemize}
+	\item Se $f(a^{(k)})f(x_k)<0$, allora possiamo porre $a^{(k+1)} = a^{(k)}$ e $b^{(k+1)} = x_k$, in questo modo ci stiamo spostando verso sinistra:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (-4,0) -- (4,0);
+			\filldraw (-4,0) circle(1pt) node[below]{$a^{(0)}$} node[above]{$a^{(1)}$} (4,0) circle(1pt) node[below]{$b^{(0)}$} (0,0) circle(1pt) node[below]{$x_0$} node[above]{$b^{(1)}$} (-2,0) circle(1pt) node[above]{$x_1$};
+		\end{tikzpicture}
+	\end{center}
+	\item Altrimenti abbiamo che $f(n^{(k)})f(x_k)<0$, quindi definiamo $a^{(k+1)} = x_k$ e $b^{(k+1)} = b^{(k)}$
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (-4,0) -- (4,0);
+			\filldraw (-4,0) circle(1pt) node[below]{$a^{(0)}$}  (4,0) circle(1pt) node[below]{$b^{(0)}$} node[above]{$b^{(1)}$} (0,0) circle(1pt) node[below]{$x_0$} node[above]{$a^{(1)}$} (2,0) circle(1pt) node[above]{$x_1$};
+		\end{tikzpicture}
+	\end{center}
+\end{itemize}
+In entrambi i casi, definiamo il punto medio come:
+\[ x_{k+1} = \frac{a^{(k+1)} + b^{(k+1)}}{2} \]
+Proseguendo in questo modo, abbiamo sicuramente convergenza. In particolare, ponendo con $I = [a^{(k)}, b^{(k)}]$ e con $|I_k| = b^{(k)} - a^{(k)}$, allora, se riprendiamo la definizione di errore che avevamo dato $e_k = x^*-x_k$, abbiamo che:
+\[ |e_k| \leq \frac{|I_k|}2 \leq \frac{b-a}{2^{k+1}} \xrightarrow{k \to +\infty} 0\]
+Quindi c'è una convergenza globale rispetto a quanto fatto prima.
+
+\begin{oss}
+	Visto che si conosce a priori $b-a$, come faccio a dire indicativamente quante iterazioni ci vogliono? In particolare (per esempio) quante iterazioni ci voglio per avere un errore minore di $10^{-4}$
+	\[ \frac{b-a}{2^{k+1}} \leq 10^{-4} \quad \Rightarrow \quad 2^{k+1}\geq \frac{b-a}{10^{-4}} \quad \Rightarrow \quad (k+1)\ln 2 \geq \ln \left( \frac{b-a}{10^{-4}} \right) \]
+	Quindi abbiamo che:
+	\[ k+1 \geq \frac{1}{\ln 2}\ln\left( \frac{b-a}{10^{-4}} = \overline k \right)\]
+	Qui abbiamo quindi la possibilità di sapere quante iterazioni sono necessarie al fine di avere un errore prescelto. Saranno necessarie al più $\overline k$ iterazioni.
+\end{oss}
+
+\begin{oss}
+	Notiamo che non c'è convergenza monotona, in particolare non è un metodo di convergenza di ordine $1$, in quanto converge molto lentamente.\\
+	Non si può parlare di convergenza monotona in quanto ci sono casi in cui l'errore al posto di diminuire aumenta, come nel seguente caso:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (-4,0) -- (4,0);
+			\filldraw (-4,0) circle(1pt) node[below]{$a^{(0)}$}  (4,0) circle(1pt) node[below]{$b^{(0)}$} (0,0) circle(1pt) node[below]{$x_0$} (0.5,0) circle(1pt) node[below]{$x^*$} (2,0) circle(1pt) node[below]{$x_1$};
+		\end{tikzpicture}
+	\end{center}
+	Qui abbiamo che:
+	\[ |e_1| \geq |e_0| \]
+	Nonostante questa cosa, le cose continuano a funzionare ugualmente
+\end{oss}
+Scriviamo l'algoritmo:
+
+\begin{tabular}{l}
+	\\
+	\textbf{Algoritmo del Metodo di Bisezione}\\
+	\hline
+	Dati $a,b,k_{max},f$ e il "criterio di arresto"\\
+	Calcoliamo $f_a = f(a)$\\
+	Per $k = 1,2,...,k_{max}$\\
+	$\qquad$ $x = \frac{a+b}2$\\
+	$\qquad$ $f_x = f(x)$\\
+	$\qquad$ Criterio di arresto\\
+	$\qquad$ Se $sgn(f_a)f_x<0$:\\
+	$\qquad$ $\qquad$ $b = x$\\
+	$\qquad$ Altrimenti:\\
+	$\qquad$ $\qquad$ $a = x$\\
+	$\qquad$ $\qquad$ $f_a = f_x$\\
+	\\
+\end{tabular}\\
+Facciamo delle osservazioni su quest'algoritmo.
+
+\begin{oss}
+	Abbiamo messo $sgn(f_a)f_x$ al posto di $f_af_x$ per evitare di dover trattare numeri troppo piccoli, in questo modo evitiamo complicanze dovute da ordini di grandezza e prodotti troppo piccoli.
+\end{oss}
+
+\begin{oss}
+	Scrivere la media come $x = \frac{a+b}2$ può risultare pericoloso. Infatti è molto meglio scrivere la media come:
+	\[ x = a + \frac{b-a}2 \]
+	In questo modo è meno suscettibile al round-off.
+\end{oss}
+
+\begin{es}[Dove non funziona bene]
+	Supponiamo di essere in aritmetica finita, in particolare in un'aritmetica in cui ci sono solamente tre cifre decimali e siano $a = 0,982$ e $b = 0,984$. Se volessimo andare a calcolare la media avremmo che:
+	\[ \frac{a+b}2 = \frac{0,982 + 0,984}2 = \frac{1,966}{2} = \frac{1,97}2 = 0,985 \]
+	Ma questa quantità appena ottenuta non solo non è la media, è addirittura sopra il più grande dei due. Con l'altro metodo:
+	\[ a + \frac{b-a}2 = 0,982 + \frac{0,984-0,982}2 = 0,982 + \frac{0,002}2 = 0,983 \]
+	Questo è il valore che ci stavamo aspettando
+\end{es}
+
+\begin{oss}
+	C'è una sola valutazione di $f$ per ogni iterazione
+\end{oss}
+
+\subsection{Criterio di Arresto}
+
+Oltre ad un primo criterio d'arresto, abbiamo possiamo definirne altri $2$. La prima estremamente simile a quanto fatto nel primo modulo:
+\[ |f_x|<tol_f \]
+Questa è una tolleranza sul "residuo"
+
+L'altro criterio di arresto può essere definito come:
+\[ |b-a|< tol_r|a| + tol_a \]
+Questa è una tolleranza sulla lunghezza dell'intervallo, in particolare $tol_r$ prende il nome di \textbf{Tolleranza Relativa ad $a$}, mentre $tol_a$ prende il nome di \textbf{Tolleranza Assoluta}. Vediamole singolarmente:
+\begin{itemize}
+	\item Se $tol_a = 0$, allora abbiamo che il criterio di arresto può essere scritto come:
+		\[ \frac{|b-a|}{|a|}<tol_r \]
+		Questo valore ci permette di controllare la vicinanza del punto al scelto ad $a$, ci permette quindi di liberare la distanza dal punto degli ordini di grandezza.
+	\item Se invece poniamo $tol_r = 0$, abbiamo che il criterio di arresto può essere riscritto come:
+		\[ |b-a|<tol_a \]
+		Questa invece è una tolleranza che mi controlla direttamente la dimensione dell'intervallo
+\end{itemize}
+
+\subsection{Metodo di Newton}
+
+Sia $f:[a,b] \to \mathbb R$ e supponiamo $x^*$ unico zero tale che $f(x^*)$ con $f'(x^*)\neq 0$ Partiamo da un $x_k[a,b]$ e cerchiamo $x_{k+1}$. Sviluppiamo in un intorno di $x_k$, allora abbiamo che:
+\[ f(x) = f(x_k) + f'(x_k)(x-x_k) + o(x_k) \]
+Allora possiamo porre $y$ come:
+\[ y = f(x_k) + f'(x_k)(x-x_k) \]
+In questo modo poniamo:
+\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-2,0) -- (3,0);
+		\draw[->] (0,-2) -- (0,4);
+		\draw[samples = 500] plot[domain = -1.5:2.5] (\x,{0.5*e^(\x)-1});
+		\draw[samples = 500, blue] plot[domain = 1:2.5] (\x, {2.69+3.69*(\x-2)});
+		\filldraw (0.69,0) circle(1pt) node[above]{$x^*$} (1.271,0) circle(1pt) node[below]{$x_{k+1}$} (2,2.7) circle(1pt) (2,0) circle(1pt) node[below]{$x_k$};
+		\draw[dotted] (2,2.7) -- (2,0);
+	\end{tikzpicture}
+\end{center}
+In particolare, se prendiamo $x = x^*$, abbiamo che:
+\[ f(x^*) = f(x_k) + f'(x_k)(x^*-x_k) + o((x^*-x_k)) \]
+Non avendo tuttavia $x^*$, prendiamo come prossimo $x_{k+1}$ l'ascissa sulla retta tangente corrispondente a $y = 0$, e così via. In questo modo abbiamo che:
+\[ 0 = f(x_k) + f'(x_k)(x_{k+1 - x_k}) \qquad \Rightarrow \qquad -\frac{f(x_k)}{f(x_{k+1})} = x_{k+1} - x_k \]
+Da cui segue che:
+\[ x_{k+1} = x_k - \frac{f(x_k)}{f(x_{k+1})} \]
+Questo algoritmo prende il nome di \textbf{Iterazione di Newton}. Scriviamone per bene l'algoritmo:
+
+\begin{tabular}{l}
+	\\
+	\textbf{Algoritmo di Newton}\\
+	\hline
+	Fissato $x_0 \in [a,n], k_{max}, f, df$ derivata di $f$\\
+	$f_0 = f(0)$\\
+	Per $k = 0,1,...,k_{max}$\\
+	$\qquad$ $df_k = df(x_k)$\\
+	$\qquad$ $x_{k+1} = x_k -\frac{f_k}{df_k}$\\
+	$\qquad$ Criterio di Arresto\\
+	$\qquad \qquad$ - Residuo: $f_{k+1} = f(x_{k+1})$, $|f_{k+1}|<tol$\\
+	$\qquad \qquad$ - $|x_{k+1} - x_k|\leq tol_r|x_k| + tol_a$\\
+	\\
+\end{tabular}\\
+Generalmente abbiamo che questo metodo ha 2 possibili risultati, o converge velocemente, oppure diverge sempre con la stessa velocità. Proprio per questo motivo non è strettamente necessario mettere un numero massimo di iterazioni abbastanza alto.
+
+Il criterio di arresto segue lo stesso principio di quello precedente. Vediamo adesso perché funziona:
+
+\begin{es}
+	Supponiamo di avere $x_{k+1}-x_k = 10^{-4}$. Nel caso in cui abbiamo $x_{k+1} = 2\cdot 10^{-4}$ e $x_{k+1} = 10^{-4}$, allora la prima cifra utile tra le due quantità è diversa, mentre se dovessi prendere $x_{k+1} = 100,0002$ e $x_{k = 100,0001}$, allora la prima cifra che varierebbe è la sesta, ma la differenza resterebbe sempre la stessa. Nel secondo caso ci si può fermare, in quanto la variazione è minima rispetto alla differenza dei due. Nel primo caso no
+\end{es}
+
+\begin{oss}
+	Se $f$ è lineare, allora Newton converge dopo una sola iterazione
+\end{oss}
+
+\begin{es}
+	Sia $f(x) =x^2-2$, sappiamo allora che $x = \sqrt 2$. Utilizzando il metodo di Newton è possibile calcolare $\sqrt 2$ con:
+	\[ x_{k+1}= \frac 1{x^k} + \frac 12 x_k \]
+	Questa formula prende il nome di \textbf{Formula di Erone}
+\end{es}
+
+\begin{prop}{}{}
+	Se $f \in X^2([a,b])$ e $\{x_k\}_{k \geq 0}$ di Newton converge, allora la convergenza è quadratica (cioè di ordine $2$) per $f'(x^*)\neq 0$
+\end{prop}
+
+\begin{proof}
+	Vogliamo mostrare che:
+	\[ \lim_{k\to +\infty} \frac{|x_{k+1} - x^*|}{|x_k - x^*|^2} = c \]
+	Per quanto fatto in precedenza, abbiamo che:
+	\[ x_{k+1}-x^* = x_k - x^* - \frac{f(x_k)}{f'(x_k)} = \frac 1{f'(x_k)}(f'(x_k)(x_k-x^*) - f(x_k) + f(x^*)) \]
+	\textit{Ho aggiunto alla parentesi il termine $f(x^*)$ in quanto $f(x^*)=0$}. Otteniamo in questo modo che i termini dentro alla parentesi rappresentano uno sviluppo di Taylor, per cui:
+	\[ f'(x_k)(x_k-x^*) - f(x_k) + f(x^*) = \frac 12 f''(\xi_k)(x_k - x^*)^2 \qquad \xi_k \in (x_k, x^*)\]
+	In questo modo abbiamo ottenuto che:
+	\[ x_{k+1} - x^* = \frac 12 \frac{f''(\xi_k)}{f'(x_k)} (x_k-x^*)^2 \]
+	Per cui abbiamo trovato che:
+	\[ \frac{x_{k+1} - x^*}{(x_k - x^*)^2} = \frac 12 \frac{f''(\xi_k)}{f'(x_k)} \xrightarrow[k \to +\infty]{\xi_k \to x^*} \frac 12 \frac{f''(x^*)}{f'(x^*)} = c\]
+\end{proof}
+\begin{oss}
+	In realtà la convergenza è almeno quadratica, se infatti $f''(x^*) = 0$, si può avere convergenza più elevata, ma in generale la convergenza quadratica è più che sufficiente.
+\end{oss}
+
+\begin{prop}{Semplificazione del Teorema di Newton-Kantovarich}{}
+	Sia $f \in C^2([a,b])$ con $f$ convessa, o concava in $[a,b]$. Supponiamo $f(a)f(b)<0$ e che le tangenti di $a$ e di $b$ si intersechino l'asse delle ascisse in un punti interni ad $[a,b]$, allora l'iterazione di Newton converge globalmente in $[a,b]$, cioè $\forall x \in [a,b]$, nell'unico zero $x^* \in [a,b]$
+\end{prop}
+\begin{cons}
+	L'unicità dello zero segue dal fatto che $f$ sia convessa o concava in tutto l'intervallo. Graficamente abbiamo che:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[->] (-2,0) -- (3,0);
+			\draw[->] (0,-2) -- (0,4);
+			\draw[samples = 500] plot[domain = -1.5:2.5] (\x,{0.5*e^(\x)-1});
+			\draw[blue] plot[domain = 1:2.5] (\x, {2.69+3.69*(\x-2)});
+			\draw[green] plot[domain = -1.5:2] (\x, {-0.5+0.5*\x});
+			\draw[red] (0,0) -- (2,0);
+			\filldraw (1.271,0) circle(1pt) (1,0) circle(1pt);
+			\draw[dotted] (2,0) -- (2,2.69);
+		\end{tikzpicture}
+	\end{center}
+\end{cons}
+
+\begin{ese}
+	Dimostrare che il metodo di Newton applicato a $f(x) = x - \cos x$ converge globalmente in $[0, \frac \pi 2]$
+\end{ese}
+\begin{sol}
+	Vogliamo studiare la convergenza ad $x^*$ tale che $f(x^*) = 0$. Sappiamo che $f(x) = x - \cos x \in C^\infty$. Per cui abbiamo che:
+	\[ f'(x) = 1 + \sin x >0 \qquad \text e \qquad f''(x) = \cos x \geq 0 \]
+	Cioè abbiamo che la derivata prima è crescente, mentre la seconda è positiva e continua, quindi la funzione è convessa nel dominio.
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[->] (-0.5,0) -- (2,0);
+			\draw[->] (0,-1.5) -- (0,2);
+			\draw[thick, samples = 500] plot[domain = 0:1.57] (\x, {\x - cos(\x r)});
+		\end{tikzpicture}
+	\end{center}
+	Sappiamo inoltre che:
+	\[ f(a) = f(0) = 0 - \cos 0 = -1<0 \qquad \text e \qquad f(b) = f\left(\frac \pi 2 \right) = \frac \pi 2 - \cos \frac \pi 2 = \frac \pi 2>0 \]
+	Viene quindi soddisfatta l'ipotesi che $f(a)f(b)<0$. Vediamo allora se le tangenti toccano l'asse delle ascisse in $[a,b]$:
+	\begin{align*}
+		x_0 = 0 & \quad x_1 = \frac{f(x_0)}{x'(x_0)} = 0 - \frac{-1}1 = 1 \in \left[0, \frac 2\pi\right]\\
+		x_0 = \frac \pi 2 & \quad x_1 = \frac{f(\frac \pi 2)}{f'(\frac \pi 2)} = \frac \pi 2 - \frac{\frac \pi 2}2 = \frac \pi 4 \in \left[0, \frac \pi 2 \right]
+	\end{align*}
+	Per la proposizione precedente si ha convergenza globale in $[0, \frac \pi 2]$
+\end{sol}
+
+\subsection{Analisi di Convergenza di Newton}
+
+\begin{defn}{Funzione Lipschitziana}{}
+	Sia $g:X \to \mathbb R$. $g$ si dice \textbf{Lipschitziana} con costante $L<0$ in $X$, e si indica con $g \in Lip_L([a,b])$ se:
+	\[ \forall x,y \in X: |g(x) - g(y)| \leq L(x-y) \]
+\end{defn}
+
+\begin{lemma}{}{}
+	Sia $f:[a,b] \to \mathbb R$ con $f' \in Lip_L([a,b])$, allora $\forall x,y \in [a,b]$ vale:
+	\[ |f(y) - f(x) - f'(x)(y-x)| \leq \frac L2|x-y|^2 \]
+\end{lemma}
+\begin{proof}
+	Partiamo dalla prima parte della disuguaglianza, senza valore assoluto:
+	\[ f(y) - f(x) - f'(x)(y-x) = \int_x^y f'(t)dt - \int_x^y f'(x)dt = \int_x^y f'(t) - f'(x)dt \]
+	Facciamo un cambiamento di variabile:
+	\[ t = x + \tau(y-x) \quad \text{per }\tau \in [0,1] \quad \Rightarrow \quad dt = (y-x)d\tau \]
+	In questo modo abbiamo che:
+	\[ f(y) - f(x) - f'(x)(y-x) = \int_x^y f'(t) - f'(x)dt = \int_0^1 (f'(x + \tau(y-x)) - f'(x))(y-x)d\tau \]
+	Quindi, con i valori assoluti, abbiamo che:
+	\[ |f(y)-f(x)-f'(x)(y-x) \leq |y-x| \int_0^1 |f'(x + \tau(y-x) - f('x))|d\tau \]
+	Su quest'ultima parte dentro l'integrale può essere applicata la definizione di funzione lipschitziana con opportuno $L$, per cui:
+	\[ |f'(x + \tau(y-x) - f('x))| \leq L|x + \tau(y-x) -x| = L|\tau(y-x)|\]
+	Per cui abbiamo che
+	\[ |f(y)-f(x)-f'(x)(y-x) \leq |y-x| \int_0^1 |f'(x + \tau(y-x) - f('x))|d\tau  \leq |y-x|^2 L \int_0^1 \tau d \tau = \frac 12 L(y-x)^2\]
+\end{proof}
+
+\begin{thm}{Convergenza dell'Algoritmo di Newton}{}
+	Sia $f:[a,b] \to \mathbb R$ con $f \in Lip_L([a,b])$. Supponiamo che esista $\rho>0$ tale che:
+	\[ |f'(x)|\geq \rho, \forall x \in [a,b] \]
+	Supponiamo inoltre che $\exists x^* \in (a,b)$ tale che $f(x^*)=0$ radice semplice. Allora esiste $\eta>0$ tale che:
+	\begin{enumerate}
+		\item Se $|x_0 - x^*|< \eta$, allora l'iterazione di Newton è ben definita e converge a $x^*$
+		\item Vale $|x_{k+1} - x^*| \leq \frac{L}{2 \rho} |x_k - x^*|^2$
+	\end{enumerate}
+\end{thm}
+\begin{cons}
+	Questo è un risultato importante in quanto ci dice che:
+	\begin{itemize}
+		\item Possiamo usare il fatto che la funzione sia Lipschitziana per avere una sufficiente regolarità di $f$
+		\item La condizione su $\rho$ ci dice che la derivata prima non deve essere troppo vicino a $0$, deve essere sufficiente lontana. Questa condizione è fondamentale in quanto previene la convergenza ad un punto $x \neq x^*$ che assume valori molto vicini allo zero
+		\item $x^*$ deve essere una radice semplice della funzione
+		\item La relazione di $2.$ vale indipendentemente dalla convergenza del metodo, quindi continua a valere sia se c'è convergenza, sia se c'è divergenza.
+		\item La quantità $\frac{L}{2 \rho}$ ci dice come può essere maggiorata la distanza di $x^*$ da $x_{k+1}$. Questa quantità dipende da $L$ al numeratore, cioè dipende proporzionalmente da quanto $f'(x)$ cresce, e da $\rho$ al denominatore.
+		\item Notiamo che l'errore che passa al passo $k+1$ è maggiorato da quella costante per l'errore del passo precedente al quadrato. Quindi c'è una relazione quadratica tra il passo $k$ e il passo $k+1$. Quindi, se ho convergenza, ho una convergenza quadratica (l'abbiamo già visto prima). Se non ho convergenza, allora ho divergenza che procede alla stessa velocità
+	\end{itemize}
+\end{cons}
+\begin{proof}
+	\fbox{2} Iniziamo con il dimostrare la disuguaglianza. Sfruttando il lemma precedente otteniamo che:
+	\begin{align*}
+		|x_{k+1} - x^*| &= \left|(x_k-x^*) - \frac{f(x_k)}{f'(x_k)} \right| = \frac{1}{|f'(x_k)|}|f'(x_k)(x_k-x^*) - f(x_k) + f(x^*)|\\
+		&= \frac 1{|f'(x_k)|^2} \frac 12 |x_k-x^*|^2 < \frac 1 \rho \frac L2 |x_k - x^*|^2
+	\end{align*}
+
+	\fbox{1} Vogliamo mostrare che preso $\tau \in (0,1)$ vale che:
+	\[ |x_{k+1}-x^*| \leq \tau |x_n - x^*|<\eta \]
+	dove poniamo $\eta = \min\{\frac{2\rho}{L}\tau, \hat \eta\}$, con $\hat \eta$ il più grande raggio del disco centrato in $x^*$ e tutto in $[a,b]$
+	\begin{center}
+		\begin{tikzpicture}
+			\draw(0,0) -- (3,0);
+			\draw[thick] (1,0) -- (3,0);
+			\filldraw (0,0) circle(1pt) node[below]{$a$} (2,0) circle(1pt) node[below]{$x^*$} (3,0) circle(1pt) node[below]{$b$};
+		\end{tikzpicture}
+	\end{center}
+	Dimostriamolo per induzione. Se $|x_0-x^*|<\eta$ allora abbiamo che, per $k = 1$:
+	\[ |x_1-x^*| \leq \frac L{2 \rho} |x_0 - x^*|^2 = \frac L{2 \rho} |x_0-x^*|\cdot |x_0-x^*|\]
+	Dalla definizione di $\eta$, abbiamo che $|x_0-x^*|<\eta\leq \frac{2\rho}L \tau$, per cui otteniamo che:
+	\[ |x_1-x^*|\leq \frac L{2\rho} |x_0 - x^*| \cdot |x_0-x^*| \leq \frac L{2 \rho} \frac{2\rho}L \tau|x_0-x^*| <|x_0-x^*|<\eta \]
+	Supponiamo adesso $|x_k-x^*|<\eta$ e facciamo vedere che vale anche per $x_{k+1}$:
+	\begin{align*}
+		|x_{k+1} - x^*| & \leq \frac L{2\rho}|x_k-x^*|^2 = \frac{L}{2\rho} |x_k - x^*| \cdot |x_k-x^*| \leq \frac{L}{2 \rho} \frac{2\rho}L \tau |x_k - x^*| =\\
+		&= \tau |x_k - x^*| < |x_k - x^*| < \eta
+	\end{align*}
+\end{proof}
+
+\subsection{Esercizi su Newton}
+
+\begin{ese}[Esame 8/01/2021]
+	Sia $f(x) = e^{-x} - \sin x$. Mostrare che l'iterazione di Newton converge a $x^* \approx 0,5885$ supponendo di aver scelto $x_0$ in modo opportuno
+\end{ese}
+
+\begin{oss}
+	Il fatto che sappiamo $x^* = 0,5885$ ci da soltanto un'indicazione di dove sta la soluzione
+\end{oss}
+
+\begin{sol}
+	Basta far vedere che valgono le ipotesi del teorema della convergenza locale. Calcoliamo la derivata prima:
+	\[ f'(x) = -e^{-x} -\cos x \]
+	Se prendiamo $x \in [0, \frac \pi 2]$, abbiamo che:
+	\[ |f'(x)| = |e^{-x} + \cos x| = e^{-x} + \cos x \geq e^{-x} \geq e^{-\pi/2} = \rho \]
+	Inoltre sappiamo che $f\in C^\infty([0, \frac \pi 2])$, quindi è sicuramente di classe $C^2$. Inoltre la sua derivata seconda è:
+	\[ f''(x) = e^{-x} + \sin(x) \]
+	È limitata in $[0, \frac \pi 2]$. Quindi per il teorema di convergenza locale, locale converge localmente (per un $x_0$ scelto in maniera opportuna)
+\end{sol}
+
+\begin{ese}[Esame 31/01/2022]
+	Data $f(x) = \sin (x) - \frac \pi 2$ con $x \in [\frac 13 \pi, \frac 34 \pi]$ mostrare che il metodo di Newton converge localmente
+\end{ese}
+
+\begin{sol}
+	Si segue esattamente lo stesso procedimento dell'esercizio precedente
+\end{sol}
+
+\begin{ese}[Esame 13/07/2020]
+	Sia $f \in C^2([a,b])$ con $x^*$ unico zero di $f$ in $[a,b]$. Supponiamo che il metodo di Newton generi $\{x_k\}_{k \geq 0}$ successione ben definita in $[a,b]$ e sia $M>0$ tale che:
+	\[ \frac 12 \left| \frac{f''(y)}{f'(x)} \right|\leq M \qquad \forall y,x \in [a,b] \]
+	\begin{enumerate}
+		\item Sfruttando Taylor intorno a $x^*$ mostrare che vale:
+			\[ |x^*-x_{k+1}| \leq M|x^* - x_k|^2 \]
+		\item Determinare un intorno $I = I(M)$ di $x^*$ tale che si abbia convergenza per $x_0 \in I(M)$
+	\end{enumerate}
+\end{ese}
+
+\begin{sol}
+	\fbox{1} Questo punto prevede sostanzialmente di rifare quanto fatto nella dimostrazione del teorema:
+	\begin{align*}
+		|x_{k+1} - x^*| &= \left|x_k-x^* - \frac{f(x_k)}{f'(x_k)}\right| = \frac 1{|f'(x_k)|} |f'(x_k)(x_k-x^*) - f(x_k) - f(x^*)|\\
+		&= \frac 12 \left| \frac{f''(\xi_x)}{f'(x_k)} \right|(x_k-x^*)^2 \qquad \text{per }\xi_x \in (x_k, x^*)
+	\end{align*}
+	Tuttavia, ricordando che $\xi_x, x_k \in [a,b]$, valgono le ipotesi date, quindi:
+	\[ |x_{k+1} - x^*| = \frac 12 \left| \frac{f''(\xi_x)}{f'(x_k)} \right|(x_k-x^*)^2 \leq M(x_k-x^*)^2 \]
+
+	\fbox{2} Fissiamo $\tau \in [0,1]$ e prendiamo $\eta$ come:
+	\[ \eta = \min\left\{ \frac 1M \tau, \hat \eta \right\} \]
+	Dove $\hat \eta$ è il raggio del più grande disco centrato in $x^*$ e contenuto in $[a,b]$. Se prendo $x_0$ in modo che:
+	\[ x_0-x^* < \eta \leq \frac 1M \tau \]
+	Allora possiamo procedere come nel teorema:
+	\begin{align*}
+		|x_1-x^*| &\leq M|x_0 -x^*|^2 = M |x_0-x^*| \cdot |x_0-x^*| < M \eta \cdot |x_0-x^*|\leq\\
+		&\leq M \frac 1M \tau |x_0 - x^*| = \tau |x_0-x^*| < \eta \leq \frac 1M \tau
+	\end{align*}
+	Procediamo allora per induzione per $x_{k+1}$, assumendo vero per $x_k$:
+	\begin{align*}
+		|x_{k+1} - x^*| \leq M|x_k - x^*|^2 \leq \tau |x_k - x^*| < |x_k - x^*|< \eta
+	\end{align*}
+	Da cui segue che l'intervallo voluto è:
+	\[ I = (x^*-\eta, x^*+\eta) \]
+\end{sol}
+
+\begin{oss}
+	Nel caso in cui $x^*$ abbia molteplicità $m>1$, se il metodo di Newton converge, la sua convergenza è lineare:
+	\[ |x_{k+1} - x^*| \leq C|x_k - x^*| \qquad \text{con }C = 1 - \frac 1M \]
+\end{oss}
+
+\subsection{Varianti (Metodi Quasi Newton)}
+
+Con Newton abbiamo che possiamo approssimare $x_{k+1}$ come:
+\[ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}\]
+Tuttavia non sempre abbiamo la derivata prima, quindi dobbiamo approssimarla:
+\[ x_{k+1} = x_k -\frac{f(x_k)}{q_k} \]
+Ci sono molti modi per approssimare la derivata prima:
+\begin{itemize}
+	\item \textbf{Newton Inesatto}: Questo metodo consiste nel sostituire la derivata prima con:
+		\[ q_k = \frac{f(x_k + h) - f(x_k)}{h} \]
+		Questo metodo quindi prevede una valutazione di $f$ due volte per iterazione. Quindi possiamo dire che l'accuratezza del metodo è dell'ordine di $\mathcal O(h)$ e dipende dalla scelta di $q_k$
+	\item \textbf{Metodo delle Corde}: qui il valore $q_k$ viene calcolato una volta soltanto, ponendo:
+		\[ q_k = q = \frac{f(b) - f(a)}{b-a} \]
+		Il valore $q$ corrisponde al coefficiente angolare della retta che unisce $(a)$ e $f(b)$:
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[->] (-2,0) -- (3,0);
+				\draw[->] (0,-2) -- (0,4);
+				\draw[samples = 500] plot[domain = -1.5:2.5] (\x,{0.5*e^(\x)-1});
+				\filldraw (-1.5,-0.888) circle(1pt) (2.5, 5.08) circle(1pt) (-1.5,0) circle(1pt) node[above]{$a$} (2.5,0) circle(1pt) node[below]{$b$};
+				\draw[dotted] (-1.5,-0.888) -- (-1.5,0) (2.5,5.08) -- (2.5,0);
+			\end{tikzpicture}
+		\end{center}
+		Se siamo fortunati abbiamo anche la pendenza giusta. Volendo si può dimostrare che la pendenza è lineare, cioè perdiamo totalmente la convergenza quadratica di Newton.
+	\item \textbf{Metodo delle Secanti}: Prendiamo $q_k$ come:
+		\[ q_k = \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}} \]
+		In questo modo dobbiamo memorizzare i valori vecchi della funzione, così da dover valutare la funzione una volta soltanto per iterazione:
+		\begin{center}
+			\begin{tikzpicture}
+				\draw[->] (-2,0) -- (3,0);
+				\draw[->] (0,-2) -- (0,4);
+				\draw[samples = 500] plot[domain = -1.5:2.25] (\x,{0.5*e^(\x)-1});
+				\filldraw (1.3,0.835) circle (1pt) (1.3,0) circle(1pt) node[above right]{$x_k$} (0.845,0) circle(1pt) node[below right]{$x_{k+1}$};
+				\draw[dotted] (1.3,0.835) -- (1.3,0);
+				\draw[blue] (0.3,-1) -- (2,2.12);
+			\end{tikzpicture}
+		\end{center}
+		Ad ogni iterazione uso sia $f(x_k)$ sia $f(x_{k-1})$. Quindi l'algoritmo sarà:
+
+		\begin{tabular}{l}
+		\\
+		\textbf{Algoritmo del Metodo delle Secanti}\\
+		\hline
+		Dati $x_0, x_1$\\
+		Per $k= 0,1,...$\\
+		$\qquad$ $x_{k+1} = x_k - \frac{f(x_k)}{\left( \frac{f(x_k) - f(x_{k-1})}{x_k-x_{k-1}} \right)} = x_k - \frac{f_{new}}{\left( \frac{f_{new} - f_{old}}{x_k - x_{k-1}} \right)} $\\
+		$\qquad$ $f_{new} = f(x_{k+1})$\\
+		$\qquad$ $f_{old} = f(x_k)$\\
+		\\
+		\end{tabular}\\
+		Nel metodo delle secanti ho bisogno di $2$ dati iniziali, possibilmente tali che $f(x_0)f(x_{-1})<0$
+\end{itemize}
+
+\begin{oss}
+	In Matlab, la funzione \texttt{fzero} usa un ibrido del metodo di bissezione (che serve per avvicinarsi allo zero della funzione) e del metodo delle secanti (per arrivare nell'effettivo alla convergenza)
+\end{oss}
+
+\newpage
+
+\section{Zeri di Polinomi}
+
+\subsection{Problema e Prime Soluzioni}
+
+Il problema consiste nel trovare un'approssimazione di $x^*$ in modo tale che $p_n(x^*) =0$, dove:
+\[ p_n(x^*) =  a_0 + a_1x + \cdots + a_nx^n \qquad (a_n \neq 0)\]
+Questo è un problema estremamente sensibile in quanto non è detto che ci siano radici reali, quindi il problema potrebbe non avere senso.
+
+Fissiamo un $x_0$ e scriviamo la ricorrenza di Newton:
+\[ x_{k+1} = x_k - \frac{p_n(x_k)}{p'_n(x_k)} \]
+Restano i problemi della valutazione di $p_n$ e $p'_n$ in $x_k$.\\
+Per ottenere $p_n(x_k)$, ci sono diversi modi per ottenerli:
+\begin{itemize}
+	\item Possiamo pensare di fare i conti esplicitamente, però bisogna fare potenze su potenze, quindi è meglio evitare.
+	\item Possiamo salvarci volta per volta il valore di $x_k^j$:
+
+		\begin{tabular}{l}
+		\\
+		\textbf{Algoritmo per la Valutazione di un Polinomio}\\
+		\hline
+		Fisso $s = 1$\\
+		$p = a_0$\\
+		Per $j = 1,...,n$\\
+		$\qquad$ $s = s \cdot x_k$\\
+		$\qquad$ $p = p + a_js$\\
+		\\
+		\end{tabular}\\
+		In questo modo, alla fine del ciclo, abbiamo che $p = p_n(x_k)$. In questo modo, rispetto a prima, sfruttiamo i conti già fatti e, avendo per ogni iterazione $3$ operazioni, quest'algoritmo ha un costo computazionale di $3n$ flops.
+	\item Possiamo utilizzare la Regola di Horner, secondo cui possiamo scrivere $p_n(x)$ come:
+		\[ p_n(x) = a_0 + x(a_1 + x(a_2 + \cdots + x(a_{n-1} + a_nx)\cdots )) \]
+		In questo modo l'algoritmo diventa:
+
+		\begin{tabular}{l}
+		\\
+		\textbf{Algoritmo per la Valutazione di un Polinomio con la regola di Horner}\\
+		\hline
+		$b_0 = a_0$\\
+		Per $j = 1,...,n$\\
+		$\qquad$ $b_j = b_{j-1}x_k + a_{n-j}$\\
+		\\
+		\end{tabular}\\
+		In questo modo abbiamo che $b_n = p_n(x_k)$. Notiamo che questo corrisponde a risolvere un sistema lineare con una matrice bidiagonale:
+		\[
+			\begin{pmatrix}
+				1 & -x_k\\
+				& 1 & -x_k\\
+				&& 1 & -x_k\\
+				&&& \ddots & \ddots\\
+				&&&& 1 & - x_k\\
+				&&&&& 1 & -x_k\\
+				&&&&&& 1\\
+			\end{pmatrix}
+			\begin{pmatrix}
+				b_n\\
+				b_{n-1}\\
+				b_{n-2}\\
+				\vdots\\
+				b_2\\
+				b_1\\
+				b_0
+			\end{pmatrix} =
+			\begin{pmatrix}
+				a_0\\
+				a_1\\
+				a_2\\
+				\vdots\\
+				a_{n-2}\\
+				a_{n-1}\\
+				a_n
+			\end{pmatrix}
+		\]
+		In totale ha un costo computazionale pari a $2n$. Questo procedimento è lo stesso che fa Matlab.
+\end{itemize}
+
+Cerchiamo ora di capire come possiamo fare per ottenere $p'_n(x_k)$. Possiamo scrivere:
+\[ p_n(x) = (x-x_n)\hat p_{n-1}(x) + b_n \]
+Dove abbiamo che:
+\[ \hat p_{n-1}(x) = b_0x^{n-1} + b_1x^{n-2} + \cdots + b_{n-1} \]
+Volendo è possibile verificare che vale l'uguaglianza termine per termine, infatti (per $k = n-1$ per esempio):
+\[ a_{n-1}x^{n-1} = x(b_{1}x^{n-2} + (-x_n)b_0x^{n-1}) \qquad \Leftrightarrow \qquad a_{n-1} = b_1 - x_{n}b_0 \]
+Questo coincide esattamente con l'iterazione $j = 1$. Per cui abbiamo che vale:
+\[ p'_n(x) = \hat p_{n-1}(x) + (x-x_k) \hat p_{n-1}(x) \qquad \Rightarrow \qquad \left. p'_n(x)\right|_{x = x_k} = \left. \hat p_{n-1}(x) \right|_{x = x_k} \]
+Quindi possiamo usare nuovamente la regola di Horner:
+
+\begin{tabular}{l}
+\\
+\textbf{Algoritmo per la Derivata in un Punto di un Polinomio}\\
+\hline
+Poniamo $c_0 = b_0$\\
+Per $j = 1,...,n-1$\\
+$\qquad$ $c_j = c_{j-1}x_k + b_j$\\
+\\
+\end{tabular}\\
+In questo modo otteniamo che $c_{n-1} = \hat p_{n-1}(x_k) = p'_n(x_k)$. Possiamo allora scrivere un unico algoritmo per calcolare sia il valore della funzione, sia quello della derivata prima:
+
+\begin{tabular}{l}
+\\
+\textbf{Algoritmo per la Valutazione della Funzione e della Derivata}\\
+\textbf{in un Punto di un Polinomio}\\
+\hline
+Poniamo $b_0 = a_n$ e $c_0 = b_0$\\
+Per $j = 1,...,n-1$\\
+$\qquad$ $b_j = b_{j-1} x_k + a_{n-k}$\\
+$\qquad$ $c_j = c_{j-1}x_k + b_j$\\
+$b_n = b_{n-1}x_k + a_0$\\
+\\
+\end{tabular}\\
+Otteniamo quindi i valori di $p_n$ e di $p'_n$ nella iterata corrente $x_k$ di Newton.
+
+Vediamo dei primi risultati:
+
+\begin{thm}{}{}
+	Sia $p_n$ un polinomio a coefficienti reali con radici $\xi_1 \geq \xi_2\geq \cdots \geq \xi_n$ tutte reali, allora il metodo di Newton genera una successione $\{x_k\}_{k \geq 0}$ convergente a $\xi_1$ in modo monotono strettamente decrescente per ogni $x_0>\xi_1$
+\end{thm}
+
+\begin{oss}
+	Con questo teorema, quello che abbiamo sostanzialmente fatto è stato spostare il problema della convergenza a quello della scelta di $x_0$
+\end{oss}
+
+\begin{thm}{Localizzazione delle Radici}{}\label{LocRad}
+	Le radici $\xi_i$ con $i \in \{1,...,n\}$ di un polinomio $p_n(x) = a_0 + a_1x + \cdots + a_nx^n$ con $a_n \neq 0$ soddisfano:
+	\begin{align*}
+		|\xi_i| &\leq \max\left\{ 1, \sum_{j = 0}^{n-1} \frac{|a_j|}{|a_n|} \right\}\equiv M_1\\
+		|\xi_i| &\leq \max \left\{ \frac{|a_0|}{|a_n|}, 1+ \frac{|a_1|}{|a_n|},\cdots, 1 + \frac{|a_{n-1}|}{|a_n|} \right\} \equiv M_2
+	\end{align*}
+\end{thm}
+
+\begin{cons}
+	Tutti questi valori noi li abbiamo, in quanto corrispondono ai coefficienti dei polinomi. Quindi sappiamo trovare tutti i valori e di conseguenza sappiamo dove porre $x_0$, infatti, posto $M = \max\{M_1, M_2\}$ ci basta porre $x_0 > M$:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[->] (-2,0) -- (4,0);
+			\filldraw (-1,0) circle(1pt) node[below]{$\xi_2$} (0,0) circle(1pt)node[below]{$0$} (1,0) circle(1pt) node[below]{$\xi_1$} (2,0) node[below]{$\xi_3$} (3,0) circle(1pt) node[below]{$M$} (3.5,0) circle(1pt) node[above]{$x_0$};
+		\end{tikzpicture}
+	\end{center}
+\end{cons}
+
+\begin{oss}
+	Supponiamo $\xi_1$ radice reale ottenuta di $p_n(x)$, polinomio avente coefficienti e radici reali $\xi_1> \xi_i, \forall i\in \{2,...,n\}$. Supponiamo di voler trovare le altre radici di $p_n(x)$. Allora possiamo definire un polinomio $q_{n-q}(x)$ come:
+	\[ q_{n-1}= \frac{p_n(x)}{x-\xi_1} \]
+	Numericamente, quello che stiamo facendo è sostanzialmente è ottenere $\tilde \xi_1$, approssimazione di $\xi_1$. In particolare abbiamo che:
+	\[ q_{n-1}(x) = \frac{p_n(x)}{x-\tilde \xi_1} = a_n(x-\xi_n)(x-\xi_{n-1})\cdots \frac{x-\xi_1}{x-\tilde\xi_1} \]
+	è una funzione razionale. Quindi, numericamente parlando, questa è una procedura pericolosa. Questo procedimento prende il nome di \textbf{Deflazione}
+\end{oss}
+
+Prima di dare la dimostrazione del teorema \ref{LocRad}.2 diamo questa definizione
+
+\begin{defn}{Matrice Compagna}{}
+	Sia $p_n(x) = a_n x^n + a_{n-1}x^{n-1} + \cdots + a_0$ con $a_n\neq 0$. Si definisce la \textbf{Matrice Compagna} o \textbf{Matrice Companion} la matrice $n \times n$:
+	\[ C = \begin{pmatrix}
+		0 &&&& -\frac{a_0}{a_n}\\
+		1 & 0 &&& -\frac{a_1}{a_n}\\
+		& 1 & \ddots && \vdots\\
+		&& \ddots & 0 & \vdots\\
+		&&& 1 & -\frac{a_{n-1}}{a_n}
+	\end{pmatrix}\]
+	Il suo polinomio caratteristico è $\varphi(\lambda) = \det (C-\lambda I)$
+\end{defn}
+
+\begin{prop}{}{}
+	Vale l'uguaglianza:
+	\[ \varphi(\lambda) = \frac{(-1)^n}{a_n}p_n(\lambda)\]
+	Cioè le radici di $p_n$ corrispondono con gli autovalori di $C$.
+\end{prop}
+
+Diamo adesso la dimostrazione del teorema \ref{LocRad}.2:
+
+\begin{proof}
+	Il teorema è una applicazione di Gerschgorin alla matrice $C$:
+	\[ \mathcal G_1^{(r)}: |\lambda|\leq\frac{|a_0|}{a_n} \qquad \text e \qquad \mathcal G_i^{(r)}: |\lambda|\leq \frac{|a_{i-1}|}{|a_n|}+1 \quad \forall i \in \{2,...,n\}\]
+	Per quanto riguarda $i = n$ abbiamo che:
+	\[ \mathcal G_n^{(r)}: \left| \lambda + \frac{a_{n-1}{an}} \leq 1 \right| \]
+	Ma abbiamo che:
+	\[ \left|\lambda + \frac {a_{n-1}}{a_n}\right| \geq |\lambda| - \left|\frac{a_{n-1}}{a_n}\right| \qquad \Rightarrow \qquad |\lambda| \leq 1 + \frac{|a_{n-1}|}{|a_n|} \]
+	Quindi è verificata la seconda disuguaglianza del teorema.
+
+	Sappiamo inoltre che:
+	\[ \mathcal G_i^{(r)}:|\lambda| \leq 1 \qquad \forall i \in\{1,...,n-1\} \]
+	Per quanto riguarda $i = n$, possiamo dire che:
+	\[ \mathcal G_n^{c}: \left|\lambda + \frac{|a_{n-1}|}{|a_n|} \right| \leq \sum_{k = 0}^{n-2} \frac{|a_k|}{|a_n|} \]
+	Sapendo poi che:
+	\[ \left|\lambda + \frac{a_{n-1}}{a_n}\right| \geq |\lambda| - \left|\frac{a_{n-1}}{a_n}\right|\qquad \Rightarrow \qquad |\lambda| \leq \sum_{k = 0}^{n-1}\frac{|a_k|}{a_n} \]
+	Quindi è verificata anche la prima disuguaglianza del teorema.
+\end{proof}
+
+\subsection{Questioni di Stabilità}
+
+Andiamo a studiare come variano le radici dei polinomi quando i coefficienti dei polinomi vengono perturbati. Consideriamo $p(x)$ con radice \underline{semplice} $\xi$. Vogliamo studiare il comportamento di $\xi(\vareps)$, radice perturbata, tale che:
+\[ \xi(\vareps) \xrightarrow{\vareps \to 0} \xi = \xi(0) \]
+Definiamo allora $p_\vareps$ come:
+\[ p_\vareps(x) = p(x) + \vareps g(x) \]
+Dove $g(x)$ è un polinomio di grado al più $n$, per esempio $g(x) = \gamma_2 x^2$. Sia $\xi(\vareps)$ radice di $p_\vareps$, cioè:
+\[ p_\vareps (\xi(\vareps))=0 \]
+Deriviamo adesso rispetto a $\vareps$:
+\begin{align*}
+	0 &= \frac{d}{d\vareps}p_\vareps(\xi(\vareps)) = \frac{d}{d\vareps} p(\xi(\vareps)) + g(\xi(\vareps)) + \vareps \frac d{d\vareps} g(\xi(\vareps)) = p'(\xi(\vareps))\xi'(\vareps) + g(\xi(\vareps)) + \vareps \frac d{d\vareps}g(\xi(\vareps)) = 0
+\end{align*}
+Da cui, sostituendo per $\vareps = 0$, si ottiene che:
+\[ p'(\xi(0)) \xi'(0) + g(\xi(0)) = 0 \]
+Da cui si ottiene che:
+\[ \xi'(0) = - \frac{g(\xi(0))}{p'(\xi(0))} \]
+Dove $\xi(0)$ è la radice \underline{non} perturbata di $p(x)$. Ma allora abbiamo che:
+\[ \xi(\vareps) \xrightarrow{\vareps \to 0} \qquad \Rightarrow \qquad \xi(\vareps) = \xi(0) + \xi'(0)\vareps + o(\vareps) \quad \text{per }\vareps \to 0 \]
+In questo modo otteniamo che:
+\[ \xi(\vareps) - \xi(0)= \xi'(0)\vareps+ o(\vareps) + o(\vareps) \approx - \frac{g(\xi(0))}{p'(\xi(0))} \]
+
+\begin{es}[Wilkinson]
+	Consideriamo il polinomio $p(x) = (x-1)(x-2)\cdots(x-20)$ di grado $20$. Consideriamo $\xi = 20$, allora abbiamo che:
+	\[ p'(20) = 19! \qquad \text e \qquad a_{19} = -210 \]
+	Consideriamo quindi $g(x) = a_{19} x^{19}$, allora il polinomio $p_\vareps(x) = p(x) + \vareps g(x)$ ha come coefficiente la quantità $a_{19} + \vareps a_{19}$. Da quanto appena fatto abbiamo che:
+	\[ \xi(\vareps) - \xi(0) \approx - \frac{-210 \cdot 20^{19}}{19!} \vareps \approx 10^{10} \vareps \]
+	Se prendiamo $\vareps = 10^{-10}$ allora abbiamo che:
+	\[ \xi(\vareps) - \xi(0) \approx 1 \]
+	Quindi la radice si è completamente spostata, anche avendo perturbato di poco
+\end{es}
+
+\newpage
+
+\section{Iterazione di Punto Fisso}
+
+\subsection{Presentazione del problema}
+
+Sia $f:[a,b] \to \mathbb R$ tale che:
+\[ f(x) = 0 \qquad \Leftrightarrow \qquad \Phi(x) = x \]
+Per qualche $\Phi$. In particolare, $\Phi$ è scelta in modo che per $f(x^*)=0$ si abbia $x^* = \Phi(x^*)$. Dalla scrittura $\Phi(x^*) = x^*$ si ottiene l'iterazione del tipo $x_{k+1} = \Phi(x_k)$ per un qualche $x_0$
+
+\begin{oss}
+	La funzione $\Phi$ non è numericamente determinata
+\end{oss}
+
+\begin{thm}{Convergenza}{}
+	Sia $x_0$ assegnato e sia l'iterazione $x_{k+1} = \Phi(x_k)$ tale che:
+	\begin{enumerate}
+		\item $\Phi:[a,b] \to [a,b]$ e che $\Phi \in C^1 ([a,b])$
+		\item Esiste $K<1$ tale che $|\Phi'(x)|\leq K$, $\forall x \in [a,b]$, cioè $\Phi$ è una contrazione
+	\end{enumerate}
+	Allora $\Phi$ ha un unico punto fisso $x^*$ in $[a,b]$ e l'iterazione $\{a_k\}_{k \in \mathbb N}$ converge in $x^*$ $\forall x_0 \in [a,b]$ (cioè si ha convergenza globale). Inoltre:
+	\[ \lim_{x \to + \infty} \frac{x_{k+1} -x^*}{x_k - x^*} = \Phi(x^*) \]
+	Cioè lo stesso $\Phi(x^*)$ rappresenta il fattore asintotico di convergenza
+\end{thm}
+
+\begin{oss}
+	Il metodo è fortemente consistente
+\end{oss}
+
+\begin{proof}
+	Le ipotesi del punto $1$ ci assicurano l'esistenza del punto fisso $x^*$. Infatti, definiamo allora $F$ come:
+	\[ F(x) = x - \Phi(x) \]
+	Notiamo allora che:
+	\[ F(a) = a-\Phi(a)\leq 0 \qquad \text e \qquad F(b) = b - \Phi(b) \geq 0 \]
+	Sappiamo che $F$ è una funzione continua, quindi $\exists x^* \in [a,b]: F(x^*) = 0$.
+
+	Dimostriamo ora l'unicità. Per assurdo supponiamo esistano $\alpha_1, \alpha_2$ distinti punti fissi, allora abbiamo che:
+	\[ |\alpha_1 - \alpha_2| = |\Phi(\alpha_1) - \Phi(\alpha_2)| \]
+	Sfruttiamo il fatto che $\Phi$ sia di classe $C^1$, allora esiste $\xi \in [\alpha_1,\alpha_2]$ tale che:
+	\[ |\alpha_1 - \alpha_2| = |\Phi(\alpha_1) - \Phi(\alpha_2)| = |\Phi'(\xi)||\alpha_1 - \alpha_2| \leq K|\alpha_1 - \alpha_2| < |\alpha_1- \alpha_2|\]
+	Per la convergenza usiamo Taylor:
+	\[ x_{k+1} - x^* = \Phi(x_k) - \Phi(x^*) = \Phi'(\xi_k)(x_k - x^*) \qquad \text{per }\xi\in (x_k, x^*) \]
+	In questo modo abbiamo che:
+	\[ |x_k - x^*| \leq K |x_k - x^*| \leq K^{k+1}|x_0 - x^*| \xrightarrow{k \to +\infty} 0 \]
+	Questo è vero in quanto abbiamo che $|K|<1$. Infine, dall'espressione precedente abbiamo che:
+	\[ \frac{|x_{k+1} - x^*|}{|x_k - x^*|} = |\Phi'(\xi_k)| \xrightarrow[\Phi \text{ continua}]{k \to +\infty} |\Phi'(x^*)| \]
+	Dove abbiamo che $\xi_k\to x^*$
+\end{proof}
+
+\begin{thm}{di Ostrowski}{}
+	Sia $x^*$ punto fisso di $\Phi$ continua e derivabile in un intorno di $I$ di $x^*$. Se $|\Phi'(x^*)|<1$, allora $\exists \delta \in \mathbb R^+$ tale che l'iterazione $(x_k)_{k \in \mathbb N}$ converge a $x^*$, $\forall x \in ]x^*-\delta, x^*+\delta[$
+\end{thm}
+
+\begin{oss}
+	La condizione definita è sufficiente, ma è anche necessaria. Infatti, se $|\Phi(x)|>1$ si può dimostrare che l'iterazione diverge. Si ha inoltre convergenza locale
+\end{oss}
+
+\begin{ese}
+	Sia $f(x) = e^{-x} - x^2$ con $x^* \approx 0,7$. Studiare la convergenza dell'iterazione di punto fisso con $\Phi(x) = e^{-x/2}$. Quindi $x_{k+1} = e^{-\frac{xk}2}$
+\end{ese}
+
+\begin{sol}
+	Andiamo a calcolarne la derivata:
+	\[ \Phi'(x) = -\frac 12  e^{-x/2}\]
+	Allora, per $x \in [0,1]$, abbiamo che:
+	\[ |\Phi'(x)| = \frac 12 e^{-x/2} \leq \frac 12 <1 \]
+	Possiamo dire che $\Phi([0,1]) \subseteq [0,1]$?. Sappiamo che $\Phi \in C^2$, quindi:
+	\[ 0 \leq \Phi(x) = e^{-x/2} \leq 1 \qquad text{per } x \in [0,1] \]
+	Quindi per il teorema di convergenza visto, converge $\forall x \in [0,1]$
+\end{sol}
+
+\end{document}

@@ -1,0 +1,2 @@
+Sapendo che il potenziale del condensatore sferico vale: $$V = \frac{Q}{4 \pi \varepsilon_0}\left(\frac 1{R_1} - \frac 1{R_2}\right)$$
+Possiamo prendere $$V = |V(R_2) - V(R_1)|$$ Da cui otteniamo che: $$Q = V \cdot \frac{4 \pi \varepsilon_0}{(\frac 1{R_1} - \frac{1}{R_2})} \qquad \Rightarrow \qquad \fbox{$C = 4 \pi \varepsilon_0 \frac{R_1R_2}{R_1-R_2}$}$$

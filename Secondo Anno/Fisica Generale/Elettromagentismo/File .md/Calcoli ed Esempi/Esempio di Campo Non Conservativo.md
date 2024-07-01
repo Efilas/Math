@@ -1,0 +1,4 @@
+Sia $\overrightarrow F = (y, x^2)$  un campo vettoriale su $\mathbb R^2$. *$\overrightarrow F$ è conservativo?*
+
+Se $\overrightarrow F$ fosse conservativo, allora esisterebbe un potenziale tale che $\overrightarrow F= \overrightarrow \nabla \cdot V$ cioè, scritto in componenti: $$F_x = \frac{∂}{∂x}V \quad \wedge \quad F_y = \frac{∂}{∂y}V \qquad \Leftrightarrow  \qquad y = \frac{∂}{∂x}V \quad \wedge \quad x^2 = \frac{∂}{∂y} V$$
+Se integriamo queste componenti otteniamo che: $$\begin{cases}V(x,y) = yx + f(y)\\ V(x,y) = x^2y + g(y)\end{cases}$$Tuttavia, poiché sono incompatibili, non esiste un campo scalare tale, quindi non è conservativo

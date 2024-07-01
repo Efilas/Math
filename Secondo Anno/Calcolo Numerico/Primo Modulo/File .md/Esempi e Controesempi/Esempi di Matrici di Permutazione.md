@@ -1,0 +1,1 @@
+Sono esempi di Matrici di permutazione le matrici: $$\Pi = \begin{pmatrix}0 & 1 & 0\\ 1 & 0 & 0\\ 0 & 0 & 1\end{pmatrix}\qquad \qquad \Pi' = \begin{pmatrix}1 & 0 & 0\\ 0 & 0 & 1\\ 0 & 1 & 0\end{pmatrix}\qquad \qquad \Pi'' = \begin{pmatrix} 0 & 0 &1\\ 0 &1 & 0\\ 1 & 0 & 0\end{pmatrix}$$

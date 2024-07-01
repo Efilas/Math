@@ -1,0 +1,9 @@
+x=logspace(-5,5);
+subplot(2,2,1)
+plot(x)
+subplot(2,2,2)
+semilogy(x)
+subplot(2,2,3)
+semilogx(x)
+subplot(2,2,4)
+loglog(x)
