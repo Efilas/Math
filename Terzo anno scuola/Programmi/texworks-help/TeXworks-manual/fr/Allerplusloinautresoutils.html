@@ -1,0 +1,470 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0" />
+<title>5 Aller plus loin : autres outils</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=utf-8" />
+<meta name="generator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<meta name="originator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<!-- info,2,sec-filename,next,index=2,url-enc,charset=utf-8,html -->
+<meta name="src" content="index.tex" />
+<link rel="stylesheet" type="text/css" href="index.css" />
+<style type="text/css" xml:space="preserve">
+/*<![CDATA[*/
+ em.c6 {font-weight: bold}
+/*]]>*/
+</style>
+</head>
+<body>
+<!--l. 5-->
+<p class="noindent"></p>
+<div id="container">
+<!--l. 5-->
+<div class="crosslinks">
+<p class="noindent">[<a href="UsageavancelesScripts.html">next</a>]
+[<a href="Allerplusloinoutilsdedition.html">prev</a>] [<a href=
+"Allerplusloinoutilsdedition.html#tailAllerplusloinoutilsdedition.html">prev-tail</a>]
+[<a href="#tailAllerplusloinautresoutils.html">tail</a>] [<a href=
+"index.html#Allerplusloinautresoutils.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"></p>
+<div class="chapternumber">
+5
+</div>
+<h1><a id="x32-300005" name="x32-300005"></a>Aller plus loin :
+autres outils</h1>
+<h3 class="sectionHead"><span class="titlemark">5.1</span> <a id=
+"x32-310005.1" name="x32-310005.1"></a>Passage source/vue :
+SyncTeX</h3><a id="dx32-31001" name="dx32-31001"></a> <!--l. 10-->
+<p class="noindent">Lorsqu’on lit le document dans la fenêtre de
+prévisualisation et qu’on remarque quelque chose à changer, il est
+intéressant de passer directement au même endroit dans la source.
+Pour faire cela il suffit de cliquer à l’endroit souhaité de la vue
+en maintenant la touche <span class="keystroke">Ctrl</span>
+enfoncée; le curseur se déplacera et mettra en surbrillance
+l’endroit recherché dans la source. De même inversement, si on a
+déjà affiché la vue et que, retourné dans la source on s’y est
+déplacé, <span class="keystroke">Ctrl</span> <img src=
+"images//LMB-.png" alt="PIC" width="9" height="13" /> mettra en
+surbrillance la même ligne dans la vue. <span class=
+"footnote-mark"><a href="index33.html#fn1x6"><sup class=
+"textsuperscript">1</sup></a></span><a id="x32-31002f1" name=
+"x32-31002f1"></a> <!--l. 12--></p>
+<p class="indent"></p>
+<div class="OSspecific">
+<div class="OSspecificLogo OSWindows"></div>Ici une remarque pour
+les utilisateurs de Windows : ceci ne fonctionne que si <b>tous</b>
+les noms de dossier/fichiers/...<b>ne</b> contiennent <b>pas</b> de
+caractères accentués. Si, par exemple, votre document est dans
+<tt>C :\Documents and Settings\Propriétaire\My Documents\these</tt>
+cela ne fonctionnera pas à cause du <span class=
+"obeylines-h verb ec-lmtt-12">é</span> de <tt>Propriétaire</tt>!
+</div>
+<h3 class="sectionHead"><span class="titlemark">5.2</span> <a id=
+"x32-320005.2" name="x32-320005.2"></a>Chaînes de commande
+particulières</h3><!--l. 18-->
+<p class="noindent">Des lignes de commentaires, au tout début du
+document, peuvent être utilisées pour régler deux autres aspects de
+la compilation. <!--l. 20--></p>
+<p class="indent">T<sub>E</sub>Xworks utilise par défaut l’encodage
+« utf-8 »<a id="dx32-32001" name="dx32-32001"></a> quand il charge
+et sauvegarde les fichiers, mais certains fichiers pourraient être
+encodés dans un autre format. Des encodages très communs sont
+“latin1”<a id="dx32-32002" name="dx32-32002"></a>, qui est
+l’encodage prépondérant pour les langues d’Europe de l’Ouest sous
+Winsows, et “Apple Roman” prépondérant sous Mac. <!--l. 22--></p>
+<p class="indent">Pour définir un autre encodage<a id="dx32-32003"
+name="dx32-32003"></a> pour un fichier en particulier on peut
+mettre en début de ce fichier :<a id="dx32-32004" name=
+"dx32-32004"></a></p>
+<pre class="fancyvrb" id="fancyvrb11" xml:space="preserve"><a id=
+"x32-32006r1" name="x32-32006r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> encoding</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> latin1</span></pre><!--l. 27-->
+<p class="indent">Notez que sans cette linge, vous devez spécifier
+manuellement à T<sub>E</sub>Xworks l’encodage correct. Sinon, vos
+données pourraient être corrompues! Pour passer au-dessus du choix
+d’encodage par défaut de T<sub>E</sub>Xworks, utilisez le menu qui
+apparaît lorsque vous cliquez sur le bouton central de la barre de
+statut de la fenêtre d’édition. <!--l. 29--></p>
+<p class="indent">Si vous avez ouvert dans T<sub>E</sub>Xworks un
+fichier qui n’avait pas été sauvegardé en utf-8 mais auquel il
+manque la ligne <span class="obeylines-h verb"><span class=
+"ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;encodage</span></span>, il peut être affiché
+avec des caractères bizarres<a id="dx32-32007" name=
+"dx32-32007"></a>. Dans ce cas, vous pouvez spécifier de la même
+façon l’encodage correct par le bouton de la barre de statut, mais
+il est <em>impératif</em> d’alors utiliser <em class="c6">Recharger
+en utilisant l’encodage sélectionné</em> du même menu! Cela oblige
+T<sub>E</sub>Xworks de ré-ouvrir le document avec l’encodage
+souhaité, les caractères bizarres devraient être remplacés par des
+caractères normaux et c’est seulement à ce moment qu’il est sûr de
+continuer à travailler. Pour éviter de devoir répéter ce processus
+chaque fois que vous ouvrez ce fichier, vous devriez soit basculer
+en utf-8 pour le sauvegarder soit ajouter une ligne adéquate
+<span class="obeylines-h verb"><span class=
+"ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;encodage</span></span>. <!--l. 31--></p>
+<p class="indent">Si on veut compiler une fichier par un autre
+programme que le programme T<sub>E</sub>X ou LaTeX par défaut<a id=
+"dx32-32008" name="dx32-32008"></a>, on mettra au début du fichier
+: <a id="dx32-32009" name="dx32-32009"></a></p>
+<pre class="fancyvrb" id="fancyvrb12" xml:space="preserve"><a id=
+"x32-32011r1" name="x32-32011r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> program</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> &lt;le_programme&gt;</span></pre><!--l. 37-->
+<p class="noindent">par exemple :</p>
+<pre class="fancyvrb" id="fancyvrb13" xml:space="preserve"><a id=
+"x32-32013r1" name="x32-32013r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> program</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> xelatex</span></pre><!--l. 42-->
+<p class="indent">Faites attention avec cette dernière instruction
+: vous devez utiliser ici le nom du programme qui doit être utilisé
+pour l’ensemble du projet, car c’est le nom de programme qui est le
+premier vu (celui du sous-document dans lequel vous êtes lorsque
+vous commencez la composition) qui sera utilisé.
+T<sub>E</sub>Xworks utilisera ce programme, même si un autre nom
+apparaît dans le document principal! <!--l. 44--></p>
+<p class="indent">Lorsqu’un document est ouvert avec une ligne
+<span class="obeylines-h verb"><span class=
+"ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;programme</span></span>, celui-ci devient le
+programme à utiliser et son nom apparaît dans la liste déroulante
+de la Barre d’outils; mais vous pouvez cependant outrepasser cela
+en choisissant un programme différent dans la liste déroulante, si
+vous le désirez. <!--l. 47--></p>
+<p class="indent">De plus, vous pouvez définir la langue de
+correction orthographique par une ligne de commentaire similaire :
+<a id="dx32-32014" name="dx32-32014"></a></p>
+<pre class="fancyvrb" id="fancyvrb14" xml:space="preserve"><a id=
+"x32-32016r1" name="x32-32016r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> spellcheck</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> &lt;language_code&gt;</span></pre><!--l. 52-->
+<p class="noindent">Les codes de langue disponibles sur votre
+système sont listés entre parenthèses dans <em class=
+"c6">Édition</em><span class="lmsy-10x-x-120">→</span><em class=
+"c6">Vérification orthographique</em> à côté du nom de la langue en
+toutes lettres. <!--l. 55--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.3</span> <a id=
+"x32-330005.3" name="x32-330005.3"></a>Mise en forme de la source
+pour la lisibilité</h3><!--l. 57-->
+<p class="noindent">Pour faciliter la lisibilité de la source, on
+peut utiliser l’indentation<a id="dx32-33001" name=
+"dx32-33001"></a> comme le font les programmeurs :</p>
+<pre class="fancyvrb" id="fancyvrb15" xml:space="preserve"><a id=
+"x32-33003r1" name="x32-33003r1"></a><span class=
+"ec-lmtt-10x-x-109">\begin{itemize}</span> 
+<a id="x32-33005r2" name="x32-33005r2"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> Premier</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109">él</span><span class=
+"ec-lmtt-10x-x-109">ément</span><span class=
+"ec-lmtt-10x-x-109"> de</span><span class=
+"ec-lmtt-10x-x-109"> la</span><span class=
+"ec-lmtt-10x-x-109"> liste;</span> 
+<a id="x32-33007r3" name="x32-33007r3"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> deuxi</span><span class=
+"ec-lmtt-10x-x-109">ème</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109">él</span><span class=
+"ec-lmtt-10x-x-109">ément;</span> 
+<a id="x32-33009r4" name="x32-33009r4"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> dernier</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109">él</span><span class=
+"ec-lmtt-10x-x-109">ément:</span> 
+<a id="x32-33011r5" name="x32-33011r5"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \begin{itemize}</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> %</span><span class=
+"ec-lmtt-10x-x-109"> d</span><span class=
+"ec-lmtt-10x-x-109">ébut</span><span class=
+"ec-lmtt-10x-x-109"> de</span><span class=
+"ec-lmtt-10x-x-109"> sous-liste</span> 
+<a id="x32-33013r6" name="x32-33013r6"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> premier</span><span class=
+"ec-lmtt-10x-x-109"> sous-</span><span class=
+"ec-lmtt-10x-x-109">él</span><span class=
+"ec-lmtt-10x-x-109">ément;</span> 
+<a id="x32-33015r7" name="x32-33015r7"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> deuxi</span><span class=
+"ec-lmtt-10x-x-109">ème</span><span class=
+"ec-lmtt-10x-x-109"> sous-</span><span class=
+"ec-lmtt-10x-x-109">él</span><span class=
+"ec-lmtt-10x-x-109">ément.</span> 
+<a id="x32-33017r8" name="x32-33017r8"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \end{itemize}</span> 
+<a id="x32-33019r9" name="x32-33019r9"></a><span class=
+"ec-lmtt-10x-x-109">\end{itemize}</span></pre><!--l. 70-->
+<p class="indent">Cela améliore la lisibilité, mais ne fonctionne
+bien que sur des lignes courtes, sans passage à la ligne
+automatique; ou si on demande de ne pas passer à la ligne par
+<em class="c6">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c6">Passage à la
+ligne</em><a id="dx32-33020" name="dx32-33020"></a>. 
+<!--l. 72--></p>
+<p class="indent">La commande <em class=
+"c6">Format</em><span class="lmsy-10x-x-120">→</span><em class=
+"c6">Indenter</em> ou le raccourci <span class=
+"keystroke">Ctrl</span><span class="keystroke">]</span> (macOS :
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class="keystroke">]</span>)
+vont indenter la ligne, ou les lignes sélectionnées, de quatre
+caractères en insérant un caractère tabulation. On peut répéter
+l’opération pour augmenter le retrait. <!--l. 74--></p>
+<p class="indent">Pour supprimer une indentation : <em class=
+"c6">Format</em><span class="lmsy-10x-x-120">→</span><em class=
+"c6">Supprimer l’indentation</em> ou par le raccourci <span class=
+"keystroke">Ctrl</span><span class="keystroke">[</span> (
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class="keystroke">[</span> sur
+macOS). <span class="footnote-mark"><a href=
+"index34.html#fn2x6"><sup class=
+"textsuperscript">2</sup></a></span><a id="x32-33021f2" name=
+"x32-33021f2"></a> <!--l. 76--></p>
+<p class="indent">Comme <span class="ec-lmro-12">indent</span>
+n’indente que la première ligne d’un texte multiligne (si on
+demande la passage à la ligne), ceci n’est pas vraiment utile. Mais
+on peut demander à T<sub>E</sub>Xworks de scinder une longue ligne
+(plus longue que la largeur du panneau d’édition) en lignes plus
+courtes et en y ajoutant des retours à la ligne physiques
+(insertion du caractère retour à la ligne) : <em><em class=
+"c6">Format</em><span class="lmsy-10x-x-120">→</span><em class=
+"c6">Retour à la ligne physique...</em></em><a id="dx32-33022"
+name="dx32-33022"></a> ouvre une boîte de dialogue dans laquelle
+vous pouvez spécifier la largeur des lignes; vous pouvez aussi
+re-formater des lignes qui ont déjà été scindées.</p>
+<h3 class="sectionHead"><span class="titlemark">5.4</span> <a id=
+"x32-340005.4" name="x32-340005.4"></a>Afficher les
+balises</h3><a id="dx32-34001" name="dx32-34001"></a> <!--l. 84-->
+<p class="noindent">Quand un document devient un peu long et qu’on
+veut se déplacer à un endroit précis (un chapitre, une section, une
+sous-section,...), il faut faire défiler la fenêtre d’édition pour
+trouver l’endroit recherché<a id="dx32-34002" name=
+"dx32-34002"></a>, ou utiliser le dialogue Rechercher si vous vous
+souvenez d’un mot clé dans le titre du chapitre. <!--l. 86--></p>
+<p class="indent">Dans le même but, plus confortablement, on peut
+aussi afficher les balises de structure du document : l’option de
+menu <em class="c6">Fenêtre</em><span class=
+"lmsy-10x-x-120">→</span><em class="c6">Montrer</em><span class=
+"lmsy-10x-x-120">→</span><em class="c6">Balise</em> ouvre un
+panneau à gauche de la zone d’édition montrant les informations
+détectées par T<sub>E</sub>Xworks. Un clic sur le niveau recherché
+sélectionne la partie correspondante dans la source. Ce panneau,
+comme tout panneau, peut être redimensionner en tirant sa bordure. 
+<!--l. 90--></p>
+<p class="indent">La même opération peut se faire dans la vue PDF
+par <em class="c6">Fenêtre</em><span class=
+"lmsy-10x-x-120">→</span><em class="c6">Visualisation</em>
+<span class="lmsy-10x-x-120">→</span><em class="c6">Table des
+matières</em><a id="dx32-34003" name="dx32-34003"></a>, mais cela
+ne sera actif que si on a créé des balises de structure dans le
+fichier PDF par le module <span class=
+"obeylines-h verb ec-lmtt-12">hyperref</span>. <!--l. 92--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.5</span> <a id=
+"x32-350005.5" name="x32-350005.5"></a>Organiser les
+fenêtres</h3><a id="dx32-35001" name="dx32-35001"></a> <!--l. 94-->
+<p class="noindent">Par défaut, la fenêtre d’édition (source)
+s’ouvre à gauche et la fenêtre de vue (lorsque le fichier PDF
+correspondant existe), à droite en partageant l’écran en deux. 
+<!--l. 96--></p>
+<p class="indent">On peut changer la position des fenêtres par le
+menu <em class="c6">Fenêtre</em>. <span class=
+"lmsy-10x-x-120">→</span><em class="c6">Mosaïque</em> et
+<span class="lmsy-10x-x-120">→</span><em class="c6">Côte à
+côte</em> donnent le effet par défaut si on n’a qu’un document
+ouvert. Sinon <span class="lmsy-10x-x-120">→</span><em class=
+"c6">Mosaïque</em> crée une mosaïque de toutes les fenêtres. Les
+autres options permettent de présenter les fenêtres selon sa
+convenance. On peut, évidemment, aussi toujours re-dimensionner et
+déplacer manuellement les fenêtres. <!--l. 98--></p>
+<p class="indent">Pour la vue on peut aussi changer la présentation
+et donc l’agrandissement<a id="dx32-35002" name=
+"dx32-35002"></a><a id="dx32-35003" name="dx32-35003"></a> par
+<em class="c6">Vue</em><span class=
+"lmsy-10x-x-120">→</span><em class="c6">Taille réelle</em>,
+<span class="lmsy-10x-x-120">→</span><em class="c6">Ajuster à la
+largeur</em> et <span class="lmsy-10x-x-120">→</span><em class=
+"c6">Ajuster à la fenêtre</em>; on peut également effectuer des
+zoom positifs et négatifs. Des raccourcis clavier existent pour
+toutes ces actions et sont donnés à côté de l’option dans le menu. 
+<!--l. 100--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.6</span> <a id=
+"x32-360005.6" name="x32-360005.6"></a>Nettoyer le dossier de
+travail</h3><a id="dx32-36001" name="dx32-36001"></a> <!--l. 103-->
+<p class="noindent">Rapidement, lorsqu’on utilise
+(L<sup>A</sup>)T<sub>E</sub>X, on découvre que le dossier de
+travail est encombré de fichiers qui ont le même nom que la source
+mais avec une extension différente : <span class=
+"path">.aux</span>, <span class="path">.log</span>, <span class=
+"path">.toc</span>, <span class="path">.lof</span>+, <span class=
+"path">.lot</span>, <span class="path">.bbl</span>,... 
+<!--l. 105--></p>
+<p class="indent">Tous ces fichiers sont nécessaires à
+(L<sup>A</sup>)T<sub>E</sub>X pour pouvoir créer la table des
+matières, les listes de figures/tableaux, la bibliographie, les
+références croisées et, également très important, pour avoir une
+trace de ce qu’il a fait (le fichier <span class=
+"path">.log</span>.) <!--l. 107--></p>
+<p class="indent">En dehors des fichiers externes, images,
+illustrations,..., les seuls fichiers nécessaires sont les fichiers
+<span class="path">.tex</span>, les sources du document. On peut
+effacer tous les autres. Parfois cela est même nécessaire lorsque
+(L<sup>A</sup>)T<sub>E</sub>X se bloque suite à une erreur. 
+<!--l. 109--></p>
+<p class="indent">Ceci peut être fait par le commande
+T<sub>E</sub>Xworks du menu <em class="c6">Fichier</em> :
+<span class="lmsy-10x-x-120">→</span><em class="c6">Supprimer les
+Fichiers Auxiliaires...</em><a id="dx32-36002" name=
+"dx32-36002"></a>. <!--l. 111--></p>
+<p class="indent">Lorsque vous lancez cette commande, une boîte de
+dialogue s’ouvre dans laquelle vous pouvez cocher/décocher les
+fichiers que vous voulez enlever <span class=
+"footnote-mark"><a href="index35.html#fn3x6"><sup class=
+"textsuperscript">3</sup></a></span><a id="x32-36003f3" name=
+"x32-36003f3"></a>. La boîte de dialogue ne ferra la liste que des
+fichiers actuellement dans le dossier; si vous les avez tous
+supprimés, vous aurez un message précisant qu’il n’y a pas de
+fichier à supprimer à ce moment. <!--l. 113--></p>
+<p class="indent">La liste des fichiers auxiliaires qui vous est
+proposée se trouve dans le fichier de configuration <span class=
+"path">texworks-config.txt</span><a id="dx32-36004" name=
+"dx32-36004"></a> du sous-dossier <span class=
+"path">configuration</span> du dossier ressource de
+T<sub>E</sub>Xworks. Vous pourriez en ajouter si nécessaire.</p>
+<h3 class="sectionHead"><span class="titlemark">5.7</span> <a id=
+"x32-370005.7" name="x32-370005.7"></a>Usage Portable &amp;
+Modifier la configuration</h3><a id="dx32-37001" name=
+"dx32-37001"></a> <a id="dx32-37002" name="dx32-37002"></a> <a id=
+"dx32-37003" name="dx32-37003"></a> <!--l. 119-->
+<p class="noindent">Nous avons vu à la section <a href=
+"Installation.html#x8-40002">2
+<!--tex4ht:ref: chap.installation --></a> (page <a href=
+"Installation.html#x8-40002">12
+<!--tex4ht:ref: chap.installation --></a>) que lors du premier
+lancement T<sub>E</sub>Xworks crée un dossier ressource, de même
+qu’il sauvegarde les informations de préférences. <!--l. 121--></p>
+<p class="indent">Il est cependant possible de définir soi-même
+l’endroit où on veut le dossier ressource et la sauvegarde des
+préférences. Cela peut être intéressant lorsqu’on veut un système
+portable (par exemple sur une clé USB) ou que l’on veut accéder
+facilement par exemple au dossier des modèles ou des mors clé de
+complétion. <!--l. 123--></p>
+<p class="indent">Par cela, créer dans le dossier du programme un
+fichier <span class="path">texworks-setup.ini</span><a id=
+"dx32-37004" name="dx32-37004"></a> dans lequel on donnera la
+localisation des dossier contenant les sous-dossiers de complétion,
+configuration, dictionnaires,...et le fichier de configuration
+(<span class="path">texworks.ini</span><a id="dx32-37005" name=
+"dx32-37005"></a>); il y aura deux lignes :</p>
+<pre class="fancyvrb" id="fancyvrb16" xml:space="preserve"><a id=
+"x32-37007r1" name="x32-37007r1"></a><span class=
+"ec-lmtt-10x-x-109">inipath=C:/mondossier/TW_conf/</span> 
+<a id="x32-37009r2" name="x32-37009r2"></a><span class=
+"ec-lmtt-10x-x-109">libpath=C:/mondossier/TW_conf/\index{configuration!libpath}</span></pre><!--l. 129-->
+<p class="indent"><span class=
+"obeylines-h verb ec-lmtt-12">inipath</span><a id="dx32-37010"
+name="dx32-37010"></a> pour le fichier de configuration et
+<span class="obeylines-h verb ec-lmtt-12">libpath</span><a id=
+"dx32-37011" name="dx32-37011"></a> pour les dossiers nécessaires.
+Ici <span class="path">TW\_conf</span> remplacerait le dossier
+ressource <span class="path">TeXworks</span>. Remarquez d’une part
+que le dossier référencé (ici <span class="path">TW\_conf</span>)
+doit exister – il ne sera pas créé – et d’autre part l’utilisation
+de <span class="obeylines-h verb ec-lmtt-12">/</span> même sous
+Windows (et non de la contre-oblique <span class=
+"obeylines-h verb ec-lmtt-12">\</span>). <!--l. 131--></p>
+<p class="indent">Si on désire mettre le dossier ressource dans le
+dossier du programme, comme sous-dossier, on peut utiliser une
+instruction qui prendra la forme <span class=
+"obeylines-h verb ec-lmtt-12">inipath=./TW\_conf/</span>; cette
+référence et les autres formes de références relatives sont
+toujours par rapport au dossier programme de
+T<sub>E</sub>Xworks(sous macOS, le dossier contenant le module app
+est utilisé.) <!--l. 133--></p>
+<p class="indent">On pourrait aussi ajouter une première ligne
+:<a id="dx32-37012" name="dx32-37012"></a></p>
+<pre class="fancyvrb" id="fancyvrb17" xml:space="preserve"><a id=
+"x32-37014r1" name="x32-37014r1"></a><span class=
+"ec-lmtt-10x-x-109">defaultbinpaths=C:/Program</span><span class=
+"ec-lmtt-10x-x-109"> Files/MiKTeX</span><span class=
+"ec-lmtt-10x-x-109"> 2.7/miktex/bin</span></pre><!--l. 137-->
+<p class="noindent">pour indiquer où se trouve les programmes de la
+distribution T<sub>E</sub>X; cependant cette instruction n’est pas
+encore pleinement opérationnelle en particulier sous Windows. 
+<!--l. 5--></p>
+<div class="crosslinks">
+<p class="noindent">[<a href="UsageavancelesScripts.html">next</a>]
+[<a href="Allerplusloinoutilsdedition.html">prev</a>] [<a href=
+"Allerplusloinoutilsdedition.html#tailAllerplusloinoutilsdedition.html">prev-tail</a>]
+[<a href="Allerplusloinautresoutils.html">front</a>] [<a href=
+"index.html#Allerplusloinautresoutils.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"><a id="tailAllerplusloinautresoutils.html" name=
+"tailAllerplusloinautresoutils.html"></a></p>
+</div>
+</body>
+</html>

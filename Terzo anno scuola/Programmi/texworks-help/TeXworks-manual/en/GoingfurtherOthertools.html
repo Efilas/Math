@@ -1,0 +1,459 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0" />
+<title>5 Going further: Other tools</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=utf-8" />
+<meta name="generator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<meta name="originator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<!-- info,2,sec-filename,next,index=2,url-enc,charset=utf-8,html -->
+<meta name="src" content="index.tex" />
+<link rel="stylesheet" type="text/css" href="index.css" />
+<style type="text/css" xml:space="preserve">
+/*<![CDATA[*/
+ em.c23 {font-weight: bold}
+ img.c22 {width:1.96ex}
+ img.c21 {width:1.82ex}
+/*]]>*/
+</style>
+</head>
+<body>
+<!--l. 5-->
+<p class="noindent"></p>
+<div id="container">
+<!--l. 5-->
+<div class="crosslinks">
+<p class="noindent">[<a href="AdvanceduseScripting.html">next</a>]
+[<a href="GoingfurtherEditingtools.html">prev</a>] [<a href=
+"GoingfurtherEditingtools.html#tailGoingfurtherEditingtools.html">prev-tail</a>]
+[<a href="#tailGoingfurtherOthertools.html">tail</a>] [<a href=
+"index.html#GoingfurtherOthertools.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"></p>
+<div class="chapternumber">
+5
+</div>
+<h1><a id="x29-320005" name="x29-320005"></a>Going further: Other
+tools</h1>
+<h3 class="sectionHead"><span class="titlemark">5.1</span> <a id=
+"x29-330005.1" name="x29-330005.1"></a>SyncTeX’ing between source
+and preview</h3><a id="dx29-33001" name="dx29-33001"></a> 
+<!--l. 10-->
+<p class="noindent">When you are reading a document in the preview
+window and see something to change, it is convenient to go
+immediately to the corresponding place in the source. To do so,
+hold down <span class="keystroke">Ctrl</span> (macOS: <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" class=
+"c21" /></span>) and click at the appropriate place in the preview;
+the cursor will move and highlight the corresponding location in
+the source window. The same is true in the other direction:
+<span class="keystroke">Ctrl</span> <img src="images//LMB-.png"
+alt="PIC" class="c22" /> in the source will highlight the same line
+in the preview window.<span class="footnote-mark"><a href=
+"index30.html#fn1x6"><sup class=
+"textsuperscript">1</sup></a></span><a id="x29-33002f1" name=
+"x29-33002f1"></a> <!--l. 14--></p>
+<p class="indent"></p>
+<div class="OSspecific">
+<div class="OSspecificLogo OSWindows"></div>Here a remark for users
+under Windows: this only works if <b>all</b> the names for
+folders/files/…do <b>not</b> have accented characters. If, for
+example, your document is in <tt>C:\Documents and
+Settings\Propriétaire\My Documents\thesis</tt> it will not work
+because of the <span class="obeylines-h verb ec-lmtt-12">é</span>
+in <tt>Propriétaire</tt>!
+</div>
+<h3 class="sectionHead"><span class="titlemark">5.2</span> <a id=
+"x29-340005.2" name="x29-340005.2"></a>Special comment strings</h3>
+<!--l. 21-->
+<p class="noindent">Special comments, at the very beginning of the
+files, can be used to manage two other aspects of the compilation. 
+<!--l. 23--></p>
+<p class="indent">By default, T<sub>E</sub>Xworks uses the “utf-8”
+encoding<a id="dx29-34001" name="dx29-34001"></a> for loading and
+saving files, but some files could be saved in another encoding.
+Common ones are “latin1”<a id="dx29-34002" name="dx29-34002"></a>,
+which is the dominant encoding on Windows when using western
+languages, and “Apple Roman” which is dominant on macOS. 
+<!--l. 25--></p>
+<p class="indent">To set a different encoding<a id="dx29-34003"
+name="dx29-34003"></a> for a specific file one can put the
+following at the beginning of that file:<a id="dx29-34004" name=
+"dx29-34004"></a></p>
+<pre class="fancyvrb" id="fancyvrb13" xml:space="preserve"><a id=
+"x29-34006r1" name="x29-34006r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> encoding</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> latin1</span></pre><!--l. 30-->
+<p class="indent">Note that without this line, you must tell
+T<sub>E</sub>Xworks the correct encoding manually. Otherwise, your
+data could be corrupted! To override T<sub>E</sub>Xworks’s default
+choice of encoding, use the menu that appears when you click on the
+editor window’s middle status bar widget. <!--l. 32--></p>
+<p class="indent">If you opened a file in T<sub>E</sub>Xworks that
+was not saved as utf-8 but is lacking the <span class=
+"obeylines-h verb"><span class="ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;encoding</span></span> line, it might be
+displayed with (some) weird characters<a id="dx29-34007" name=
+"dx29-34007"></a>. In that case, you can specify the correct
+encoding via the status bar widget menu in the same way, but it is
+<em>imperative</em> that you then use <em class="c23">Reload using
+selected encoding</em> from the same menu! This forces
+T<sub>E</sub>Xworks to open the document again with the encoding
+you selected, the weird characters should be replaced by normal
+ones, and only then it is safe to continue to work normally. To
+avoid having to repeat this procedure each time you open this file,
+you should either switch to utf-8 for saving it in the future or
+add a proper <span class="obeylines-h verb"><span class=
+"ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;encoding</span></span> line. <!--l. 34--></p>
+<p class="indent">If we want to compile a file with another
+programme<a id="dx29-34008" name="dx29-34008"></a> than the default
+T<sub>E</sub>X or LaTeX, we put at the beginning of the file:
+<a id="dx29-34009" name="dx29-34009"></a></p>
+<pre class="fancyvrb" id="fancyvrb14" xml:space="preserve"><a id=
+"x29-34011r1" name="x29-34011r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> program</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> &lt;the_programme&gt;</span></pre><!--l. 39-->
+<p class="noindent">for example:</p>
+<pre class="fancyvrb" id="fancyvrb15" xml:space="preserve"><a id=
+"x29-34013r1" name="x29-34013r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> program</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> xelatex</span></pre><!--l. 44-->
+<p class="indent">Pay attention to this last instruction. You have
+to use the name of the programme here which should be used for the
+whole project, as the first encountered programme when starting
+typesetting is used (which is the one from the sub-document you are
+in). T<sub>E</sub>Xworks will use that programme, even if another
+name appears in the main document! <!--l. 46--></p>
+<p class="indent">When opening a document which contains a
+<span class="obeylines-h verb"><span class=
+"ec-lmtt-12">%</span><span class=
+"ec-lmtt-12">&nbsp;!TeX</span><span class=
+"ec-lmtt-12">&nbsp;program</span></span> line, the specified
+programme will become the one to use and its name will appear in
+the drop down menu in the toolbar; you can, however, override this
+by selecting a different one from the drop down list, if you want. 
+<!--l. 50--></p>
+<p class="indent">In addition, you can set the spell checking
+language by a similar comment line: <a id="dx29-34014" name=
+"dx29-34014"></a></p>
+<pre class="fancyvrb" id="fancyvrb16" xml:space="preserve"><a id=
+"x29-34016r1" name="x29-34016r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> spellcheck</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> &lt;language_code&gt;</span></pre><!--l. 55-->
+<p class="noindent">The language codes available on your system are
+listed in parentheses in <em class="c23">Edit</em> <span class=
+"lmsy-10x-x-120">→</span><em class="c23">Spelling</em> next to the
+human-readable name of the language. <!--l. 57--></p>
+<p class="indent">To tell T<sub>E</sub>Xworks about bibliography
+databases to use for the “Insert Citations…” dialog, you can use
+(see sec.&nbsp;<a href=
+"GoingfurtherEditingtools.html#x20-300004.7">4.7
+<!--tex4ht:ref: sec.citationsDialog --></a>)</p>
+<pre class="fancyvrb" id="fancyvrb17" xml:space="preserve"><a id=
+"x29-34018r1" name="x29-34018r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> bibfiles</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> file1.bib,file2.bib</span></pre><!--l. 63-->
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.3</span> <a id=
+"x29-350005.3" name="x29-350005.3"></a>Formatting the source for
+legibility</h3><!--l. 65-->
+<p class="noindent">To facilitate legibility of the source, one can
+use indentation<a id="dx29-35001" name="dx29-35001"></a> as
+programmers do:</p>
+<pre class="fancyvrb" id="fancyvrb18" xml:space="preserve"><a id=
+"x29-35003r1" name="x29-35003r1"></a><span class=
+"ec-lmtt-10x-x-109">\begin{itemize}</span> 
+<a id="x29-35005r2" name="x29-35005r2"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> First</span><span class=
+"ec-lmtt-10x-x-109"> element</span><span class=
+"ec-lmtt-10x-x-109"> of</span><span class=
+"ec-lmtt-10x-x-109"> the</span><span class=
+"ec-lmtt-10x-x-109"> list;</span> 
+<a id="x29-35007r3" name="x29-35007r3"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> second</span><span class=
+"ec-lmtt-10x-x-109"> element;</span> 
+<a id="x29-35009r4" name="x29-35009r4"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> last</span><span class=
+"ec-lmtt-10x-x-109"> element:</span> 
+<a id="x29-35011r5" name="x29-35011r5"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \begin{itemize}</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> %</span><span class=
+"ec-lmtt-10x-x-109"> beginning</span><span class=
+"ec-lmtt-10x-x-109"> of</span><span class=
+"ec-lmtt-10x-x-109"> a</span><span class=
+"ec-lmtt-10x-x-109"> sub-list</span> 
+<a id="x29-35013r6" name="x29-35013r6"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> first</span><span class=
+"ec-lmtt-10x-x-109"> sub-element;</span> 
+<a id="x29-35015r7" name="x29-35015r7"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \item</span><span class=
+"ec-lmtt-10x-x-109"> second</span><span class=
+"ec-lmtt-10x-x-109"> sub-element.</span> 
+<a id="x29-35017r8" name="x29-35017r8"></a><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \end{itemize}</span> 
+<a id="x29-35019r9" name="x29-35019r9"></a><span class=
+"ec-lmtt-10x-x-109">\end{itemize}</span></pre><!--l. 78-->
+<p class="indent">This increases legibility, but works well only on
+short lines, without text wrapping; or if one chooses not to use
+text wrapping by unchecking <em class="c23">Format</em>
+<span class="lmsy-10x-x-120">→</span><em class="c23">Wrap
+lines</em><a id="dx29-35020" name="dx29-35020"></a>. 
+<!--l. 80--></p>
+<p class="indent">The command <em class=
+"c23">Format</em><span class="lmsy-10x-x-120">→</span><em class=
+"c23">Indent</em> or the shortcut <span class=
+"keystroke">Ctrl</span><span class="keystroke">]</span> (macOS:
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+class="c21" /></span><span class="keystroke">]</span>) will indent
+the line, or the selected lines, by inserting a tab character. You
+can repeat the process to increase the indent. <!--l. 82--></p>
+<p class="indent">To remove one level of indentation, use
+<em class="c23">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c23">Unindent</em> or the
+shortcut <span class="keystroke">Ctrl</span><span class=
+"keystroke">[</span> ( <span class="keystroke"><img src=
+"images//MacCmdKey-.png" alt="PIC" class=
+"c21" /></span><span class="keystroke">[</span> on
+macOS).<span class="footnote-mark"><a href=
+"index31.html#fn2x6"><sup class=
+"textsuperscript">2</sup></a></span><a id="x29-35021f2" name=
+"x29-35021f2"></a> <!--l. 84--></p>
+<p class="indent">As <span class="ec-lmro-12">indent</span> only
+indents the first part of very long (wrapped) lines, this is not
+very satisfactory in some cases. But one can ask
+T<sub>E</sub>Xworks to split a long line (longer than the width of
+the editing window) into short ones adding a hard coded line feed.
+<em class="c23">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c23">Hard Wrap...</em><a id=
+"dx29-35022" name="dx29-35022"></a> opens a dialog box in which you
+can specify the width of the lines; you can also re-format lines
+which have already been split.</p>
+<h3 class="sectionHead"><span class="titlemark">5.4</span> <a id=
+"x29-360005.4" name="x29-360005.4"></a>Showing the tags</h3><a id=
+"dx29-36001" name="dx29-36001"></a> <!--l. 92-->
+<p class="noindent">When a document is becoming long and you want
+to move to a specific place (a chapter, a section, a subsection,
+…)<a id="dx29-36002" name="dx29-36002"></a> you normally need to
+scroll the editing window to find the desired location, or use the
+Find dialog if you remember a keyword in the chapter’s title. 
+<!--l. 94--></p>
+<p class="indent">To the same end, though a lot more comfortable,
+you can also use the structural information in the document to
+navigate the source: the menu item <em class=
+"c23">Window</em><span class="lmsy-10x-x-120">→</span><em class=
+"c23">Show</em><span class="lmsy-10x-x-120">→</span><em class=
+"c23">Tags</em> opens a panel showing the information detected by
+T<sub>E</sub>Xworks. Clicking on an item in the panel moves the
+cursor to the corresponding part in the source. That panel, like
+any other, can be resized by dragging its border. <!--l. 96--></p>
+<p class="indent">The same action is possible in the PDF window
+from <em class="c23">Window</em><span class=
+"lmsy-10x-x-120">→</span><em class="c23">Show</em><span class=
+"lmsy-10x-x-120">→</span><em class="c23">Table of
+contents</em><a id="dx29-36003" name="dx29-36003"></a>, but this
+only works if one has created structure tags in the PDF file using
+the package <span class=
+"obeylines-h verb ec-lmtt-12">hyperref</span>. <!--l. 98--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.5</span> <a id=
+"x29-370005.5" name="x29-370005.5"></a>Organising the
+windows</h3><a id="dx29-37001" name="dx29-37001"></a> <!--l. 100-->
+<p class="noindent">By default, the editor/source window opens on
+the left and the preview one on the right (when the corresponding
+PDF file exists), thus splitting the screen in two. 
+<!--l. 102--></p>
+<p class="indent">You can change the position of the windows in the
+<em class="c23">Window</em> menu. <span class=
+"lmsy-10x-x-120">→</span><em class="c23">Stack</em> and
+<span class="lmsy-10x-x-120">→</span><em class="c23">Side by
+side</em> give the default effect if there is only one document
+open. If not, <span class="lmsy-10x-x-120">→</span><em class=
+"c23">Stack</em> creates a mosaic with all the windows. The other
+options allow to place the windows for your convenience. It is also
+always possible to resize and move the windows manually, of course.
+<!--l. 104--></p>
+<p class="indent">For the preview you can change the way it is
+presented and of course the zoom<a id="dx29-37002" name=
+"dx29-37002"></a> by <em class="c23">View</em><span class=
+"lmsy-10x-x-120">→</span><em class="c23">Actual size</em>,
+<span class="lmsy-10x-x-120">→</span><em class="c23">Fit to
+width</em> and <span class="lmsy-10x-x-120">→</span><em class=
+"c23">Fit to window</em>; you can also zoom in and out. Shortcuts
+exist for all these actions and are shown next to the menu items. 
+<!--l. 106--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">5.6</span> <a id=
+"x29-380005.6" name="x29-380005.6"></a>Cleaning the working
+folder</h3><a id="dx29-38001" name="dx29-38001"></a> <!--l. 109-->
+<p class="noindent">Very soon when one uses
+(L<sup>A</sup>)T<sub>E</sub>X, one discovers that the working
+folder is cluttered by many files which have the name of the source
+file but different extensions: <span class="path">.aux</span>,
+<span class="path">.log</span>, <span class="path">.toc</span>,
+<span class="path">.lof</span>, <span class="path">.lot</span>,
+<span class="path">.bbl</span>, … <!--l. 111--></p>
+<p class="indent">All these are files needed by
+(L<sup>A</sup>)T<sub>E</sub>X to be able to create the table of
+contents, lists of figures/tables, the bibliography, the cross
+references and, also very importantly, to keep track of what it did
+(in the <span class="path">.log</span> file). <!--l. 113--></p>
+<p class="indent">Apart from the external files, images, pictures,
+…, the only files required are the <span class="path">.tex</span>
+files, the sources of the document. One can erase all the others.
+Sometimes, this is even necessary when
+(L<sup>A</sup>)T<sub>E</sub>X gets stuck after an error. 
+<!--l. 115--></p>
+<p class="indent">This can be done using a T<sub>E</sub>Xworks
+command from the <em class="c23">File</em> menu with the
+<span class="lmsy-10x-x-120">→</span><em class="c23">Remove Aux
+files…</em><a id="dx29-38002" name="dx29-38002"></a> item. 
+<!--l. 117--></p>
+<p class="indent">When you use this command, a dialog box opens in
+which you can check/uncheck the files you want to
+remove.<span class="footnote-mark"><a href=
+"index32.html#fn3x6"><sup class=
+"textsuperscript">3</sup></a></span><a id="x29-38003f3" name=
+"x29-38003f3"></a> The dialog box will only list files that
+actually exist in the folder; if you removed all these auxiliary
+files before, you get a message box saying that there is no file to
+remove at the moment. <!--l. 119--></p>
+<p class="indent">The list of auxiliary files which are taken into
+account is defined in the file <span class=
+"path">texworks-config.txt</span><a id="dx29-38004" name=
+"dx29-38004"></a> in the <span class="path">configuration</span>
+folder of the T<sub>E</sub>Xworks resources folder. You could add
+some if required.</p>
+<h3 class="sectionHead"><span class="titlemark">5.7</span> <a id=
+"x29-390005.7" name="x29-390005.7"></a>Portable Usage &amp;
+Changing the Configuration</h3><a id="dx29-39001" name=
+"dx29-39001"></a> <a id="dx29-39002" name="dx29-39002"></a> <a id=
+"dx29-39003" name="dx29-39003"></a> <!--l. 124-->
+<p class="noindent">We have seen in section <a href=
+"Installation.html#x7-40002">2
+<!--tex4ht:ref: chap.installation --></a> (on page <a href=
+"Installation.html#x7-40002">12
+<!--tex4ht:ref: chap.installation --></a>) that the first time you
+use T<sub>E</sub>Xworks, it creates a resource folder and also that
+it saves default preferences. <!--l. 126--></p>
+<p class="indent">It is possible to define a personal place where
+one wants the resource folder and the preferences. This can be
+handy when one wants a portable system (e.g., on an USB stick) or
+when one wants to easily access the templates or completion folders
+for modifications. <!--l. 128--></p>
+<p class="indent">For this, create a file <span class=
+"path">texworks-setup.ini</span><a id="dx29-39004" name=
+"dx29-39004"></a> in the programme folder in which you specify the
+path to the folder containing the completion, configuration,
+dictionaries,…folders and the configuration file (<span class=
+"path">texworks.ini</span><a id="dx29-39005" name=
+"dx29-39005"></a>); there will be two lines:</p>
+<pre class="fancyvrb" id="fancyvrb19" xml:space="preserve"><a id=
+"x29-39007r1" name="x29-39007r1"></a><span class=
+"ec-lmtt-10x-x-109">inipath=C:/myfolder/TW_conf/</span> 
+<a id="x29-39009r2" name="x29-39009r2"></a><span class=
+"ec-lmtt-10x-x-109">libpath=C:/myfolder/TW_conf/</span></pre>
+<!--l. 134-->
+<p class="indent"><span class=
+"obeylines-h verb ec-lmtt-12">inipath</span><a id="dx29-39010"
+name="dx29-39010"></a> for the configuration file and <span class=
+"obeylines-h verb ec-lmtt-12">libpath</span><a id="dx29-39011"
+name="dx29-39011"></a> for the necessary folders. Here,
+<span class="path">TW_conf</span> would replace the resource folder
+<span class="path">TeXworks</span>. Note that the referenced folder
+(here <span class="path">TW_conf</span>) should exist—it will not
+be created—, and that the <span class=
+"obeylines-h verb ec-lmtt-12">/</span> is used even on Windows
+(instead of the common <span class=
+"obeylines-h verb ec-lmtt-12">\</span>). <!--l. 136--></p>
+<p class="indent">If one wants to put the resource folder in the
+programme folder as a subfolder, one can use an instruction like
+<span class=
+"obeylines-h verb ec-lmtt-12">inipath=./TW_conf/</span>; all
+relative paths are taken to be relative to the T<sub>E</sub>Xworks
+programme folder (on macOS, the folder containing the app package
+is used). <!--l. 138--></p>
+<p class="indent">One can also add a line<a id="dx29-39012" name=
+"dx29-39012"></a> like</p>
+<pre class="fancyvrb" id="fancyvrb20" xml:space="preserve"><a id=
+"x29-39014r1" name="x29-39014r1"></a><span class=
+"ec-lmtt-10x-x-109">defaultbinpaths=C:/Program</span><span class=
+"ec-lmtt-10x-x-109"> Files/MiKTeX</span><span class=
+"ec-lmtt-10x-x-109"> 2.7/miktex/bin</span></pre><!--l. 142-->
+<p class="noindent">to specify where the programmes of the
+T<sub>E</sub>X distribution are located; but this instruction is
+not yet completely operational, especially under Windows. 
+<!--l. 5--></p>
+<div class="crosslinks">
+<p class="noindent">[<a href="AdvanceduseScripting.html">next</a>]
+[<a href="GoingfurtherEditingtools.html">prev</a>] [<a href=
+"GoingfurtherEditingtools.html#tailGoingfurtherEditingtools.html">prev-tail</a>]
+[<a href="GoingfurtherOthertools.html">front</a>] [<a href=
+"index.html#GoingfurtherOthertools.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"><a id="tailGoingfurtherOthertools.html" name=
+"tailGoingfurtherOthertools.html"></a></p>
+</div>
+</body>
+</html>

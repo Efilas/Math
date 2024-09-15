@@ -1,0 +1,805 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0" />
+<title>4 Aller plus loin : outils d’edition</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=utf-8" />
+<meta name="generator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<meta name="originator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<!-- info,2,sec-filename,next,index=2,url-enc,charset=utf-8,html -->
+<meta name="src" content="index.tex" />
+<link rel="stylesheet" type="text/css" href="index.css" />
+<style type="text/css" xml:space="preserve">
+/*<![CDATA[*/
+ em.c7 {font-weight: bold}
+/*]]>*/
+</style>
+</head>
+<body>
+<!--l. 5-->
+<p class="noindent"></p>
+<div id="container">
+<!--l. 5-->
+<div class="crosslinks">
+<p class="noindent">[<a href=
+"Allerplusloinautresoutils.html">next</a>] [<a href=
+"Priseenmain.html">prev</a>] [<a href=
+"Priseenmain.html#tailPriseenmain.html">prev-tail</a>] [<a href=
+"#tailAllerplusloinoutilsdedition.html">tail</a>] [<a href=
+"index.html#Allerplusloinoutilsdedition.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"></p>
+<div class="chapternumber">
+4
+</div>
+<h1><a id="x22-170004" name="x22-170004"></a>Aller plus loin :
+outils d’édition</h1><!--l. 7-->
+<p class="indent">Lorsque vous aurez T<sub>E</sub>Xworks bien en
+main, vous sentirez le besoin d’avoir des outils pour être plus
+efficace. Beaucoup d’outils existent dans T<sub>E</sub>Xworks. Nous
+les passons maintenant en revue.</p>
+<h3 class="sectionHead"><span class="titlemark">4.1</span> <a id=
+"x22-180004.1" name="x22-180004.1"></a>Créer un document à partir
+d’un modèle</h3><a id="dx22-18001" name="dx22-18001"></a> 
+<!--l. 11-->
+<p class="noindent">Les documents que vous créerez ont le plus
+souvent les mêmes instructions dans le préambule, on charge les
+mêmes modules, on définit les mêmes caractéristiques de page, on
+définit aussi des en-tête et pied de page personnalisés. On peut
+utiliser les modèles prédéfinis ou créer ses propres modèles
+contenant tous ces pré-requis. <!--l. 13--></p>
+<p class="indent">Utilisez <em class="c7">Fichier</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Nouveau à partir d’un
+modèle...</em> ou <span class="keystroke">Ctrl</span><span class=
+"keystroke">Maj</span><span class="keystroke">N</span> (macOS :
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class=
+"keystroke">Maj</span><span class="keystroke">N</span>). Une boîte
+de dialogue s’ouvre pour permettre la sélection du modèle. Après
+sélection et <span class="obeylines-h verb ec-lmtt-12">OK</span> un
+document est créé et on peut commencer à travailler. 
+<!--l. 15--></p>
+<p class="indent">Si on désire créer un modèle plus personnalisé,
+il suffit de créer ce document avec tout ce que l’on désire
+toujours y trouver (et en marquant éventuellement des emplacements
+à compléter) et de l’enregistrer comme fichier <span class=
+"path">.tex</span> dans le répertoire ressources de
+T<sub>E</sub>Xworks <span class=
+"path">&lt;ressources&gt;\templates</span> ou un sous-répertoire
+éventuel de celui-ci, si vous le désirez. <!--l. 17--></p>
+<p class="noindent"></p>
+<h3 class="sectionHead"><span class="titlemark">4.2</span> <a id=
+"x22-190004.2" name="x22-190004.2"></a>Créer un projet sur
+plusieurs fichiers sources</h3><a id="dx22-19001" name=
+"dx22-19001"></a> <!--l. 19-->
+<p class="noindent">Lorsque la source d’un document devient longue,
+il est parfois difficile de se déplacer dans celle-ci et de la
+gérer. On a alors avantage à scinder le fichier source en plusieurs
+fichiers plus petits : un fichier sera le document principal,
+central, qui contiendra le préambule, l’environnement <span class=
+"obeylines-h verb ec-lmtt-12">document</span>, ainsi que des appels
+aux « sous-documents » <span class="footnote-mark"><a href=
+"index23.html#fn1x5"><sup class=
+"textsuperscript">1</sup></a></span><a id="x22-19002f1" name=
+"x22-19002f1"></a>, qui pourraient contenir des chapitres séparés. 
+<!--l. 21--></p>
+<p class="indent">Mais il y aura un problème si, étant dans un
+sous-document, on lance la composition/compilation; comme il n’y a
+pas de préambule ni d’environnement <span class=
+"obeylines-h verb ec-lmtt-12">document</span> LaTeXs’arrête
+immédiatement sur erreur. <!--l. 23--></p>
+<p class="indent">Pour signaler à T<sub>E</sub>Xworks qu’il doit
+compiler le document principal on ajoute au début du fichier
+sous-document l’instruction : <a id="dx22-19003" name=
+"dx22-19003"></a></p>
+<pre class="fancyvrb" id="fancyvrb5" xml:space="preserve"><a id=
+"x22-19005r1" name="x22-19005r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> root</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> chemin/fichier_principal.tex</span></pre>
+<!--l. 28-->
+<p class="noindent">par exemple :</p>
+<pre class="fancyvrb" id="fancyvrb6" xml:space="preserve"><a id=
+"x22-19007r1" name="x22-19007r1"></a><span class=
+"ec-lmtt-10x-x-109">%</span><span class=
+"ec-lmtt-10x-x-109"> !TeX</span><span class=
+"ec-lmtt-10x-x-109"> root</span><span class=
+"ec-lmtt-10x-x-109"> =</span><span class=
+"ec-lmtt-10x-x-109"> manuel.tex</span></pre><!--l. 40-->
+<p class="indent">Si le fichier principal est dans le même dossier,
+son nom suffit, comme dans l’exemple ci-dessus. Sinon vous devez
+fournir le chemin vers le document principal (de préférence
+relativement au sous-document en question, p.e. <span class=
+"path">../manuel.tex</span>). Remarquer aussi l’utilisation des
+barres obliques « <span class=
+"obeylines-h verb ec-lmtt-12">/</span> » et non des contre-obliques
+« <span class="obeylines-h verb ec-lmtt-12">\</span> » utilisées
+par Windows pour séparer les niveaux de dossiers. <!--l. 42--></p>
+<p class="indent">De plus, avec MikTeX, l’appel au sous-document,
+<span class="obeylines-h verb ec-lmtt-12">\input{nom.tex}</span>,
+doit inclure l’extension <span class="path">.tex</span> pour que
+SyncTeX fonctionne convenablement (voir la section&nbsp;<a href=
+"Allerplusloinautresoutils.html#x32-310005.1">5.1
+<!--tex4ht:ref: sec.synctex --></a>).</p>
+<h3 class="sectionHead"><span class="titlemark">4.3</span> <a id=
+"x22-200004.3" name="x22-200004.3"></a>Vérification
+d’orthographe</h3><!--l. 46-->
+<p class="noindent">On peut demander de faire une vérification
+orthographique <a id="dx22-20001" name="dx22-20001"></a>automatique
+durant la frappe par <em class="c7">Édition</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Vérification
+orthographique</em><span class="lmsy-10x-x-120">→</span><em class=
+"c7">&lt;choix de langue&gt;</em> : par exemple fr-FR pour le
+français. Il est également possible de demander à
+T<sub>E</sub>Xworks de permettre une vérification orthographique
+par défaut par <em class="c7">Édition</em><span class=
+"lmsy-10x-x-120">→</span><em class=
+"c7">Préférences...</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Éditeur</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Langue de vérification
+orthographique :</em>. <!--l. 48--></p>
+<p class="indent">Lors de la frappe, s’il y a une erreur pour le
+correcteur, le mot est souligné par un liséré rouge. Un clic-droit
+sur le mot ouvre un menu contextuel dans lequel il y a des
+propositions de mots de remplacement. Cliquer sur le mot désiré
+pour effectuer le remplacement. <!--l. 50--></p>
+<p class="indent">Avant d’utiliser la vérification orthographique,
+il faut installer des dictionnaires<a id="dx22-20002" name=
+"dx22-20002"></a> dans le bon dossier de T<sub>E</sub>Xworks :
+<span class="path">&lt;ressources&gt;\dictionaries</span>. Le
+dossier <span class="path">&lt;ressources&gt;</span> est atteint
+facilement par <em class="c7">Aide</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Paramètres et
+ressources...</em> <!--l. 52--></p>
+<p class="indent"></p>
+<div class="OSspecific">
+<div class="OSspecificLogo OSLinux"></div>Sous Linux, les
+dictionnaires sont généralement pris dans le dossier <span class=
+"path">/usr/share/myspell/dicts</span> – le chemin par défaut pour
+les dictionnaires de myspell. Notez, cependant, que la personne qui
+gère votre module T<sub>E</sub>Xworks a pu changer cela pour tenir
+compte de l’organisation du système de fichiers de votre
+distribution Linux. Vous pouvez passer outre à cet organisation par
+défaut en définissant la variable d’environnement <span class=
+"obeylines-h verb ec-lmtt-12">TW_DICPATH</span> avant d’exécuter
+Tw.
+</div><!--l. 56-->
+<p class="indent">On peut utiliser les dictionnaires disponibles
+pour OpenOffice.org et d’autres logiciels libres <span class=
+"footnote-mark"><a href="index24.html#fn2x5"><sup class=
+"textsuperscript">2</sup></a></span><a id="x22-20003f2" name=
+"x22-20003f2"></a> ; si par exemple vous avez Mozilla Thunderbird
+avec correction orthographique, vous pouvez copier les fichiers
+<span class="path">.aff</span><a id="dx22-20004" name=
+"dx22-20004"></a> et <span class="path">.dic</span><a id=
+"dx22-20005" name="dx22-20005"></a>.</p>
+<h3 class="sectionHead"><span class="titlemark">4.4</span> <a id=
+"x22-210004.4" name="x22-210004.4"></a>Rechercher et
+remplacer</h3><a id="dx22-21001" name="dx22-21001"></a> <a id=
+"dx22-21002" name="dx22-21002"></a> <!--l. 63-->
+<p class="noindent"></p>
+<h4 class="subsectionHead"><span class="titlemark">4.4.1</span>
+<a id="x22-220004.4.1" name="x22-220004.4.1"></a>Les actions
+classiques</h4><!--l. 65-->
+<p class="noindent">Les options du menu <em class=
+"c7">Recherche</em>–<em class="c7">Rechercher...</em>, <em class=
+"c7">Chercher encore</em>, <em class="c7">Remplacer...</em>,
+<em class="c7">Remplacer encore</em> et <em class="c7">Aller à la
+ligne...</em> (<span class="keystroke">Ctrl</span><span class=
+"keystroke">F</span>, <span class=
+"keystroke">Ctrl</span><span class="keystroke">G</span>,
+<span class="keystroke">Ctrl</span><span class=
+"keystroke">R</span>, <span class=
+"keystroke">Ctrl</span><span class=
+"keystroke">Maj</span><span class="keystroke">R</span> et
+<span class="keystroke">Ctrl</span><span class="keystroke">L</span>
+respectivement (macOS : <span class="keystroke"><img src=
+"images//MacCmdKey-.png" alt="PIC" width="8" height=
+"7" /></span><span class="keystroke">F</span>, <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" width="8"
+height="7" /></span><span class="keystroke">G</span>, <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" width="8"
+height="7" /></span><span class="keystroke">R</span>, <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" width="8"
+height="7" /></span><span class="keystroke">Shift <span class=
+"lmsy-10x-x-120">⇑</span></span><span class="keystroke">R</span> et
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class="keystroke">L</span>)
+sont des actions classiques; la première et la troisième provoque
+l’ouverture d’une boîte de dialogue :</p>
+<div class="center">
+<!--l. 67-->
+<p class="noindent"><!--l. 68--></p>
+<p class="noindent"><img src="images//rechremp.png" alt="PIC"
+width="238" height="118" /></p>
+</div><!--l. 71-->
+<p class="indent">On y trouve les options habituelles :
+<em>Recherche en boucle – dans tout le document</em><em>Chercher
+vers le haut</em>, <em>Chercher/Remplacer dans la sélection</em> ou
+<em>Chercher toutes les occurences</em>. Sont aussi classiques les
+options <em>Sensible à la casse</em> et <em>Mots entiers</em>. Par
+défaut la recherche se fait vers le bas, la fin du texte. 
+<!--l. 73--></p>
+<p class="indent">L’option <em>Remplacer dans tous les fichiers
+ouverts</em> est une extension fréquente, mais pas aussi répandue
+que les autres; cela permet de faire, par exemple, des
+remplacements dans tous les fichiers d’un projet – faites attention
+que ceci est très puissant. <!--l. 75--></p>
+<p class="indent">La dernière option, <em>Expression
+régulière</em>, est expliquée ci-après. <!--l. 77--></p>
+<p class="indent">Dans le menu <em class="c7">Recherche</em> il y a
+d’autres options :</p>
+<dl class="description">
+<dt class="description"><!--l. 79--><br class="noindent" />
+<span class="ec-lmbx-12">Copier vers Rechercher</span></dt>
+<dd class="description">
+<!--l. 79-->
+<p class="noindent">copie le texte sélectionné et l’envoye dans la
+zone de saisie <b><span class="ec-lmro-12">Rechercher :</span></b>
+de la boîte de dialogue Rechercher ou Remplacer; vous devez encore
+ouvrir les dialogues séparément;</p>
+</dd>
+<dt class="description"><!--l. 80--><br class="noindent" />
+<span class="ec-lmbx-12">Copier vers Remplacer</span></dt>
+<dd class="description">
+<!--l. 80-->
+<p class="noindent">on peut faire de même avec un texte de
+remplacement vers la zone <b><span class="ec-lmro-12">Par
+:</span></b> de la boîte de dialogue <b><span class=
+"ec-lmro-12">Remplacer</span></b>;</p>
+</dd>
+<dt class="description"><!--l. 81--><br class="noindent" />
+<span class="ec-lmbx-12">Trouver la s</span><span class=
+"ec-lmbx-12">élection</span></dt>
+<dd class="description">
+<!--l. 81-->
+<p class="noindent">utilise la sélection pour une recherche sans
+ouvrir la boîte de dialogue <b><span class=
+"ec-lmro-12">Recherche</span></b> – très rapide;</p>
+</dd>
+<dt class="description"><!--l. 82--><br class="noindent" />
+<span class="ec-lmbx-12">Montrer la s</span><span class=
+"ec-lmbx-12">élection</span></dt>
+<dd class="description">
+<!--l. 82-->
+<p class="noindent">, nous ramène immédiatement au texte
+sélectionné – pratique si on a sélectionné un texte et qu’on s’est
+déplacé dans le document par la glissière latérale, pratique aussi
+si on ne fait pas passer les lignes à la ligne.</p>
+</dd>
+</dl><!--l. 85-->
+<p class="noindent"></p>
+<h4 class="subsectionHead"><span class="titlemark">4.4.2</span>
+<a id="x22-230004.4.2" name=
+"x22-230004.4.2"></a>Recherche/Remplacement avancé (les expressions
+régulières)</h4><a id="dx22-23001" name="dx22-23001"></a> 
+<!--l. 87-->
+<p class="noindent">Les expressions régulières forment un outil
+très performant, mais qu’il convient de bien comprendre. Il
+faudrait un manuel uniquement pour cet apprentissage <span class=
+"footnote-mark"><a href="index25.html#fn3x5"><sup class=
+"textsuperscript">3</sup></a></span><a id="x22-23002f3" name=
+"x22-23002f3"></a>, mais nous allons donner quelques idées
+d’utilisation. Voir aussi les expressions disponibles dans la
+section <a href="Expressionsregulieres.html#x47-52000B">B
+<!--tex4ht:ref: sec:regexp --></a>. <!--l. 89--></p>
+<p class="indent">Supposons que nous ayons le texte suivant :</p>
+<pre class="fancyvrb" id="fancyvrb7" xml:space="preserve"><a id=
+"x22-23004r1" name="x22-23004r1"></a><span class=
+"ec-lmtt-10x-x-109">Voici</span><span class=
+"ec-lmtt-10x-x-109"> du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> pour</span><span class=
+"ec-lmtt-10x-x-109"> tester</span><span class=
+"ec-lmtt-10x-x-109"> les</span><span class=
+"ec-lmtt-10x-x-109"> expressions</span><span class=
+"ec-lmtt-10x-x-109"> r</span><span class=
+"ec-lmtt-10x-x-109">éguli</span><span class=
+"ec-lmtt-10x-x-109">ères</span> 
+<a id="x22-23006r2" name="x22-23006r2"></a><span class=
+"ec-lmtt-10x-x-109">dans</span><span class=
+"ec-lmtt-10x-x-109"> du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> accentu</span><span class=
+"ec-lmtt-10x-x-109">é.</span> 
+<a id="x22-23008r3" name="x22-23008r3"></a><span class=
+"ec-lmtt-10x-x-109">Voici</span><span class=
+"ec-lmtt-10x-x-109"> du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> pour</span><span class=
+"ec-lmtt-10x-x-109"> tester</span><span class=
+"ec-lmtt-10x-x-109"> les</span><span class=
+"ec-lmtt-10x-x-109"> expressions</span><span class=
+"ec-lmtt-10x-x-109"> r</span><span class=
+"ec-lmtt-10x-x-109">éguli</span><span class=
+"ec-lmtt-10x-x-109">ères</span><span class=
+"ec-lmtt-10x-x-109"> dans</span> 
+<a id="x22-23010r4" name="x22-23010r4"></a><span class=
+"ec-lmtt-10x-x-109">du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> accentu</span><span class=
+"ec-lmtt-10x-x-109">é.</span> 
+<a id="x22-23012r5" name="x22-23012r5"></a><span class=
+"ec-lmtt-10x-x-109">Voici</span><span class=
+"ec-lmtt-10x-x-109"> du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> pour</span><span class=
+"ec-lmtt-10x-x-109"> tester</span><span class=
+"ec-lmtt-10x-x-109"> les</span><span class=
+"ec-lmtt-10x-x-109"> expressions</span><span class=
+"ec-lmtt-10x-x-109"> r</span><span class=
+"ec-lmtt-10x-x-109">éguli</span><span class=
+"ec-lmtt-10x-x-109">ères.</span><span class=
+"ec-lmtt-10x-x-109"> Voici</span> 
+<a id="x22-23014r6" name="x22-23014r6"></a><span class=
+"ec-lmtt-10x-x-109">du</span><span class=
+"ec-lmtt-10x-x-109"> texte</span><span class=
+"ec-lmtt-10x-x-109"> pour</span><span class=
+"ec-lmtt-10x-x-109"> tester</span><span class=
+"ec-lmtt-10x-x-109"> les</span><span class=
+"ec-lmtt-10x-x-109"> expressions</span><span class=
+"ec-lmtt-10x-x-109"> r</span><span class=
+"ec-lmtt-10x-x-109">éguli</span><span class=
+"ec-lmtt-10x-x-109">ères.</span> 
+<a id="x22-23016r7" name="x22-23016r7"></a><span class=
+"ec-lmtt-10x-x-109">truc</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> truc</span> 
+<a id="x22-23018r8" name="x22-23018r8"></a><span class=
+"ec-lmtt-10x-x-109">t</span><span class=
+"ec-lmtt-10x-x-109">él.:</span><span class=
+"ec-lmtt-10x-x-109"> 010-99-99-99</span> 
+<a id="x22-23020r9" name="x22-23020r9"></a><span class=
+"ec-lmtt-10x-x-109">t</span><span class=
+"ec-lmtt-10x-x-109">él.:</span><span class=
+"ec-lmtt-10x-x-109"> 00.32.10.99.99.99</span> 
+<a id="x22-23022r10" name="x22-23022r10"></a><span class=
+"ec-lmtt-10x-x-109">t</span><span class=
+"ec-lmtt-10x-x-109">él.:</span><span class=
+"ec-lmtt-10x-x-109"> 00/32-10/99.99.99</span></pre><!--l. 102-->
+<p class="noindent">Nous désirons d’une part</p>
+<ol class="enumerate1">
+<li class="enumerate" id="x22-23024x1">
+<!--l. 104-->
+<p class="noindent">séparer les différents paragraphes par une
+ligne vide après « accentué » (pour créer des paragraphes dans
+LaTeX) mais pas pour les trois numéros de téléphone;</p>
+</li>
+<li class="enumerate" id="x22-23026x2">
+<!--l. 105-->
+<p class="noindent">remplacer les deux caractères tabulations
+(<span class="ec-lmro-12">tab</span>)qui séparent les deux mots «
+truc » du quatrième paragraphe chacun par trois espaces et,
+enfin;</p>
+</li>
+<li class="enumerate" id="x22-23028x3">
+<!--l. 106-->
+<p class="noindent">uniformiser les numéros de téléphones en
+remplaçant les divers caractères de ponctuation par des
+espaces.</p>
+</li>
+</ol><!--l. 109-->
+<p class="indent">Pour 1) dans la boîte de dialogue <b><span class=
+"ec-lmro-12">Remplacer</span></b> (<span class=
+"keystroke">Ctrl</span><span class="keystroke">R</span>) pour
+<em>Rechercher :</em> on mettra ›<span class=
+"obeylines-h verb ec-lmtt-12">\n</span>‹ <span class=
+"footnote-mark"><a href="index26.html#fn4x5"><sup class=
+"textsuperscript">4</sup></a></span><a id="x22-23029f4" name=
+"x22-23029f4"></a> et dans <em>Par :</em> ›<span class=
+"obeylines-h verb ec-lmtt-12">\n\n</span>‹. ›<span class=
+"obeylines-h verb ec-lmtt-12">\n</span>‹ est le code pour le
+passage à la ligne. On prendra soin d’avoir sélectionné les quatre
+premiers paragraphes et le début du cinquième (premier numéro de
+téléphone) et de cocher les cases <em>Remplacer dans la
+sélection</em> et <em>Expression régulière</em>; si on ne l’a pas
+fait et qu’une ligne vide a été insérée entre toutes les lignes,
+sélectionner les lignes de téléphone et faire l’opération inverse :
+replacer ›<span class="obeylines-h verb ec-lmtt-12">\n\n</span>‹
+par ›<span class="obeylines-h verb ec-lmtt-12">\n</span>‹. Donc
+nous avons remplacer un passage à la ligne par un double, en créant
+ainsi une ligne vide. <!--l. 111--></p>
+<p class="indent">Pour 2) on utilisera ›<span class=
+"obeylines-h verb ec-lmtt-12">\t</span>‹ et ›<span class=
+"obeylines-h verb ec-lmtt-12">␣␣␣</span>‹ <span class=
+"footnote-mark"><a href="index27.html#fn5x5"><sup class=
+"textsuperscript">5</sup></a></span><a id="x22-23030f5" name=
+"x22-23030f5"></a>. ›<span class=
+"obeylines-h verb ec-lmtt-12">\t</span>‹ est le code représentant
+une tabulation, un espace est entré tel quel (ici représenté par
+<span class="obeylines-h verb ec-lmtt-12">␣</span>). 
+<!--l. 113--></p>
+<p class="indent">Pour 3) ce sera : rechercher ›<span class=
+"obeylines-h verb ec-lmtt-12">-|\.|/</span>‹ et remplacer par
+›<span class="obeylines-h verb ec-lmtt-12">␣</span>‹. Ici,
+›<span class="obeylines-h verb ec-lmtt-12">|</span>‹ fournit les
+diverses alternatives (<span class=
+"obeylines-h verb ec-lmtt-12">-</span>, <span class=
+"obeylines-h verb ec-lmtt-12">.</span>, or <span class=
+"obeylines-h verb ec-lmtt-12">/</span>); pour le point nous avons
+utilisé ›<span class="obeylines-h verb ec-lmtt-12">\.</span>‹ car
+le point seul est un code d’expression régulière qui représente
+n’importe quel caractère et nous aurions donc remplacer tous les
+caractères par un espace!! Nous devons dès lors utiliser un code
+pour avoir le point – en mettant une contre-oblique devant le
+point, on précise que le point doit garder son sens propre plutôt
+que le sens spécial qu’il a généralement dans les expressinos
+régulières. <!--l. 115--></p>
+<p class="indent">Si on a des chaînes d’un même caractère mais de
+longueurs différentes (exemple 3, 4, 5 fois le caractère e) et
+qu’on veut tout ramener à une chaîne plus courte (exemple 2), on
+peut demander de remplacer la chaîne ›<span class=
+"obeylines-h verb ec-lmtt-12">e{3,5}</span>‹ par ›<span class=
+"obeylines-h verb ec-lmtt-12">ee</span>‹. <!--l. 117--></p>
+<p class="indent">Si on veut insérer devant une série de
+paragraphes séparés ou non par une ligne vide une même chaîne, par
+exemple ›<span class=
+"obeylines-h verb ec-lmtt-12">\noindent␣</span>‹ ou ›<span class=
+"obeylines-h verb ec-lmtt-12">\item␣</span>‹, on peut remplacer
+›<span class="obeylines-h verb ec-lmtt-12">\n\n</span>‹ ou
+›<span class="obeylines-h verb ec-lmtt-12">\n</span>‹ par
+›<span class="obeylines-h verb ec-lmtt-12">\n\n\\noindent␣</span>‹
+ou ›<span class=
+"obeylines-h verb ec-lmtt-12">\n\\noindent␣</span>‹. Attention, on
+a doublé le <span class="obeylines-h verb ec-lmtt-12">\</span>
+devant <span class="obeylines-h verb ec-lmtt-12">noindent</span>
+pour en avoir un (<span class=
+"obeylines-h verb ec-lmtt-12">\noindent</span>), parce que
+<span class="obeylines-h verb ec-lmtt-12">\</span> est un caractère
+d’échapement dans les expressions régulièrs (nous l’avons rencontré
+auparavant dans l’expression <span class=
+"obeylines-h verb ec-lmtt-12">\.</span>)! <!--l. 119--></p>
+<p class="indent">Si cela avait un sens, nous pourrions remplacer
+toutes les lettres comprises entre « a » et « m » par « $ » en
+utilisant ›<span class="obeylines-h verb ec-lmtt-12">[a-m]</span>‹
+et ›<span class="obeylines-h verb ec-lmtt-12">$</span>‹.</p>
+<h3 class="sectionHead"><span class="titlemark">4.5</span> <a id=
+"x22-240004.5" name="x22-240004.5"></a>Autres outils d’édition et
+de recherche d’erreur</h3><a id="dx22-24001" name="dx22-24001"></a>
+<!--l. 124-->
+<p class="noindent"></p>
+<h4 class="subsectionHead"><span class="titlemark">4.5.1</span>
+<a id="x22-250004.5.1" name="x22-250004.5.1"></a>Outils
+standard</h4><!--l. 126-->
+<p class="noindent">Il est toujours possible d’annuler<a id=
+"dx22-25001" name="dx22-25001"></a> une action non-désirée par
+<em class="c7">Édition</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Annuler</em> ou
+<span class="keystroke">Ctrl</span><span class="keystroke">Z</span>
+(macOS : <span class="keystroke"><img src="images//MacCmdKey-.png"
+alt="PIC" width="8" height="7" /></span><span class=
+"keystroke">Z</span>); on peut ainsi annuler à reculons!
+L’opération inverse, annuler l’annulation ou refaire<a id=
+"dx22-25002" name="dx22-25002"></a>, s’obtient par <em class=
+"c7">Édition</em><span class="lmsy-10x-x-120">→</span><em class=
+"c7">Répéter/refaire</em> ou <span class=
+"keystroke">Ctrl</span><span class=
+"keystroke">Maj</span><span class="keystroke">Z</span> (macOS
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class=
+"keystroke">Maj</span><span class="keystroke">Z</span>.)
+<span class="footnote-mark"><a href=
+"index28.html#fn6x5"><sup class="textsuperscript">6</sup></a></span><a id="x22-25003f6"
+name="x22-25003f6"></a> <!--l. 128--></p>
+<p class="indent">T<sub>E</sub>Xworks dispose aussi des outils
+classiques d’édition comme le presse papier; on peut donc
+sélectionner, couper/copier puis coller une partie de texte. 
+<!--l. 130--></p>
+<p class="indent">On peut sélectionner à la souris en « glissant »
+sur le texte à sélectionner, et on peut aussi « double cliquer »
+pour sélectionner un mot. Au clavier il suffit de se déplacer en
+maintenant la touche <span class="keystroke">Maj</span> enfoncée;
+on utilisera les touches de direction seules avec <span class=
+"keystroke">Maj</span>; mais on peut aussi se déplacer et
+sélectionner par mot en se déplaçant à gauche ou à droite en
+maintenant <span class="keystroke">Ctrl</span><span class=
+"keystroke">Maj</span> enfoncés ( <span class="keystroke"><img src=
+"images//MacCmdKey-.png" alt="PIC" width="8" height=
+"7" /></span><span class="keystroke">Shift <span class=
+"lmsy-10x-x-120">⇑</span></span> sous macOS). Les raccourcis
+clavier du presse papier sont les raccourcis que l’on trouve dans
+pratiquement tous les logiciels : <span class=
+"keystroke">Ctrl-X</span> pour couper, <span class=
+"keystroke">Ctrl</span><span class="keystroke">C</span> pour copier
+et <span class="keystroke">Ctrl</span><span class=
+"keystroke">V</span> pour coller ( <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" width="8"
+height="7" /></span><span class="keystroke">X</span>, <span class=
+"keystroke"><img src="images//MacCmdKey-.png" alt="PIC" width="8"
+height="7" /></span><span class="keystroke">C</span> et
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class="keystroke">V</span>
+respectivement, macOS.) <!--l. 132--></p>
+<p class="indent">On peut facilement changer la casse<a id=
+"dx22-25004" name="dx22-25004"></a> d’une sélection – tout mettre
+en capitales ou tout en minuscules – par <em class=
+"c7">Édition</em><span class="lmsy-10x-x-120">→</span><em class=
+"c7">Changer la casse</em> puis, suivant le cas, <em class=
+"c7">TOUT EN CAPITALES</em> ou <em class="c7">tout en
+minuscules</em>, ou <em class="c7">Inverser la casse</em> (qui
+bascule la casse de chaque lettre idividuellement.) 
+<!--l. 134--></p>
+<p class="indent">Il est aussi pratique de voir les numéros de
+lignes<a id="dx22-25005" name="dx22-25005"></a>, car tous les
+messages d’erreurs font référence à ces numéros; vous pouvez
+basculer <tt>on/off</tt> l’affichage des lignes, sur la gauche du
+panneau de saisie, par <em class="c7">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Numéros de ligne</em>.</p>
+<h4 class="subsectionHead"><span class="titlemark">4.5.2</span>
+<a id="x22-260004.5.2" name="x22-260004.5.2"></a>Commenter</h4>
+<!--l. 138-->
+<p class="noindent">Quand on met au point un texte pour
+(L<sup>A</sup>)T<sub>E</sub>X il est souvent intéressant d’empêcher
+la compilation d’une partie du texte pour arriver à localiser les
+erreurs; on progresse ainsi morceau de texte par morceau de texte
+qui fonctionne jusqu’à rencontrer un fragment qui cause une erreur.
+Pour cela on commentera la source par bloc. <!--l. 140--></p>
+<p class="indent">Nous avons vu que le signe <span class=
+"obeylines-h verb ec-lmtt-12">%</span> indique le début d’un
+commentaire. Pour commenter <a id="dx22-26001" name=
+"dx22-26001"></a>une grande partie de texte, il suffit de la
+sélectionner puis de demander le marquage en tant que commentaire
+<em class="c7">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Commenter</em> ou
+<span class="keystroke">Ctrl</span><span class="keystroke">(</span>
+(macOS : <span class="keystroke"><img src="images//MacCmdKey-.png"
+alt="PIC" width="8" height="7" /></span><span class=
+"keystroke">Shift <span class=
+"lmsy-10x-x-120">⇑</span></span><span class="keystroke">]</span>.)
+Pour supprimer la mise en commentaire : sélectionnez les lignes et
+choisissez <em class="c7">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Dé-commenter</em><a id=
+"dx22-26002" name="dx22-26002"></a> ou <span class=
+"keystroke">Ctrl</span><span class="keystroke">)</span> (macOS :
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class=
+"keystroke">Maj</span><span class="keystroke">[</span> <span class=
+"footnote-mark"><a href="index29.html#fn7x5"><sup class=
+"textsuperscript">7</sup></a></span><a id="x22-26003f7" name=
+"x22-26003f7"></a>.</p>
+<h4 class="subsectionHead"><span class="titlemark">4.5.3</span>
+<a id="x22-270004.5.3" name="x22-270004.5.3"></a>Équilibrer les
+délimiteurs</h4><a id="dx22-27001" name="dx22-27001"></a> 
+<!--l. 145-->
+<p class="noindent">Une erreur fréquente est d’oublier un symbole
+fermant : parenthèse, accolade, crochet,<em>etc</em>.
+T<sub>E</sub>Xworks propose un outil pour mettre en évidence les
+paires de symboles : lorsqu’on passe sur un de ces symboles son
+complémentaire est brièvement mis en sur-brillance orange. On peut
+également, quand on est à l’intérieur d’un bloc ainsi délimité
+demander de le sélectionner par <em class="c7">Édition</em>
+<span class="lmsy-10x-x-120">→</span><em class="c7">Sélection d’un
+bloc entre délimiteurs</em><a id="dx22-27002" name=
+"dx22-27002"></a> ou son raccourci <span class=
+"keystroke">Ctrl</span><span class="keystroke">B</span> (macOS :
+<span class="keystroke"><img src="images//MacCmdKey-.png" alt="PIC"
+width="8" height="7" /></span><span class="keystroke">B</span>). On
+voit ainsi directement l’ampleur du bloc. <!--l. 147--></p>
+<p class="noindent"></p>
+<h4 class="subsectionHead"><span class="titlemark">4.5.4</span>
+<a id="x22-280004.5.4" name="x22-280004.5.4"></a>Guillemets
+intelligents</h4><a id="dx22-28001" name="dx22-28001"></a> 
+<!--l. 150-->
+<p class="noindent">Une autre erreur similaire, mais ici sémantique
+et n’ayant aucune influence sur la composition, est rencontrée dans
+l’utilisation des guillemets lorsqu’on désire mettre un texte en
+évidence. <!--l. 152--></p>
+<p class="indent">En français il y a des guillemets ‘simples’ et
+des guillemets « doubles ». On utilise également les guillemets
+“anglais” pour un texte entre guillemets dans un texte déjà entre
+guillemets. Les guillemets simples et doubles anglais sont obtenus
+par <span class="obeylines-h verb ts1-lmtt12-">`</span> et
+<span class="obeylines-h verb ts1-lmtt12-">'</span>; ce ne sont pas
+les guillemets utilisés en programmation et trouvés sur la clavier
+<span class="obeylines-h verb ec-lmtt-12">"</span> et <span class=
+"obeylines-h verb ts1-lmtt12-">'</span>. Mais utilisant le système
+des guillemets intelligents de T<sub>E</sub>Xworks, on peut
+utiliser ces derniers pour produire automatiquement les guillemets
+simple/double ouvrants et fermants. <!--l. 154--></p>
+<p class="indent">Dans un document <span class="path">.tex</span>,
+sélectionnez un des systèmes de guillemets intelligents :
+<em class="c7">Format</em><span class=
+"lmsy-10x-x-120">→</span><em class="c7">Guillemets
+intelligents</em><span class="lmsy-10x-x-120">→</span><em class=
+"c7">Ligatures TeX</em>, <span class=
+"lmsy-10x-x-120">→</span><em class="c7">Commandes TeX</em>,
+<span class="lmsy-10x-x-120">→</span><em class="c7">Caractères
+Unicode</em> <span class="footnote-mark"><a href=
+"index30.html#fn8x5"><sup class=
+"textsuperscript">8</sup></a></span><a id="x22-28002f8" name=
+"x22-28002f8"></a>. Ensuite dans votre texte, lorsque vous voulez
+commencer un texte mis en évidence, disons des guillemets doubles,
+entrez <span class="obeylines-h verb ec-lmtt-12">"</span> puis le
+texte et pour terminer de nouveau <span class=
+"obeylines-h verb ec-lmtt-12">"</span>; T<sub>E</sub>Xworks va
+automatiquement insérer les guillemets ouvrants <span class=
+"obeylines-h verb ts1-lmtt12-">``</span> et ensuite les guillemets
+fermants corrects <span class=
+"obeylines-h verb ts1-lmtt12-">''</span>. Les trois options donnent
+le même résultat dans le document composé, mais <em class=
+"c7">Ligatures TeX</em> devrait bien fonctionner dans la plupart
+des cas. <!--l. 156--></p>
+<p class="indent">Enfin, il est possible de définir ses propres
+systèmes de guillemets (dans le fichier de définitions
+(<span class="path">smart-quotes-modes.txt</span> dans le dossier
+<span class="path">configuration</span> du dossier ressources.) Par
+exemple, pour les guillemets français de babel, ajoutez le code
+suivant :</p>
+<pre class="fancyvrb" id="fancyvrb8" xml:space="preserve"><a id=
+"x22-28004r1" name="x22-28004r1"></a><span class=
+"ec-lmtt-10x-x-109">#[French</span><span class=
+"ec-lmtt-10x-x-109"> quotes]</span> 
+<a id="x22-28006r2" name="x22-28006r2"></a><span class=
+"ec-lmtt-10x-x-109">[Guillemets</span><span class=
+"ec-lmtt-10x-x-109"> fran</span><span class=
+"ec-lmtt-10x-x-109">çais]</span> 
+<a id="x22-28008r3" name="x22-28008r3"></a><span class=
+"ts1-lmtt10-x-x-109">'</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ts1-lmtt10-x-x-109">`</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ts1-lmtt10-x-x-109">'</span> 
+<a id="x22-28010r4" name="x22-28010r4"></a><span class=
+"ec-lmtt-10x-x-109">"</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \og{}</span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> </span><span class=
+"ec-lmtt-10x-x-109"> \fg{}</span></pre>
+<h3 class="sectionHead"><span class="titlemark">4.6</span> <a id=
+"x22-290004.6" name="x22-290004.6"></a>La complétion
+automatique</h3><a id="dx22-29001" name="dx22-29001"></a> 
+<!--l. 166-->
+<p class="noindent">Un autre outil dont on ne peut rapidement plus
+se passer est la complétion automatique. En effet, quand on utilise
+(L<sup>A</sup>)T<sub>E</sub>X, on doit continuellement entrer des
+codes pour, par exemple, créer des environnements; de plus dans ce
+cas il ne faut pas oublier de les fermer. <!--l. 168--></p>
+<p class="indent">La complétion automatique permet de taper une
+suite de caractères, on pourrait dire un mot clé, puis en tapant
+<span class="keystroke msam-10x-x-120">⇆</span>T<sub>E</sub>Xworks
+crée automatiquement le code de la commande ou de l’environnement
+(L<sup>A</sup>)T<sub>E</sub>X. <!--l. 170--></p>
+<p class="indent">Par exemple, pour obtenir « LaTeX », il faut
+entrer <span class="obeylines-h verb ec-lmtt-12">\LaTeX</span>. Ce
+n’est pas difficile, mais l’introduction du “<span class=
+"obeylines-h verb ec-lmtt-12">\</span>” <span class=
+"footnote-mark"><a href="index31.html#fn9x5"><sup class=
+"textsuperscript">9</sup></a></span><a id="x22-29002f9" name=
+"x22-29002f9"></a> puis du mot “<span class=
+"obeylines-h verb ec-lmtt-12">LaTeX</span>” avec l’alternance de
+majuscules et de minuscules peut devenir fastidieux à la longue.
+Par la complétion automatique il suffit d’entrer <span class=
+"obeylines-h verb ec-lmtt-12">latex</span> puis taper <span class=
+"keystroke">TaB</span> pour obtenir <span class=
+"obeylines-h verb ec-lmtt-12">\LaTeX</span>. Il faut juste veiller
+à ne pas avoir une <em>lettre</em> accolée devant ou derrière
+<span class="obeylines-h verb ec-lmtt-12">latex</span> – par ex.
+<span class="obeylines-h verb ec-lmtt-12">alatax</span> – sinon le
+mécanisme pourrait ne pas choisir le mot clé correct. 
+<!--l. 173--></p>
+<p class="indent">Autres exemples, <span class=
+"obeylines-h verb ec-lmtt-12">bmin</span> produit :</p>
+<pre class="fancyvrb" id="fancyvrb9" xml:space="preserve"><a id=
+"x22-29004r1" name="x22-29004r1"></a><span class=
+"ec-lmtt-10x-x-109">\begin{minipage}{}</span> 
+<a id="x22-29006r2" name="x22-29006r2"></a><span class=
+"ts1-lmtt10-x-x-109">∙</span> 
+<a id="x22-29008r3" name="x22-29008r3"></a><span class=
+"ec-lmtt-10x-x-109">\end{minipage}</span><span class=
+"ts1-lmtt10-x-x-109">∙</span></pre><!--l. 179-->
+<p class="noindent">le curseur de saisie se trouve dans la paire
+d’accolades vide où il faut entrer la dimension de la minipage.
+Voir la section <a href="AdaptationdeTw.html#x40-51000A.3">A.3
+<!--tex4ht:ref: sec.autocompletion --></a> pourune liste des mots
+clé d’autocomplétion. Remarquons le « <span class=
+"ts1-lmr12-">∙</span> » dans l’environnement minipage. C’est une
+marque que l’on peut atteindre par <span class=
+"keystroke">Ctrl</span><span class=
+"keystroke msam-10x-x-120">⇆</span> (<span class=
+"keystroke">Option</span><span class=
+"keystroke msam-10x-x-120">⇆</span> sur le Mac), en répétant ce
+raccourci, on avance dans la structure créée et par <span class=
+"keystroke">Ctrl</span><span class=
+"keystroke">Maj</span><span class=
+"keystroke msam-10x-x-120">⇆</span> (<span class=
+"keystroke">Option</span><span class="keystroke">Shift <span class=
+"lmsy-10x-x-120">⇑</span></span><span class=
+"keystroke msam-10x-x-120">⇆</span>) on recule. <!--l. 183--></p>
+<p class="indent">Il est à remarquer que si on donne un mot clé
+partiel et que l’on appuie successivement sur <span class=
+"keystroke msam-10x-x-120">⇆</span>, on peut avoir d’autres
+complétions, généralement associées. Par exemple, <span class=
+"obeylines-h verb ec-lmtt-12">bali</span> (le <span class=
+"obeylines-h verb ec-lmtt-12">b</span> indique un début
+d’environnement <span class=
+"obeylines-h verb ec-lmtt-12">\begin{}</span>) crée l’environnement
+<span class="obeylines-h verb ec-lmtt-12">align</span> après un
+<span class="keystroke msam-10x-x-120">⇆</span>, <span class=
+"obeylines-h verb ec-lmtt-12">align*</span> ensuite, successivement
+<span class="obeylines-h verb ec-lmtt-12">alignat</span>,
+<span class="obeylines-h verb ec-lmtt-12">alignat*</span>,
+<span class="obeylines-h verb ec-lmtt-12">aligned</span>,
+<span class="obeylines-h verb ec-lmtt-12">alignedat</span>,
+<span class="obeylines-h verb ec-lmtt-12">alignedat</span> avec
+option; ces derniers environnements ont leur propre code qui
+commence par <span class="obeylines-h verb ec-lmtt-12">bali</span>
+(<span class="obeylines-h verb ec-lmtt-12">balis</span>,
+<span class="obeylines-h verb ec-lmtt-12">baliat</span>,
+<span class="obeylines-h verb ec-lmtt-12">baliats</span>,
+<span class="obeylines-h verb ec-lmtt-12">balied</span>,
+<span class="obeylines-h verb ec-lmtt-12">baliedat</span> et enfin
+<span class="obeylines-h verb ec-lmtt-12">baliedato</span>.) 
+<!--l. 185--></p>
+<p class="indent">Enfin, si vous désirer créer vos propres
+raccourcis, vous pouvez toujours ajouter un fichier <span class=
+"path">.txt</span> dans le sous-répertoire <span class=
+"path">completion</span> du répertoire ressources. Les entrées dans
+ce fichier seront de la forme :</p>
+<pre class="fancyvrb" id="fancyvrb10" xml:space="preserve"><a id=
+"x22-29010r1" name="x22-29010r1"></a><span class=
+"ec-lmtt-10x-x-109">bfigo:=\begin{figure}[#INS#]#RET##RET#\end{figure}</span><span class="ts1-lmtt10-x-x-109">∙</span> 
+<a id="x22-29012r2" name="x22-29012r2"></a><span class=
+"ec-lmtt-10x-x-109">\bibliography{#INS#}</span><span class=
+"ts1-lmtt10-x-x-109">∙</span></pre><!--l. 192-->
+<p class="indent">Dans le premier cas, pour l’environnement
+<span class="obeylines-h verb ec-lmtt-12">figure</span> avec
+option, <span class="obeylines-h verb ec-lmtt-12">bfigo</span> est
+le mot clé, puis vient l’affectation <span class=
+"obeylines-h verb ec-lmtt-12">:=</span> et la définition : écrire
+<span class="obeylines-h verb ec-lmtt-12">\begin{figure}[]</span>
+<span class="obeylines-h verb ec-lmtt-12">\end{figure}</span> avec
+un passage à la ligne après le <span class=
+"obeylines-h verb ec-lmtt-12">begin</span> (<span class=
+"obeylines-h verb ec-lmtt-12">#RET#</span>), laisser une ligne vide
+(deuxième <span class="obeylines-h verb ec-lmtt-12">#RET#</span>)
+et mettre le curseur d’insertion entre les crochets (<span class=
+"obeylines-h verb ec-lmtt-12">#INS#</span>); « <span class=
+"ts1-lmr12-">∙</span> » est la marque de déplacement expliquée plus
+haut. <!--l. 194--></p>
+<p class="indent">Dans le deuxième cas il n’y aura que <span class=
+"obeylines-h verb ec-lmtt-12">\bibliography{}</span> lui-même et
+T<sub>E</sub>Xworks créera le nom complet avec accolades (le
+curseur entre elles.) Dans ce cas le mot clé est l’instruction
+elle-même. <!--l. 198--></p>
+<p class="indent">Il faut veiller à créer des fichiers <span class=
+"path">.txt</span> encodés en utf-8; on peut pour cela utiliser le
+programme T<sub>E</sub>Xworks lui-même, qui utilise cet encodage
+par défaut. <!--l. 5--></p>
+<div class="crosslinks">
+<p class="noindent">[<a href=
+"Allerplusloinautresoutils.html">next</a>] [<a href=
+"Priseenmain.html">prev</a>] [<a href=
+"Priseenmain.html#tailPriseenmain.html">prev-tail</a>] [<a href=
+"Allerplusloinoutilsdedition.html">front</a>] [<a href=
+"index.html#Allerplusloinoutilsdedition.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"><a id="tailAllerplusloinoutilsdedition.html"
+name="tailAllerplusloinoutilsdedition.html"></a></p>
+</div>
+</body>
+</html>

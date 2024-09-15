@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0" />
+<title>1 Introduction</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=utf-8" />
+<meta name="generator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<meta name="originator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<!-- info,2,sec-filename,next,index=2,url-enc,charset=utf-8,html -->
+<meta name="src" content="index.tex" />
+<link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+<body>
+<!--l. 5-->
+<p class="noindent"></p>
+<div id="container">
+<!--l. 5-->
+<div class="crosslinks">
+<p class="noindent">[<a href="Installation.html">next</a>]
+[<a href="contentsname.html">prev</a>] [<a href=
+"contentsname.html#tailcontentsname.html">prev-tail</a>] [<a href=
+"#tailIntroduction.html">tail</a>] [<a href=
+"index.html#Introduction.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"></p>
+<div class="chapternumber">
+1
+</div>
+<h1><a id="x4-20001" name="x4-20001"></a>Introduction</h1>
+<!--l. 7-->
+<p class="indent">Donald E. Knuth<a id="dx4-2001" name=
+"dx4-2001"></a> a décidé de créer un nouveau système typographique
+qui sera appelé T<sub>E</sub>X<a id="dx4-2002" name=
+"dx4-2002"></a>, parce que le système d’impression des volumes de
+son livre <em>The Art of Computer Programming</em> avait changé;
+Knuth trouva horrible le résultat du nouveau système. 
+<!--l. 9--></p>
+<p class="indent">Le but de T<sub>E</sub>X était d’avoir un système
+qui produirait toujours les mêmes documents indépendamment de la
+machine utilisée. Knuth a aussi décrit la famille de fontes
+<em>Computer Modern</em> et le langage <span class=
+"sansserif">METAFONT</span><a id="dx4-2003" name="dx4-2003"></a> de
+description de fontes. <!--l. 11--></p>
+<p class="indent">Le travail débuté en 1977 fut terminé (les
+langages ont été « figés ») en 1989. T<sub>E</sub>X et <span class=
+"sansserif">METAFONT</span> n’évoluent plus sauf pour correction de
+bogues mineures (les versions de T<sub>E</sub>X sont numérotées
+suivant les décimales de <span class="lmmi-12">π</span> –
+actuellement 3.1415926 – et <span class="sansserif">METAFONT</span>
+les décimales du nombre « e » – actuellement 2.718281.) 
+<!--l. 13--></p>
+<p class="indent">T<sub>E</sub>X fournit des outils de base
+(commandes/instructions/« primitives ») pour définir une
+typographie <span class="footnote-mark"><a href=
+"index5.html#fn1x2"><sup class=
+"textsuperscript">1</sup></a></span><a id="x4-2004f1" name=
+"x4-2004f1"></a> ; pratiquement tous les détails doivent être
+précisés, mais le langage permet de créer des macros pour des
+constructions répétées. C’est ainsi que des collections de macros
+sont chargées au moyen de fichiers « format »<a id="dx4-2005" name=
+"dx4-2005"></a> (entre autres, de grandes collections de macros
+précompilées.) <!--l. 15--></p>
+<p class="indent">Knuth a créé un format de base par défaut (plus
+ou moins 600 commandes), c’est <em>Plain<a id="dx4-2006" name=
+"dx4-2006"></a> T<sub>E</sub>X</em>. Celui-ci facilite la création
+des documents. <!--l. 17--></p>
+<p class="indent">Le format le plus utilisé est LaTeX<a id=
+"dx4-2007" name="dx4-2007"></a> (Leslie Lamport<a id="dx4-2008"
+name="dx4-2008"></a>, 1985), qui offre des commandes et des
+structures plus générales pour certains documents (article,
+book,...) permettant un travail plus facile et plus rapide, mais
+parfois avec moins de flexibilité à cause du cadre plus ou moins
+rigide. D’autres formats sont <span class=
+"cmsy-10x-x-120">𝒜ℳ𝒮</span>-T<sub>E</sub>X<a id="dx4-2009" name=
+"dx4-2009"></a>, <span class="cmsy-10x-x-120">𝒜ℳ𝒮</span>-LaTeX,
+ConTeXt<a id="dx4-2010" name="dx4-2010"></a>, chacun ayant des buts
+et des avantages (et inconvénients) particuliers. <!--l. 19--></p>
+<p class="indent">Pour étendre le format, on charge des « modules »
+qui sont des collections de macros spécifiques à certains aspects
+de la typographie. <!--l. 21--></p>
+<p class="indent">Depuis sa définition, fin des années 70, jusqu’à
+maintenant, dernière version en mars 2008, la famille
+T<sub>E</sub>X a dû évoluer pour tenir compte des développements de
+la typographie en dehors du monde T<sub>E</sub>X. <!--l. 23--></p>
+<p class="indent">Quelques uns des problèmes étaient/sont :</p>
+<ul class="itemize1">
+<li class="itemize">
+<!--l. 25-->
+<p class="noindent">prendre en compte d’autres langues avec des «
+alphabets » plus étendus que l’ASCII <span class=
+"footnote-mark"><a href="index6.html#fn2x2"><sup class=
+"textsuperscript">2</sup></a></span><a id="x4-2011f2" name=
+"x4-2011f2"></a> ou tout aussi bien avec des alphabets non
+latins,</p>
+</li>
+<li class="itemize">
+<!--l. 26-->
+<p class="noindent">avoir plus de polices, il n’y a pas grande
+variété dans les polices créées avec <span class=
+"sansserif">METAFONT</span> (peu de créateurs l’utilisent),</p>
+</li>
+<li class="itemize">
+<!--l. 27-->
+<p class="noindent">créer des documents dans d’autres formats que
+le DVI d’origine <span class="footnote-mark"><a href=
+"index7.html#fn3x2"><sup class=
+"textsuperscript">3</sup></a></span><a id="x4-2012f3" name=
+"x4-2012f3"></a>,</p>
+</li>
+<li class="itemize">
+<!--l. 28-->
+<p class="noindent">utiliser les riches possibilités des autres
+systèmes et formats typographiques comme PostScript et PDF,</p>
+</li>
+<li class="itemize">
+<!--l. 29-->
+<p class="noindent">avoir plus de facilités de calcul et de
+création de scripts,...</p>
+</li>
+</ul><!--l. 32-->
+<p class="indent">Pour répondre à ces demandes et d’autres, de
+nombreux « moteurs » et programmes ont été créés autour de
+T<sub>E</sub>X, par exemple : pdftex<a id="dx4-2013" name=
+"dx4-2013"></a>, pdflatex, dvips<a id="dx4-2014" name=
+"dx4-2014"></a>, ps2pdf, <span class=
+"sansserif">METAPOST</span><a id="dx4-2015" name="dx4-2015"></a>
+pour ouvrir le monde T<sub>E</sub>X aux possibilités de
+PostScript<a id="dx4-2016" name="dx4-2016"></a> et PDF<a id=
+"dx4-2017" name="dx4-2017"></a>, X<sub>E</sub>T<sub>E</sub>X<a id=
+"dx4-2018" name="dx4-2018"></a> et
+X<sub>E</sub>L<sup>A</sup>T<sub>E</sub>X pour pouvoir utiliser des
+fontes « normales » sur les différentes machines et pour être
+capable de gérer les systèmes d’écriture différents des systèmes
+gauche-droite originaires d’Europe (lettres latines et cyrilliques
+et associés) – droite-gauche, vertical, pictogrammes,...–,
+LuaTeX<a id="dx4-2019" name="dx4-2019"></a> et LuaLaTeX pour avoir
+un langage puissant de scripts. <!--l. 34--></p>
+<p class="indent">Mais pour utiliser T<sub>E</sub>X et les systèmes
+de sa famille, on doit créer un document « source »<a id="dx4-2020"
+name="dx4-2020"></a> car T<sub>E</sub>X n’est qu’un système pour
+transformer un document source en un document (parfaitement!) mis
+en page. Cette source est un simple fichier texte avec des
+instructions de mise en forme typographique et on a besoin d’un
+programme pour la créer : <b>l’éditeur<a id="dx4-2021" name=
+"dx4-2021"></a></b>. <!--l. 36--></p>
+<p class="indent">Il y a beaucoup d’éditeurs capables de créer une
+source T<sub>E</sub>X, certains sont des éditeurs généraux,
+d’autres sont spécifiquement créés pour T<sub>E</sub>X : c’est ici
+qu’intervient T<sub>E</sub>Xworks<a id="dx4-2022" name=
+"dx4-2022"></a>. <!--l. 39--></p>
+<p class="indent">T<sub>E</sub>Xworks est un projet de création
+d’un éditeur de texte utilisé pour les outils de la faille
+T<sub>E</sub>X, nous nous référerons à ceux-ci comme
+(L<sup>A</sup>)T<sub>E</sub>X. Plutôt que de créer une nouvelle
+incarnation d’éditeur sophistiqué, bardé de multiples barres
+d’outils pour subvenir à tous les besoins, T<sub>E</sub>Xworks
+cherche au contraire à proposer un éditeur dépouillé, n’offrant, à
+première vue que des outils limités à l’édition de texte ainsi
+qu’un bouton et un menu déroulant pour composer un texte en
+(L<sup>A</sup>)T<sub>E</sub>X. <!--l. 41--></p>
+<p class="indent">L’idée de création de l’éditeur fait suite à une
+longue réflexion de <em>Jonathan Kew<a id="dx4-2023" name=
+"dx4-2023"></a></em>, initiateur en charge du projet, sur les
+raisons qui éloignent les utilisateurs potentiels de
+(L<sup>A</sup>)T<sub>E</sub>X, ainsi que de l’observation du succès
+de l’éditeur <b>T<sub>E</sub>Xshop<a id="dx4-2024" name=
+"dx4-2024"></a></b> sous environnement Mac. <!--l. 43--></p>
+<p class="indent">Enfin, le but est aussi de fournir un éditeur
+identique sur de nombreuses plates-formes logicielles;
+T<sub>E</sub>Xworks est actuellement disponible sous Linux, sous
+macOS ainsi que sous Windows. Dans tous les cas l’interface se
+présente sous la même forme et offre les mêmes fonctionnalités. 
+<!--l. 46--></p>
+<p class="indent">Après l’introduction, la deuxième section
+explique comment installer le logiciel. Dans le troisième on décrit
+l’interface et on crée un premier document montrant les bases
+d’utilisation de T<sub>E</sub>Xworks. Dans les quatrièmes et
+cinquièmes sections on aborde les outils de travail avancés
+proposés par T<sub>E</sub>Xworks; cette section n’est à lire que
+lorsqu’on a bien en main les bases du travail sous
+T<sub>E</sub>Xworks. Les outils avancés permettent d’être beaucoup
+plus efficace. La sixième section donne une brève introduction à
+l’écriture de scripts (ce qui dépasse le but de ce manuel, on
+trouvera des informations ailleurs.) Enfin la septième section
+fournit des pointeurs vers des informations complémentaires sur
+T<sub>E</sub>X et des sources d’aide; ceci termine la partie
+principale du document. <!--l. 48--></p>
+<p class="indent">Enfin, les annexes fournissent des informations
+pour « customiser » l’éditeur T<sub>E</sub>Xworks, sur les
+expressions régulières pour le système rechercher/remplacer et
+comment T<sub>E</sub>Xworks peut être compilé à partir des sources.
+Une courte bibliographie et un index terminent ce manuel.</p>
+<h3 class="sectionHead"><span class="titlemark">1.1</span> <a id=
+"x4-30001.1" name="x4-30001.1"></a>Icônes et style</h3><!--l. 52-->
+<p class="noindent">Parce qu’une image vaut souvent mieux que mille
+mots, des icônes et des styles particuliers sont utilisés dans tout
+le manuel pour éviter des paragraphes incommodes ou marquer
+certains points spéciaux. Les touches du clavier sont généralement
+représentées par<span class="keystroke">A</span>, à l’exception de
+quelques touches spéciales. Ce sont :<span class="keystroke">Shift
+<span class="lmsy-10x-x-120">⇑</span></span>,<span class=
+"keystroke">Page <span class=
+"lmsy-10x-x-120">↑</span></span>,<span class="keystroke">Page
+<span class="lmsy-10x-x-120">↓</span></span>,<span class=
+"keystroke"><img src="index0x.png" alt="←'" class=
+"hookleftarrow" /></span> (retour charriot), <span class=
+"keystroke lmsy-10x-x-120">↑</span>, <span class=
+"keystroke lmsy-10x-x-120">↓</span>,<span class=
+"keystroke lmsy-10x-x-120">←</span>,<span class=
+"keystroke lmsy-10x-x-120">→</span>, (espace),<span class=
+"keystroke">⌫</span> (backspace) et <span class=
+"keystroke msam-10x-x-120">⇆</span> (tab). <!--l. 54--></p>
+<p class="indent">De plus, les cliques de souris sont représentés
+par <img src="images//LMB-.png" alt="PIC" width="9" height="13" />
+(clique gauche) et <img src="images//RMB-.png" alt="PIC" width="9"
+height="13" /> (clique droit; sur macOS avec une souris à un
+bouton, cela est généralement réalisé en maintenant la touche
+<span class="keystroke">Ctrl</span> tout en cliquant.) 
+<!--l. 56--></p>
+<p class="indent">En dehors des instructions de saisie, de nombreux
+passages de ce manuel sont marqués avec un style particulier. 
+<!--l. 59--></p>
+<p class="indent">Des informations valables seulement pour ou qui
+ne concernent qu’un système d’exploitation sont indiquées comme
+ceci :</p>
+<div class="OSspecific">
+<div class="OSspecificLogo OSWindows"></div>Ceci ne vous concerne
+que si vous utilisez Windows.<br class="newline" />
+Vous pouvez bien évidemment lire ces informations si vous utilisez
+un autre système d’exploitation.<br class="newline" />
+Ce ne sera que de peu d’usage pour vous.
+</div><!--l. 67-->
+<p class="indent">Les exemples de code sont donnés par une police
+de chasse fixe, style machine à écrire, avec des lignes au-dessus
+et en-dessous pour les séparer du reste du texte :</p>
+<pre class="fancyvrb" id="fancyvrb1" xml:space="preserve"><a id=
+"x4-3002r1" name="x4-3002r1"></a><span class=
+"ec-lmtt-10x-x-109">Hello</span><span class=
+"ec-lmtt-10x-x-109"> \TeX-World!</span></pre><!--l. 72-->
+<p class="indent">En relation directe avec ceci, le chapitre
+<a href="Priseenmain.html#x10-90003">3
+<!--tex4ht:ref: chap:first-steps --></a> contient plusieurs
+tutoriels, présentés comme les exemples de code ci-dessus, mais
+avec une icône de bloc-note à côté. <!--l. 4--></p>
+<div class="crosslinks">
+<p class="noindent">[<a href="Installation.html">next</a>]
+[<a href="contentsname.html">prev</a>] [<a href=
+"contentsname.html#tailcontentsname.html">prev-tail</a>] [<a href=
+"Introduction.html">front</a>] [<a href=
+"index.html#Introduction.html">up</a>]</p>
+</div><!--l. 4-->
+<p class="indent"><a id="tailIntroduction.html" name=
+"tailIntroduction.html"></a></p>
+</div>
+</body>
+</html>

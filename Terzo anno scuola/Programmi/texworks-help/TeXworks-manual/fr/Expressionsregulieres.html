@@ -1,0 +1,623 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta name="generator" content=
+"HTML Tidy for HTML5 for Linux version 5.6.0" />
+<title>B Expressions regulières</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=utf-8" />
+<meta name="generator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<meta name="originator" content=
+"TeX4ht (https://tug.org/tex4ht/)" />
+<!-- info,2,sec-filename,next,index=2,url-enc,charset=utf-8,html -->
+<meta name="src" content="index.tex" />
+<link rel="stylesheet" type="text/css" href="index.css" />
+<style type="text/css" xml:space="preserve">
+/*<![CDATA[*/
+ tr.c12 {vertical-align:baseline;}
+ td.c11 {white-space:normal; text-align:left;}
+ td.c10 {white-space:nowrap; text-align:left;}
+ div.c9 {white-space:nowrap; text-align:left;}
+/*]]>*/
+</style>
+</head>
+<body>
+<!--l. 5-->
+<p class="noindent"></p>
+<div id="container">
+<!--l. 5-->
+<div class="crosslinks">
+<p class="noindent">[<a href="CompilerTw.html">next</a>] [<a href=
+"AdaptationdeTw.html">prev</a>] [<a href=
+"AdaptationdeTw.html#tailAdaptationdeTw.html">prev-tail</a>]
+[<a href="#tailExpressionsregulieres.html">tail</a>] [<a href=
+"index.html#Expressionsregulieres.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"></p>
+<div class="chapternumber">
+B
+</div>
+<h1><a id="x47-52000B" name="x47-52000B"></a>Expressions
+régulières</h1><!--l. 8-->
+<p class="indent">Comme T<sub>E</sub>Xworks est construit sur Qt,
+les expressions régulières<a id="dx47-52001" name="dx47-52001"></a>
+– souvent appelées <em>regexp</em> – disponibles sont un
+sous-ensemble de celles trouvées dans Qt. Voir le site de Qt.
+<span class="footnote-mark"><a href=
+"index48.html#fn1x10"><sup class=
+"textsuperscript">1</sup></a></span><a id="x47-52002f1" name=
+"x47-52002f1"></a> pour plus d’information. Il est possible de
+trouver d’autres informations sur les expressions régulières sur le
+net <span class="footnote-mark"><a href=
+"index49.html#fn2x10"><sup class=
+"textsuperscript">2</sup></a></span><a id="x47-52003f2" name=
+"x47-52003f2"></a> ou dans des livres. Mais faites attention que
+tous les systèmes (langages de programmation, éditeurs,...)
+n’utilisent pas le même ensemble d’instructions; il n’y a
+malheureusement pas « d’ensemble standard ».</p>
+<h3 class="sectionHead"><span class="titlemark">B.1</span> <a id=
+"x47-53000B.1" name="x47-53000B.1"></a>Introduction</h3><a id=
+"dx47-53001" name="dx47-53001"></a> <!--l. 14-->
+<p class="noindent">Lorsqu’on recherche et remplace, on doit
+définir le texte à trouver. Ce peut être le texte lui-même (ex. «
+Abracadabra »), mais souvent il est nécessaire de définir les
+chaînes d’une façon plus générale et puissante pour éviter de
+répéter la même opération plusieurs fois avec seulement de faibles
+changements d’une fois à l’autre; si, par exemple, on veut
+remplacer des séquences de la lettre « a » par un « o », mais pas
+toutes les séquences, seulement celles de 3 à 7 <b>a</b>; ceci
+demanderait de répéter 5 fois l’opération de remplacement en
+l’ajustant légèrement. Un autre exemple : remplacer toutes les
+voyelles par <b>§</b>, encore 5 remplacements. C’est ici
+qu’interviennent les expressions régulières! <!--l. 16--></p>
+<p class="indent">Un simple caractère (a ou 9) représente lui-même.
+Mais on peut définir un ensemble de caractères : <b>[aeiou]</b>
+correspondra à toute voyelle, <b>[abcdef]</b> aux lettres <b>a b c
+d e f</b>; ce dernier ensemble peut être abrégé en <b>[a-f]</b> en
+utilisant « <b>-</b> » entre les deux extrémités de l’intervalle.
+On peut même combiner ceci : <b>[a-zA-Z0-9]</b> va correspondre à
+toutes les lettres et tous les chiffres. <!--l. 18--></p>
+<p class="indent">Pour définir un ensemble à exclure <span class=
+"footnote-mark"><a href="index50.html#fn3x10"><sup class=
+"textsuperscript">3</sup></a></span><a id="x47-53002f3" name=
+"x47-53002f3"></a>, on utilise « <b>^</b> » : le circonflexe rend
+l’ensemble négatif s’il apparaît comme le premier caractère,
+c’est-à-dire juste après le crochet d’ouverture. <b>[^abc]</b>
+correspond à tout sauf <b>a b c</b>.</p>
+<h3 class="sectionHead"><span class="titlemark">B.2</span> <a id=
+"x47-54000B.2" name="x47-54000B.2"></a>Codes pour certains
+ensembles spéciaux</h3><a id="dx47-54001" name="dx47-54001"></a> 
+<!--l. 23-->
+<p class="noindent">Lorsqu’on utilise les expressions régulières,
+on doit très souvent créer des chaînes qui représentent d’autres
+chaînes de façon générale. Si, par exemple, vous cherchez une
+chaîne qui représente une adresse de courriel, les lettres et
+symboles vont varier; cependant vous pourriez rechercher toute
+chaîne correspondant à une adresse de courriel
+(<tt>texte@texte.texte</tt> – en général). Il y a des abréviations
+pour représenter les lettres, les chiffres, symboles,... 
+<!--l. 25--></p>
+<p class="indent">Ces codes remplacent et facilitent la définition
+d’ensembles; par exemple, pour représenter en toutes lettres les
+chiffres <b>[0-9]</b>, on peut utiliser « <b>\d</b> ». Le tableau
+page suivante liste les codes de remplacement. <span class=
+"footnote-mark"><a href="index51.html#fn4x10"><sup class=
+"textsuperscript">4</sup></a></span><a id="x47-54002f4" name=
+"x47-54002f4"></a></p>
+<div class="table">
+<!--l. 29-->
+<p class="indent"></p>
+<hr class="float" />
+<div class="float">
+<!--l. 29-->
+<p class="noindent"><!--tex4ht:inline--></p>
+<div class="tabular">
+<table id="TBL-12" class="tabular">
+<colgroup id="TBL-12-1g">
+<col id="TBL-12-1" />
+<col id="TBL-12-2" />
+</colgroup>
+<tr class="c12" id="TBL-12-1-">
+<td id="TBL-12-1-1" class="td11 c10">
+<div class="multicolumn c9">
+Élément
+</div>
+</td>
+<td id="TBL-12-1-2" class="td11 c11">
+<!--l. 31-->
+<p class="noindent">Signification</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-2-">
+<td id="TBL-12-2-1" class="td11 c11">
+<!--l. 33-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">c</span></p>
+</td>
+<td id="TBL-12-2-2" class="td11 c11">
+<!--l. 33-->
+<p class="noindent">Tout caractère se représente lui-même, à moins
+qu’il n’aie une signification particulière dans les expressions
+régulières. Ainsi c correspond au caractère c.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-3-">
+<td id="TBL-12-3-1" class="td11 c11">
+<!--l. 34-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\c</span></p>
+</td>
+<td id="TBL-12-3-2" class="td11 c11">
+<!--l. 34-->
+<p class="noindent">Un caractère qui suit une contre-oblique
+correspond au caractère lui-même à moins de mention ci-dessous. Par
+exemple, si vous voulez chercher un circonflexe en début de chaîne
+vous devriez écrire « <span class=
+"obeylines-h verb ec-lmtt-12">\^</span> ».</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-4-">
+<td id="TBL-12-4-1" class="td11 c11">
+<!--l. 35-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\n</span></p>
+</td>
+<td id="TBL-12-4-2" class="td11 c11">
+<!--l. 35-->
+<p class="noindent">Ceci correspond au caractère ASCII <em>passage
+à la ligne</em> (LF, <em>à la ligne</em> de Unix, utilisé dans
+T<sub>E</sub>Xworks).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-5-">
+<td id="TBL-12-5-1" class="td11 c11">
+<!--l. 36-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\r</span></p>
+</td>
+<td id="TBL-12-5-2" class="td11 c11">
+<!--l. 36-->
+<p class="noindent">Ceci correspond à l’ASCII <em>retour à la
+ligne</em> (CR).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-6-">
+<td id="TBL-12-6-1" class="td11 c11">
+<!--l. 37-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\t</span></p>
+</td>
+<td id="TBL-12-6-2" class="td11 c11">
+<!--l. 37-->
+<p class="noindent">Ceci est la tabulation horizontale (ASCII :
+HT).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-7-">
+<td id="TBL-12-7-1" class="td11 c11">
+<!--l. 38-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\v</span></p>
+</td>
+<td id="TBL-12-7-2" class="td11 c11">
+<!--l. 38-->
+<p class="noindent">La tabulation verticale (ASCII : VT).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-8-">
+<td id="TBL-12-8-1" class="td11 c11">
+<!--l. 39-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\xhhhh</span></p>
+</td>
+<td id="TBL-12-8-2" class="td11 c11">
+<!--l. 39-->
+<p class="noindent">Correspond au caractère Unicode de
+représentation hexadécimale hhhh (entre 0x0000 et 0xFFFF).
+<span class="obeylines-h verb ec-lmtt-12">\0ooo</span> (i.e.,
+zero-ooo) correspond au caractère ASCII/Latin-1 correspondant au
+nombre octal ooo (entre 0 et 0377).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-9-">
+<td id="TBL-12-9-1" class="td11 c11">
+<!--l. 40-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">.</span> <span class=
+"ec-lmbx-12">(point)</span></p>
+</td>
+<td id="TBL-12-9-2" class="td11 c11">
+<!--l. 40-->
+<p class="noindent">Correspond à n’importe quel caractère (y
+compris <em>passage à la ligne</em>). Dès lors si vous voulez
+trouver le <em>point</em>, il faut lui ajouter un échappement «
+<span class="obeylines-h verb ec-lmtt-12">\.</span> ».</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-10-">
+<td id="TBL-12-10-1" class="td11 c11">
+<!--l. 41-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\d</span></p>
+</td>
+<td id="TBL-12-10-2" class="td11 c11">
+<!--l. 41-->
+<p class="noindent">Correspond à un chiffre.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-11-">
+<td id="TBL-12-11-1" class="td11 c11">
+<!--l. 42-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\D</span></p>
+</td>
+<td id="TBL-12-11-2" class="td11 c11">
+<!--l. 42-->
+<p class="noindent">Correspond à un non-chiffre.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-12-">
+<td id="TBL-12-12-1" class="td11 c11">
+<!--l. 43-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\s</span></p>
+</td>
+<td id="TBL-12-12-2" class="td11 c11">
+<!--l. 43-->
+<p class="noindent">Correspond à une espace (espace blanc).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-13-">
+<td id="TBL-12-13-1" class="td11 c11">
+<!--l. 44-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\S</span></p>
+</td>
+<td id="TBL-12-13-2" class="td11 c11">
+<!--l. 44-->
+<p class="noindent">Correspond à une non-espace.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-14-">
+<td id="TBL-12-14-1" class="td11 c11">
+<!--l. 45-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\w</span></p>
+</td>
+<td id="TBL-12-14-2" class="td11 c11">
+<!--l. 45-->
+<p class="noindent">Correspond à un caractère d’un mot ou «
+<span class="obeylines-h verb ec-lmtt-12">_</span> »).</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-15-">
+<td id="TBL-12-15-1" class="td11 c11">
+<!--l. 46-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\W</span></p>
+</td>
+<td id="TBL-12-15-2" class="td11 c11">
+<!--l. 46-->
+<p class="noindent">Correspond à un caractère non mot.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-16-">
+<td id="TBL-12-16-1" class="td11 c11">
+<!--l. 47-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\n</span><span class="ec-lmbx-12">, .
+. .</span></p>
+</td>
+<td id="TBL-12-16-2" class="td11 c11">
+<!--l. 47-->
+<p class="noindent">La nıème référence antérieure, ex. <span class=
+"obeylines-h verb ec-lmtt-12">\1</span>, <span class=
+"obeylines-h verb ec-lmtt-12">\2</span>, etc.; utilisé dans les
+chaînes de remplacement avec des motifs de capture – voir plus
+bas</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-12-17-">
+<td id="TBL-12-17-1" class="td11 c11"></td>
+</tr>
+</table>
+</div>
+</div>
+<hr class="endfloat" />
+</div><!--l. 53-->
+<p class="indent">Il est préférable d’utiliser les abréviations que
+de décrire les ensembles, car les abréviations restent valables
+dans différents alphabets. <!--l. 55--></p>
+<p class="indent">Faites attention à ce que le caractère <em>fin de
+ligne</em> est souvent pris comme une espace. Sous
+T<sub>E</sub>Xworks on fait spécifiquement référence à la fin de
+ligne par « <span class="obeylines-h verb ec-lmtt-12">\n</span>
+».</p>
+<h3 class="sectionHead"><span class="titlemark">B.3</span> <a id=
+"x47-55000B.3" name="x47-55000B.3"></a>Répétition</h3><a id=
+"dx47-55001" name="dx47-55001"></a> <!--l. 60-->
+<p class="noindent">On ne travaille pas uniquement avec de simples
+lettres, chiffres, symboles; la plupart du temps ils sont répétés
+(ex. : un nombre est une répétition de chiffres et de symboles –
+dans le bon ordre.) <!--l. 63--></p>
+<p class="indent">Pour indiquer le nombre de répétitions, on
+utilise ce qu’on appelle des « quantificateurs » : <b>a{1,1}</b>
+signifie au moins un et seulement un <b>a</b>, <b>a{3,7}</b> entre
+3 et 7; <b>{1,1}</b> est redondant, ainsi <b>a{1,1}</b> = <b>a</b>.
+<!--l. 65--></p>
+<p class="indent">Ceci peut être combiné à la notation d’ensemble :
+<b>[0-9]{1,2}</b> correspondra à au moins un chiffre et au plus
+deux, soit les nombres entiers entre 0 et 99. Mais cela
+correspondra à tout groupe de 1 ou 2 chiffres <em>dans</em> une
+chaîne (il peut y avoir beaucoup de texte avant et après l’entier);
+si on désire que cela corresponde à l’entièreté de la chaîne avec
+qu’un ou deux chiffres (sans caractères qui les précèdent ou
+suivent) nous devrons écrire l’expression régulière comme
+<b>^[0-9]{1,2}$</b>; ici <b>^</b> précise que la chaîne désirée
+doit être le premier caractère de la chaîne, le <b>$</b> le
+dernier, de sorte qu’il n’y a qu’un ou deux chiffres dans la chaîne
+(<b>^</b> et <b>$</b> sont des « assertions » – voir plus loin pour
+des compléments.) <!--l. 67--></p>
+<p class="indent">Voici la table des quantificateurs. <span class=
+"footnote-mark"><a href="index52.html#fn5x10"><sup class=
+"textsuperscript">5</sup></a></span><a id="x47-55002f5" name=
+"x47-55002f5"></a> E représente une expression (lettre,
+abréviation, ensemble.) <!--l. 70--></p>
+<p class="noindent"><!--tex4ht:inline--></p>
+<div class="tabular">
+<table id="TBL-13" class="tabular">
+<colgroup id="TBL-13-1g">
+<col id="TBL-13-1" />
+<col id="TBL-13-2" />
+</colgroup>
+<tr class="c12" id="TBL-13-1-">
+<td id="TBL-13-1-1" class="td11 c11">
+<!--l. 72-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E{n,m}</span></p>
+</td>
+<td id="TBL-13-1-2" class="td11 c11">
+<!--l. 72-->
+<p class="noindent">Correspond à au moins <b>n</b> occurrences et
+au plus <b>m</b> occurrences de l’expression.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-2-">
+<td id="TBL-13-2-1" class="td11 c11">
+<!--l. 73-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E{n}</span></p>
+</td>
+<td id="TBL-13-2-2" class="td11 c11">
+<!--l. 73-->
+<p class="noindent">Exactement <b>n</b> occurrences de
+l’expression. Équivalent à répéter l’expression n fois. C’est la
+même chose que <b>E{n,n}</b> ou de répéter l’expression n fois.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-3-">
+<td id="TBL-13-3-1" class="td11 c11">
+<!--l. 74-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E{n,}</span></p>
+</td>
+<td id="TBL-13-3-2" class="td11 c11">
+<!--l. 74-->
+<p class="noindent">Correspond à au moins <b>n</b> occurrences de
+l’expression.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-4-">
+<td id="TBL-13-4-1" class="td11 c11">
+<!--l. 75-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E{,m}</span></p>
+</td>
+<td id="TBL-13-4-2" class="td11 c11">
+<!--l. 75-->
+<p class="noindent">Correspond à au plus <b>m</b> occurrences de
+l’expression.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-5-">
+<td id="TBL-13-5-1" class="td11 c11">
+<!--l. 76-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E?</span></p>
+</td>
+<td id="TBL-13-5-2" class="td11 c11">
+<!--l. 76-->
+<p class="noindent">Zéro ou une occurrence de E. Ce quantificateur
+signifie <em>l’expression précédente est optionnelle</em> (elle
+peut être présente, mais ne doit pas nécessairement l’être). C’est
+la même chose que <b>E{0,1}</b>.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-6-">
+<td id="TBL-13-6-1" class="td11 c11">
+<!--l. 78-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E+</span></p>
+</td>
+<td id="TBL-13-6-2" class="td11 c11">
+<!--l. 78-->
+<p class="noindent">Une ou plusieurs occurrences de E. C’est
+équivalent à <b>E{1,}</b>.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-7-">
+<td id="TBL-13-7-1" class="td11 c11">
+<!--l. 79-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">E*</span></p>
+</td>
+<td id="TBL-13-7-2" class="td11 c11">
+<!--l. 79-->
+<p class="noindent">Zéro ou plus d’occurrences de E. Équivalent à
+<b>E{0,}</b>. Attention le quantificateur <b>*</b> est souvent
+utilisé à tort pour le quantificateur <b>+</b>. Comme il correspond
+à zéro ou plus d’occurrences, il y aura correspondance même s’il
+n’y a aucune occurrence dans la chaîne.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-13-8-">
+<td id="TBL-13-8-1" class="td11 c11"></td>
+</tr>
+</table>
+</div>
+<h3 class="sectionHead"><span class="titlemark">B.4</span> <a id=
+"x47-56000B.4" name="x47-56000B.4"></a>Alternatives et
+assertions</h3><a id="dx47-56001" name="dx47-56001"></a> 
+<!--l. 87-->
+<p class="noindent">Lorsqu’on cherche, il est souvent nécessaire de
+chercher des alternatives, par ex. : pomme, poire, cerise, mais pas
+pommeau. Pour séparer les alternatives on utilise le symbole
+<b>|</b> : pomme|poire|cerise. Mais ceci n’empêchera pas de trouver
+pommeau, nous devons donc spécifier que pomme doit être un mot en
+soi, un mot entier (dénomination fréquente des boîtes de dialogues
+« Chercher ».) <!--l. 89--></p>
+<p class="indent">Pour préciser qu’une chaîne doit être considérée
+comme un mot en soi, nous l’écrirons entourée d’un séparateur/d’un
+délimiteur de mot (début/fin de phrase, espace) : <b>\bpomme\b</b>.
+Pour notre exemple d’alternatives nous les <b>grouperons</b> par
+des parenthèses et ajouteront les délimiteurs
+<b>\b(pomme|poire|cerise)\b</b>. En plus de <b>\b</b> nous avons
+déjà vu <b>^</b> et <b>$</b> qui marquent les limites de toute ne
+chaîne. <!--l. 91--></p>
+<p class="indent">Voici le tableau des « assertions » qui ne
+correspondent à aucun caractère et ne feront jamais partie du
+résultat d’une recherche. <span class="footnote-mark"><a href=
+"index53.html#fn6x10"><sup class=
+"textsuperscript">6</sup></a></span><a id="x47-56002f6" name=
+"x47-56002f6"></a> <!--l. 94--></p>
+<p class="noindent"><!--tex4ht:inline--></p>
+<div class="tabular">
+<table id="TBL-14" class="tabular">
+<colgroup id="TBL-14-1g">
+<col id="TBL-14-1" />
+<col id="TBL-14-2" />
+</colgroup>
+<tr class="c12" id="TBL-14-1-">
+<td id="TBL-14-1-1" class="td11 c11">
+<!--l. 96-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">^</span></p>
+</td>
+<td id="TBL-14-1-2" class="td11 c11">
+<!--l. 96-->
+<p class="noindent">Le circonflexe représente le début de la
+chaîne. Si vous voulez trouver le caractère <b>^</b> vous devez
+utilisez un échappement en écrivant <span class=
+"obeylines-h verb ec-lmtt-12">\^</span></p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-2-">
+<td id="TBL-14-2-1" class="td11 c11">
+<!--l. 97-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">$</span></p>
+</td>
+<td id="TBL-14-2-2" class="td11 c11">
+<!--l. 97-->
+<p class="noindent">Le dollar représente la fin de chaîne. Pour
+trouver le symbole <b>$</b> vous devez utilisez un échappement en
+écrivant <span class="obeylines-h verb ec-lmtt-12">\$</span></p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-3-">
+<td id="TBL-14-3-1" class="td11 c11">
+<!--l. 98-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\b</span></p>
+</td>
+<td id="TBL-14-3-2" class="td11 c11">
+<!--l. 98-->
+<p class="noindent">Un séparateur mot.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-4-">
+<td id="TBL-14-4-1" class="td11 c11">
+<!--l. 99-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">\B</span></p>
+</td>
+<td id="TBL-14-4-2" class="td11 c11">
+<!--l. 99-->
+<p class="noindent">Un non-séparateur mot. Cette assertion est
+valable chaque fois que <span class=
+"obeylines-h verb ec-lmtt-12">\b</span> est faux.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-5-">
+<td id="TBL-14-5-1" class="td11 c11">
+<!--l. 100-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">(?=E)</span></p>
+</td>
+<td id="TBL-14-5-2" class="td11 c11">
+<!--l. 100-->
+<p class="noindent">Anticipation positive. L’assertion est vraie si
+l’expression <b>E</b> est correcte à ce point de l’expression
+régulière.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-6-">
+<td id="TBL-14-6-1" class="td11 c11">
+<!--l. 101-->
+<p class="noindent"><span class=
+"obeylines-h verb ec-lmtt-12">(?!E)</span></p>
+</td>
+<td id="TBL-14-6-2" class="td11 c11">
+<!--l. 101-->
+<p class="noindent">Anticipation négative. L’assertion est vraie si
+l’expression <b>E</b> n’est pas correcte à ce point dans
+l’expression régulière.</p>
+</td>
+</tr>
+<tr class="c12" id="TBL-14-7-">
+<td id="TBL-14-7-1" class="td11 c11"></td>
+</tr>
+</table>
+</div><!--l. 106-->
+<p class="indent">Remarquez les significations différentes de
+<b>^</b> comme assertion et comme négation dans un ensemble!</p>
+<h3 class="sectionHead"><span class="titlemark">B.5</span> <a id=
+"x47-57000B.5" name="x47-57000B.5"></a>Pour conclure</h3>
+<!--l. 110-->
+<p class="noindent">Utiliser les expressions régulières est très
+puissant, mais donc aussi très dangereux; vous pourriez changer
+votre texte à des endroits non visibles et parfois le retour à la
+situation précédente n’est pas entièrement possible. Si vous
+remarquez immédiatement l’erreur, vous pourriez utiliser
+<span class="keystroke">Ctrl</span><span class=
+"keystroke">Z</span>. <!--l. 112--></p>
+<p class="indent">Montrer comment tirer profit de toute la
+puissance des expressions régulières exigerait beaucoup plus que
+cette introduction extrêmement sommaire; en fait cela demanderait
+un manuel complet en soi. <!--l. 114--></p>
+<p class="indent">Notez aussi qu’il y a certaines limites dans les
+implantations des expressions régulières dans T<sub>E</sub>Xworks;
+en particulier les assertions (^ et $) ne prennent en compte que
+tout le fichier et il n’y a pas d’assertion à anticipation
+positive. <!--l. 116--></p>
+<p class="indent">Enfin, n’oubliez pas de « cocher » l’option
+<span class="ec-lmro-12">Expression r</span><span class=
+"ec-lmro-12">éguli</span><span class="ec-lmro-12">ère</span>
+lorsque vous en utilisez dans les boîtes de dialogue
+<em>Rechercher</em> et <em>Remplacer</em> et de la décocher lorsque
+vous n’utilisez pas d’expression régulière. <!--l. 5--></p>
+<div class="crosslinks">
+<p class="noindent">[<a href="CompilerTw.html">next</a>] [<a href=
+"AdaptationdeTw.html">prev</a>] [<a href=
+"AdaptationdeTw.html#tailAdaptationdeTw.html">prev-tail</a>]
+[<a href="Expressionsregulieres.html">front</a>] [<a href=
+"index.html#Expressionsregulieres.html">up</a>]</p>
+</div><!--l. 5-->
+<p class="indent"><a id="tailExpressionsregulieres.html" name=
+"tailExpressionsregulieres.html"></a></p>
+</div>
+</body>
+</html>
