@@ -4,34 +4,146 @@
 
 \begin{document}
 
-\titolo{Probabilità e Statistica}
+\titolo{Statistica}
 
-\section{Daje}
+\tableofcontents
 
-\subsection{DDaje}
+\newpage
 
-\begin{defn}{Nome definizione}{}
-	Definizione
+\section{Spazio di Probabilità}
+
+Per poter studiare Probabilità e statistica possiamo immaginare di fare un parallelismo con l'analisi:
+
+\begin{center}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Probabilità e Statistica} & \textbf{Analisi Matematica}\\
+		\hline
+		{Spazio di Probabilità} & {Numeri reali}\\
+		\hline
+		{Variabile Aleatoria} & {Variabile reale}\\
+		\hline
+		{Convergenza per successioni di variabili aleatorie} & {Successioni}\\
+		\hline
+		{($\mathbb M$) Processo Stocastico} & {Funzioni}\\
+		\hline
+		{($\mathbb M$) Calcolo Stocastico} & {Calcolo differenziale e integrale}\\
+		\hline
+		{($\mathbb M$) Equazioni Differenziali Stocastiche } & {Equazioni Differenziali}\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textit{Il $(\mathbb M)$ sta indicare che non sono argomenti trattati in questo corso, ma saranno approfonditi alla magistrale}
+
+\subsection{Cenni di Teoria della Misura}
+
+\begin{defn}{Spazio Misurabile}{}
+	Si definisce \textbf{Spazio Misurabile} una coppia $(\Omega, \mathcal F)$, dove $\Omega$ è un insieme non vuoto e $\mathcal F$ è una $\sigma-$algebra, cioè una famiglia non vuota di sottoinsiemi di $\Omega$ che soddisfa due proprietà:
+	\begin{enumerate}
+		\item $A \in \mathcal F \Rightarrow A^c \in \mathcal F$, cioè $\mathcal F$ è chiuso rispetto al complementare
+		\item Se $(A_n)_{n \in \mathbb N}$ è una successione in $\mathcal F$, allora
+			\[ \bigcup_{n \in \mathbb N}A_n \in \mathcal F \]
+			cioè $\mathcal F$ è chiusa rispetto all'unione numerabile
+	\end{enumerate}
 \end{defn}
 
-\begin{thm}{Nome teorema}{}
-	Teorema
-\end{thm}
+Il prefisso $"\sigma-"$ davanti a queste parole sta ad indicare che si tratta di una proprietà \underline{numerabile}. Quindi le due proprietà sopra elencate possono essere scritte come "$\mathcal F$ è $\sigma-\cup-$chiuso"
+
+\begin{oss}
+	Sottolineiamo che $\Omega$ può essere un insieme qualunque (un esempio, forse il più facile da tenere a mente è quello della Teoria della Misura di Lebesgue, un esempio può essere $(\Omega, \mathcal F) = (\mathbb R^n, \mathcal M(\mathbb R^n))$) Quindi possiamo prendere insiemi qualunque, che siano numerici, come $\mathbb N, \mathbb C$, vettoriali $\mathbb R^n$, oppure qualcosa di totalmente diverso, come l'insieme delle funzioni continue $C(\mathbb R)$, l'insieme dei polinomi $\mathbb R[x]$ addirittura l'insieme delle sedie in una stanza.
+\end{oss}
+
+\begin{oss}[$\sigma-$algebre banali]
+	Esistono due tipi di $\sigma-$algebre particolari, dette \textbf{Banali} in quanto sono definite come:
+	\[ \mathcal F = \{\varnothing, \Omega\} \qquad \text e \qquad \mathcal F = \mathcal P(\Omega) \]
+	In particolare abbiamo che valgono:
+	\[ \{\varnothing, \Omega\} \subseteq \mathcal F \subseteq \mathcal P(\Omega) \qquad \forall \mathcal F \text{ }\sigma- \text{algebra}\]
+\end{oss}
+
+\begin{prop}{}{}
+	Se $\mathcal F$ è una $\sigma-$algebra, allora è $\cup-$chiusa (cioè l'unione finita è chiusa)
+\end{prop}
 
 \begin{proof}
-	Dimostrazione
+	Siano $A_1,...,A_n \in \mathcal F$ e siano:
+	\[
+		\bigcup_{k=1}^n A_n = \bigcup_{k=1}^{+\infty} \overline A_k \qquad \text{dove } \overline A_k =
+		\begin{cases}
+			A_k & k\leq n\\
+			A_n & k>n
+		\end{cases}
+	\]
+	Tuttavia, sappiamo che $\mathcal F$ è una $\sigma-$algebra, quindi il secondo elemento sta in $\mathcal F$. Tuttavia, essendo il secondo uguale al primo abbiamo che anche il primo sta in $\mathcal F$. Per l'arbitrarietà degli $A_k$, segue che $\mathcal F$ è $\cup-$chiuso
 \end{proof}
+\begin{oss}
+	Per, definizione di $\sigma-$algebra, $\mathcal F$ è non vuoto. Sia $A\in\mathcal F$ vale che:
+	\[
+		A^c  \in \mathcal F \quad\Rightarrow\quad A\cup A^c=\Omega\in \mathcal F \text{ e }\varnothing=\Omega^c\in \mathcal F
+	\]
+questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\sigma$-algebra. 
+\end{oss}
+\begin{oss}
+	Prendiamo $(A_n)_{n \in \mathbb N}$ successione in $\mathcal F$ allora dalla definizione vale che:
+	\[
+		\bigcap\limits_{n\in\mathbb{N}} A_n=\left(\bigcup\limits_{n\in\mathbb{N}}A^c\right)^c\in\mathcal F
+	\]
+\end{oss}
+\begin{defn}{Misura su $(\Omega,\mathcal F)$}{}
+	Definiamo una \textbf{Misura} su uno spazio misurabile come una funzione $\mu:\mathcal F\rightarrow[0,+\infty]$ tale che:
+	\begin{enumerate}
+		\item $\mu(\varnothing)=0$
+		\item $\mu$ è $\sigma$-additiva ovvero:
+		\[
+			\text{Se }(A_n) \text{ è una successione in }\mathcal F \text{ i cui elementi sono disgiunti } \implies\mu(\bigcup\limits_{n\geq1}A_n)=\sum\limits_{n\geq1}\mu(A_n)
+		\]
+	\end{enumerate}
+\end{defn}
+\begin{oss}[la misura è additiva su somme finite]
+	 Usiamo la Notazione $\biguplus$ per parlare di unione disgiunta. Siano $A_1,\dots,A_n$ disgiunti e siano $A_k=\varnothing$ $\forall k\geq n+1$, dalla definizione di misura segue banalmente che $\mu(A_k)=0$ $\forall k\geq n+1$ allora dal fatto poichè $\mu$ è $\sigma$-additiva vale che:
+	\[
+		\mu\left(\biguplus\limits_{k=1}^n A_k\right)=\mu\left(\biguplus\limits_{k=1}^{+\infty} A_k\right)=\sum\limits_{k=1}^{+\infty}\mu(A_k)=\sum\limits_{k=1}^n\mu(A_k)
+	\]
+\end{oss}
+\begin{defn}{Spazio di Probabilità}{}
+	Definiamo uno \textbf{Spazio di Probabilità} come una tripla $(\Omega,\mathcal F, P)$, ovvero uno spazio misurabile $(\Omega,\mathcal F)$ con misura $P$ tale che:
+	\[
+		P(\Omega)= 1
+	\] 
+\end{defn}
+\begin{defn}{Spazio Campionario}{}
+	Manu è bello e qui ci scrive quello che vuole :3
+\end{defn}
+\begin{defn}{Spazio Discreto}{}
+	Uno spazio si dice $\textbf{Discreto}$ se $\Omega$ è finito o numerabile in questo caso prendiamo:
+	\[
+		\mathcal F =\mathcal P(\Omega)\quad \text{e scriviamo}\quad (\Omega,\mathcal F, P)=(\Omega, P)
+	\]
+\end{defn}
+\begin{es}[Lancio di un dado]
+	In questo caso abbiamo: $\Omega=\{1,\dots,6\}$, $\mathcal F=$ famiglia degli eventi dove $A\in\mathcal F$ è un evento ovvero ''un affermazione relativa all'esito dell'esperimento'', $P=$ Misura di probabilità è la funzione $P:\mathcal F\rightarrow[0,1]$ che manda A nella probabilià che l'esito sia positivo.   
 
-\begin{cor}{Nome Corollario}{}
-	Corollario
-\end{cor}
-
-\begin{ese}
-	Esercizio
-\end{ese}
-
-\begin{sol}
-\end{sol}
-
-
+Per esempio sia $A= \{1,3,5\}\subseteq \Omega$ ovvero le possibili facce che lanciando il Dado diano un esito positivo, allora $P(A)=\frac{1}{2}$. Notiamo inoltre che lanciando il dado uscirà sempre almeno una faccia questo equivale a dire che $P(\varnothing)=0$ e $P(\Omega)=1$.
+\end{es}
+\begin{oss}
+	Possiamo fare un parallelismo tra gli insiemi misurabili e la probabilità aiutandoci con la ''terminologia'':
+	\begin{center}
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{Analisi e Insiemistica} & \textbf{Probabilità e statistica}\\
+			\hline
+			{$A\cup B$} & {Evento $A$ ''oppure'' Evento $B$}\\
+			\hline
+			{$A\cap B$} & {Evento $A$ ''e'' Evento $B$}\\
+			\hline
+			{$A^c$} & {''Non Evento A''}\\
+			\hline
+			{$\mu(\mathbb{Q})=0$} & {$P(A)=0\Rightarrow A$ è ''non misurabile''}\\
+			\hline
+			{$\mu(\mathbb{R}\setminus\mathbb{Q})=+\infty$} & {$P(A)=1\Rightarrow A$ è ''quasi certo''}\\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{oss}
 \end{document}
+
