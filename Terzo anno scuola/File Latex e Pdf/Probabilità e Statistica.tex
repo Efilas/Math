@@ -79,9 +79,9 @@ Il prefisso $"\sigma-"$ davanti a queste parole sta ad indicare che si tratta di
 \begin{oss}
 	Per, definizione di $\sigma-$algebra, $\mathcal F$ è non vuoto. Sia $A\in\mathcal F$ vale che:
 	\[
-		A^c  \in \mathcal F \quad\Rightarrow\quad A\cup A^c=\Omega\in \mathcal F \text{ e }\varnothing=\Omega^c\in \mathcal F
+		A^c  \in \mathcal F \quad\Rightarrow\quad A\cup A^c=\Omega\in \mathcal F \quad \text{e} \quad \varnothing=\Omega^c\in \mathcal F
 	\]
-questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\sigma$-algebra. 
+questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\sigma$-algebra.
 \end{oss}
 \begin{oss}
 	Prendiamo $(A_n)_{n \in \mathbb N}$ successione in $\mathcal F$ allora dalla definizione vale che:
@@ -95,25 +95,44 @@ questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\s
 		\item $\mu(\varnothing)=0$
 		\item $\mu$ è $\sigma$-additiva ovvero:
 		\[
-			\text{Se }(A_n) \text{ è una successione in }\mathcal F \text{ i cui elementi sono disgiunti } \implies\mu(\bigcup\limits_{n\geq1}A_n)=\sum\limits_{n\geq1}\mu(A_n)
+			\text{Se }(A_n) \text{ è una successione in }\mathcal F \text{ i cui elementi sono disgiunti } \implies\mu\left(\bigcup\limits_{n\geq1}A_n\right)=\sum\limits_{n\geq1}\mu\left(A_n\right)
 		\]
 	\end{enumerate}
 \end{defn}
-\begin{oss}[la misura è additiva su somme finite]
-	 Usiamo la Notazione $\biguplus$ per parlare di unione disgiunta. Siano $A_1,\dots,A_n$ disgiunti e siano $A_k=\varnothing$ $\forall k\geq n+1$, dalla definizione di misura segue banalmente che $\mu(A_k)=0$ $\forall k\geq n+1$ allora dal fatto poichè $\mu$ è $\sigma$-additiva vale che:
+\begin{oss}[La misura è additiva su somme finite]
+	Usiamo la Notazione $\biguplus$ per parlare di unione disgiunta. Siano $A_1,\dots,A_n$ disgiunti e siano $A_k=\varnothing$ $\forall k\geq n+1$, dalla definizione di misura segue banalmente che $\mu(A_k)=0$ $\forall k\geq n+1$ allora dal fatto poichè $\mu$ è $\sigma$-additiva vale che:
 	\[
 		\mu\left(\biguplus\limits_{k=1}^n A_k\right)=\mu\left(\biguplus\limits_{k=1}^{+\infty} A_k\right)=\sum\limits_{k=1}^{+\infty}\mu(A_k)=\sum\limits_{k=1}^n\mu(A_k)
 	\]
 \end{oss}
 \begin{defn}{Spazio di Probabilità}{}
-	Definiamo uno \textbf{Spazio di Probabilità} come una tripla $(\Omega,\mathcal F, P)$, ovvero uno spazio misurabile $(\Omega,\mathcal F)$ con misura $P$ tale che:
+	Definiamo uno \textbf{Spazio di Probabilità} come una tripla $(\Omega,\mathcal F, P)$, cioè uno spazio misurabile $(\Omega,\mathcal F)$ con misura $P$ tale che:
 	\[
 		P(\Omega)= 1
-	\] 
+	\]
 \end{defn}
-\begin{defn}{Spazio Campionario}{}
-	Manu è bello e qui ci scrive quello che vuole :3
-\end{defn}
+
+Diamo adesso dei nomi agli strumenti che stiamo utilizzando, in particolare utilizzando un esempio, quello del dado a $6$ facce:
+
+\begin{center}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Elemento} & \textbf{Nome} & \textbf{Esempio}\\
+		\hline
+		{$\Omega$} & \textbf{Spazio Campionario} & {$\Omega = \{1,2,3,4,5,6\}$}\\
+		\hline
+		{$\omega \in \Omega$} & \textbf{Esito} & {$\omega = 1$}\\
+		\hline
+		{$\mathcal F$} & \textbf{Famiglia degli Eventi} & {$\mathcal F = \mathcal P(\Omega)$}\\
+		\hline
+		{$A \in \mathcal F$} & \textbf{Evento} & {$A = \{1,3,5\}$}\\
+		\hline
+		{$P$} & \textbf{Misura di Probabilità} & {$P(A)$}\\
+		\hline
+	\end{tabular}
+\end{center}
+
+
 \begin{defn}{Spazio Discreto}{}
 	Uno spazio si dice $\textbf{Discreto}$ se $\Omega$ è finito o numerabile in questo caso prendiamo:
 	\[
@@ -121,7 +140,7 @@ questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\s
 	\]
 \end{defn}
 \begin{es}[Lancio di un dado]
-	In questo caso abbiamo: $\Omega=\{1,\dots,6\}$, $\mathcal F=$ famiglia degli eventi dove $A\in\mathcal F$ è un evento ovvero ''un affermazione relativa all'esito dell'esperimento'', $P=$ Misura di probabilità è la funzione $P:\mathcal F\rightarrow[0,1]$ che manda A nella probabilià che l'esito sia positivo.   
+	In questo caso abbiamo: $\Omega=\{1,\dots,6\}$, $\mathcal F=$ famiglia degli eventi dove $A\in\mathcal F$ è un evento ovvero ''un affermazione relativa all'esito dell'esperimento'', $P=$ Misura di probabilità è la funzione $P:\mathcal F\rightarrow[0,1]$ che manda A nella probabilià che l'esito sia positivo.
 
 Per esempio sia $A= \{1,3,5\}\subseteq \Omega$ ovvero le possibili facce che lanciando il Dado diano un esito positivo, allora $P(A)=\frac{1}{2}$. Notiamo inoltre che lanciando il dado uscirà sempre almeno una faccia questo equivale a dire che $P(\varnothing)=0$ e $P(\Omega)=1$.
 \end{es}
@@ -145,5 +164,143 @@ Per esempio sia $A= \{1,3,5\}\subseteq \Omega$ ovvero le possibili facce che lan
 		\end{tabular}
 	\end{center}
 \end{oss}
+
+\begin{es}[Corridore e le due Gare]\label{Corridore}
+	Abbiamo un corridore che partecipa a 2 gare dove, ottimisticamente parlando, vorrebbe vincere le due gare:
+	\begin{itemize}
+		\item $A$ = Vince la prima gara
+		\item $B$ = Vince la seconda gara
+	\end{itemize}
+	Supponiamo di avere come dati:
+	\begin{itemize}
+		\item $P(A)$ = $30\%$ la probabilità di vincere di la prima gara
+		\item $P(B)$ = $40\%$ la probabilità di vincere la seconda gara
+		\item $P(A\cup B)$ = $50\%$ la probabilità di vincere la prima o la seconda gara
+	\end{itemize}
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (-1,1) arc(-270:90:2cm and 1 cm) node[above]{$A$};
+			\draw (1,1) arc(-270:90:2cm and 1cm) node[above]{$B$};
+			\filldraw[green, very nearly transparent] (-1,1) arc(-270:90:2cm and 1 cm);
+			\filldraw[blue, very nearly transparent] (1,1) arc(-270:90:2cm and 1cm);
+			\draw (0,0) node{$A\cap B$};
+		\end{tikzpicture}
+	\end{center}
+
+	Allora dall'additività della misura possiamo ricavare:
+		\[
+			P(A\cup B)=P(A\uplus (B\setminus A))= P(A)+P(B\setminus A)=P(A)+P(B\setminus A)+P(A\cap B)- P(A\cap B)
+		\]
+	e poiché $P(B\setminus A)+P(A\cap B)=P(B)$ otteniamo:
+		\[
+			P(A\cup B)=P(A)+P(B)- P(A\cap B)\quad \Rightarrow\quad P(A\cap B)=P(A)+P(B)-P(A\cup B)
+		\]
+	Andando a sostituire otteniamo:
+		\[
+			P(A\cup B)=P(A)+P(B)-P(A\cup B)=0.3+0.4-0.5=0.2=20\%
+		\]
+\end{es}
+
+\begin{oss}
+	L'esempio precedente funziona perché siamo in uno spazio discreto. Prendiamo $(\Omega,P)$ discreto ovvero $\#\Omega\leq\aleph_0$ quindi considerando $\omega$ esito e $\{\omega\}$ evento elementare sappiamo che vale:
+	\[
+		P(A)=P\left(\biguplus\limits_{\omega\in A} \{\omega\}\right)=\sum\limits_{\omega\in A}P(\{\omega\})
+	\]
+	Quindi data $P$ misura di probabilità posso definire la seguente funzione:
+	\begin{align*}
+		p:\quad&\Omega\rightarrow[0,1]\\
+		&\omega\mapsto P(\{\omega\})=p(\omega)
+	\end{align*}
+	Dove sappiamo che valgono:
+	\begin{itemize}
+		\item $1=P(\Omega)=\sum\limits_{w\in\Omega} p(\omega)$
+		\item $p(\omega)\geq 0$
+	\end{itemize}
+	Concludendo possiamo dire che se $(\Omega,P)$ è discreto, posso studiare la probabilità sui singoli eventi elementari.
+\end{oss}
+
+È importante osservare che avere la probabilità dei singoli esiti o eventi elementari risulta fondamentale nel calcolo di vari eventi. In particolare se lo spazio campionario di partenza è molto grande oppure numerabile.
+
+\begin{es}
+	Se abbiamo uno spazio campionario $\Omega$ tale che $\# \Omega = 100$, allora abbiamo che $\# \mathcal P(\Omega) = 2^{100}$.
+	Risulta quindi estremamente più comodo conoscere le probabilità dei singoli eventi elementari che di tutti gli eventi possibili.
+	Per questo motivo, in questo caso, è opportuno ricordare $p$ definita sugli esiti che $P$ sugli eventi.
+
+	Viceversa, se $\Omega$ è discreto, cioè è tale che $\Omega = \{\omega_1,\omega_2,...\}$, e conosciamo le singole probabilità di ogni esito, allora possiamo considerare una successione $(p_n)n$, definite come $p_n = p(\omega_n)$, e possiamo calcolare $P(A)$, per $A \in \mathcal F$, come:
+	\[ P(A) = \sum_{\omega_n \in A}p_n \]
+	Quindi $p$ mi definisce una misura di probabilità $P$.
+\end{es}
+
+Tutto quello che abbiamo fatto è fattibile in quanto abbiamo che $\Omega$ è discreto, se così non fosse non sarebbe possibile.
+
+\begin{es}[Probabilità Uniforme]
+	Se abbiamo che $\# \Omega = N$, allora possiamo prendere $p_n = \frac 1N$ per $n \in \{1,2,...,N\}$, allora segue che la probabilità di ogni evento è:
+	\[ P(A) = \frac{\# A}{\# \Omega} \]
+	Cioè andiamo a guardare le cardinalità degli insiemi. In sintesi questo sarebbe "Casi Favorevoli su Casi Totali"
+\end{es}
+
+\begin{es}[Continuo del Corridore, Esempio \ref{Corridore}] %Serve per i collegamenti interni
+	Possiamo scrivere $\Omega$ come:
+	\[ \Omega = \{ p_1 = vv, p_2 = vp, p_3 = pv, p_4 = pp \} \]
+	Allora, riprendendo gli eventi $A$ e $B$, questi possono essere scritti come:
+	\[ A = \{ vv, vp \} = \{p_1,p_2\} = 30\% \qquad B = \{ vv, pv \} = \{p_1,p_3\} = 40\% \]
+	Da cui segue che:
+	\[ A\cup B = \{vv,vp,pv\} = \{p_1,p_2,p_3\} = 50\% \qquad A \cap B = \{ vv \}=\mathbf{??}\% \]
+	Abbiamo allora che $P$ è univocamente determinata se conosciamo $p_1,p_2,p_3,p_4$. Tuttavia, per come abbiamo definito p, abbiamo che:
+	\[ p_1+p_2+p_3+p_4 = 1 \qquad \Rightarrow \qquad p_4 = 1-p_1-p_2-p_3 \]
+	Otteniamo quindi un sistema lineare di $4$ operazioni a $4$ incognite:
+	\[
+		\begin{cases}
+			p_1 + p_2 = 0,3\\
+			p_1 + p_3 = 0,4\\
+			p_1 + p_2 + p_3 = 0,5\\
+			p_1 + p_2 + p_3 + p_4 = 1
+		\end{cases}
+	\]
+	Andandolo a risolvere otteniamo lo stesso risultato ottenuto nell'esempio precedente
+\end{es}
+
+Questo è anche un esempio di probabilità non uniforme
+
+\begin{oss}
+	La probabilità uniforme non è altro che un esempio di probabilità, il caso più semplice e a volte anche quello meno interessante, in quanto basta solamente guardare la cardinalità degli insiemi degli eventi e può essere usata solamente per $\Omega$ finiti. Se infatti $\Omega$ fosse numerabile, avremmo che:
+	\[ 1 = P(\Omega) = \sum_{\omega \in \Omega}P(\{\omega\}) \]
+	Poiché tutti gli elementi sono uguali, questa serie diverge oppure è uguale a $0$.
+\end{oss}
+
+\subsection{Proprietà Generali}
+
+\begin{prop}{Monotonia}{}
+	Vale la proprietà di monotonia per la Misura di Probabilità $P$, cioè:
+	\[ \forall A,B \in \mathcal F: \quad A \subseteq B \quad \Rightarrow \quad P(A)\leq P(B) \]
+\end{prop}
+\begin{proof} %Unico caso in cui non separerei gli ambienti
+	Graficamente abbiamo che:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (2,0) arc(0:360:2cm and 1cm) node[right]{$B$};
+			\draw (1,0) arc(0:360:1cm and 0.5cm) node[right]{$A$};
+		\end{tikzpicture}
+	\end{center}
+	Allora possiamo considerare:
+	\[ P(B) = P(A \uplus (B\setminus A)) = P(A) + \underbrace{P(B\setminus A)}_{\geq 0} \geq P(A) \]
+\end{proof}
+
+\begin{oss}
+	Se $B = \Omega$, allora abbiamo che:
+	$1= P(\Omega) = P(A) + P(A^c) \quad \Rightarrow \quad P(A^c) = 1-P(A)$
+\end{oss}
+
+\begin{es}[Lancio $8$ dadi]
+	Sia $\Omega$ l'insieme dei possibili risultati lanciando $8$ dadi e sia $A= $ "esca almeno un $6$". In questo caso (così come quelli futuri in cui ci sarà "almeno"), è più facile calcolare $P(A^c)$, dove $A^c =$ "Non esce neanche un $6$". Scrivendo tutto per bene in formule abbiamo che:
+	\[ \Omega = \{(\omega_1,...,\omega_8): \omega_i \in \{1,...,6\}\} \qquad \Rightarrow \# \Omega = 6^8\]
+	Allora abbiamo che:
+	\[ P(A) = 1-P(A^c) = 1 - \frac{\# A^c}{\# \Omega} = 1 - \frac{5^8}{6^8} \]
+\end{es}
+
 \end{document}
+% Cerca di mantenere l'indentazione e di spaziare tra i vari ambienti
+% Non sembra, ma aiuta di un sacco la lettura del codice e fidati che ti troverai meglio anche tu
+% Ogni tanto se vuoi lascia commenti che li leggo
 
