@@ -1,7 +1,6 @@
 \documentclass[11pt, a4paper, twoside]{article}
 
 \input{Template}
-
 \begin{document}
 
 \titolo{Statistica}
@@ -89,7 +88,7 @@ questo implica che $\varnothing$ e $\Omega$ appartengono a ogni $\mathcal F$ $\s
 		\bigcap\limits_{n\in\mathbb{N}} A_n=\left(\bigcup\limits_{n\in\mathbb{N}}A^c\right)^c\in\mathcal F
 	\]
 \end{oss}
-\begin{defn}{Misura su $(\Omega,\mathcal F)$}{}
+\begin{defn}{Misura su $(\Omega,\mathcal F)$}{}\label{Misura}
 	Definiamo una \textbf{Misura} su uno spazio misurabile come una funzione $\mu:\mathcal F\rightarrow[0,+\infty]$ tale che:
 	\begin{enumerate}
 		\item $\mu(\varnothing)=0$
@@ -271,7 +270,7 @@ Questo è anche un esempio di probabilità non uniforme
 
 \subsection{Proprietà Generali}
 
-\begin{prop}{Monotonia}{}
+\begin{prop}{Monotonia}{}\label{Monotonia}
 	Vale la proprietà di monotonia per la Misura di Probabilità $P$, cioè:
 	\[ \forall A,B \in \mathcal F: \quad A \subseteq B \quad \Rightarrow \quad P(A)\leq P(B) \]
 \end{prop}
@@ -299,8 +298,33 @@ Questo è anche un esempio di probabilità non uniforme
 	\[ P(A) = 1-P(A^c) = 1 - \frac{\# A^c}{\# \Omega} = 1 - \frac{5^8}{6^8} \]
 \end{es}
 
+\begin{prop}{$\sigma$-sub-additività di $P$}{}
+	Se $P$ è misura di Probabilità	$\Rightarrow P$ è $\sigma$-sub-additiva ovvero vale:
+	\[
+		\forall A \text{ e } (A_n)\in\mathcal F : A\subseteq \bigcup\limits_{n\geq 1} A_n\quad\Rightarrow\quad P(A)\leq \sum\limits_{n\geq 1} P(A_n)
+	\]
+\end{prop}
+\begin{proof}
+	Siano $A$ e $(A_n)\in\mathcal F$ tali che $A\subseteq \bigcup\limits_{n\geq 1} A_n$, poniamo $\overline{A}_1= A_1\cap A$, e prendiamo come elementi disgiunti $\overline{A}_n=\left(A_n\setminus\left(\bigcup\limits_{k=1}^{n-1} \overline{A}_k\right)\right)\cap A$. In questo modo infatti vale che sono tutti elmenti di $\mathcal F$ e $A=\biguplus\limits_{n\geq1} \overline{A}_n$ e quindi dalla $\sigma$-additività \hyperref[Misura]{1.1.3}  e dalla Monotonia \hyperref[Monotonia]{1.2.1} vale che:
+	\[
+		P(A)=\sum\limits_{n\geq 1} P(\overline{A}_n)\leq \sum\limits_{n\geq 1} P(A_n)\qquad \left(\overline{A}_n\subseteq A_n \forall n\right)
+	\]
+\end{proof}
+
+\begin{prop}{Caratterizzazione dell'additività Finita}{}
+	Sia $P : \mathcal F\rightarrow [0,1]$ Misura di Probabilità tale che $P(\varnothing)=0$ allora:
+	\[
+		P \text{ è additiva (Finitamente)}\quad \iff\quad P(A\cup B)=P(A)+P(B)-P(A\cup B) \quad \forall A,B\in \mathcal F
+	\]
+\end{prop}
+\begin{proof}
+\end{proof}
+
 \end{document}
-% Cerca di mantenere l'indentazione e di spaziare tra i vari ambienti
+% Cerca di mantenere l'indentazione e di spaziare tra i vari ambienti % Grazie bello :3 
 % Non sembra, ma aiuta di un sacco la lettura del codice e fidati che ti troverai meglio anche tu
-% Ogni tanto se vuoi lascia commenti che li leggo
+% Ogni tanto se vuoi lascia commenti che li leggo % va bene 3:
+
+
+
 
