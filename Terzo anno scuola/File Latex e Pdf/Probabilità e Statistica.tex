@@ -298,14 +298,14 @@ Questo è anche un esempio di probabilità non uniforme
 	\[ P(A) = 1-P(A^c) = 1 - \frac{\# A^c}{\# \Omega} = 1 - \frac{5^8}{6^8} \]
 \end{es}
 
-\begin{prop}{$\sigma$-sub-additività di $P$}{}
+\begin{prop}{$\sigma$-sub-additività di $P$}{}\label{sub-additività}
 	Se $P$ è misura di Probabilità	$\Rightarrow P$ è $\sigma$-sub-additiva ovvero vale:
 	\[
 		\forall A \text{ e } (A_n)\in\mathcal F : A\subseteq \bigcup\limits_{n\geq 1} A_n\quad\Rightarrow\quad P(A)\leq \sum\limits_{n\geq 1} P(A_n)
 	\]
 \end{prop}
 \begin{proof}
-	Siano $A$ e $(A_n)\in\mathcal F$ tali che $A\subseteq \bigcup\limits_{n\geq 1} A_n$, poniamo $\overline{A}_1= A_1\cap A$, e prendiamo come elementi disgiunti $\overline{A}_n=\left(A_n\setminus\left(\bigcup\limits_{k=1}^{n-1} \overline{A}_k\right)\right)\cap A$. In questo modo infatti vale che sono tutti elmenti di $\mathcal F$ e $A=\biguplus\limits_{n\geq1} \overline{A}_n$ e quindi dalla $\sigma$-additività \hyperref[Misura]{1.1.3}  e dalla Monotonia \hyperref[Monotonia]{1.2.1} vale che:
+	Siano $A$ e $(A_n)\in\mathcal F$ tali che $A\subseteq \bigcup\limits_{n\geq 1} A_n$, poniamo $\overline{A}_1= A_1\cap A$, e prendiamo come elementi disgiunti $\overline{A}_n=\left(A_n\setminus\left(\bigcup\limits_{k=1}^{n-1} \overline{A}_k\right)\right)\cap A$. In questo modo infatti vale che sono tutti elmenti di $\mathcal F$ e $A=\biguplus\limits_{n\geq1} \overline{A}_n$ e quindi dalla $\sigma$-additività \hyperref[Misura]{1.1.3}  e dalla Monotonia \hyperref[Monotonia]{1.2.1} vale che: % ho messo hyperref perchè non mi funzionava il resto D:
 	\[
 		P(A)=\sum\limits_{n\geq 1} P(\overline{A}_n)\leq \sum\limits_{n\geq 1} P(A_n)\qquad \left(\overline{A}_n\subseteq A_n \forall n\right)
 	\]
@@ -318,6 +318,61 @@ Questo è anche un esempio di probabilità non uniforme
 	\]
 \end{prop}
 \begin{proof}
+	$\Rightarrow $ la prima implicazione l'abbiamo vista ieri nell'esempio del Corridore \ref{Corridore}.
+
+	$\Leftarrow$ la seconda implicazione invece è ovvia infatti basta partire dal caso $A\cap B=\varnothing$ ed otteniamo il risultato.
+\end{proof}
+
+\begin{es}[Lancio dei 2 Dadi]
+	Consideriamo il seguente evento $A$= ''Almeno uno dei 2 lanci è minore o uguale a 3'', (Piccola notazione: $I_n=\{1,\dots,n\}\quad n\in\mathbb{N}$) in questo caso lo spazio di probabilità discreto $(\Omega,P)$ è composto da:
+	\begin{itemize}
+		\item $\Omega=I_6\times I_6=\{(m,n):m,n \in I_6\}$ 
+		\item $P$ Probabilità uniforme 
+	\end{itemize}
+	In particolare notiamo che $A=A_1\cup A_2$ dove $A_1$=''Il primo lancio è minore o uguale di 3'' e $A_2$=''Il secondo lancio è minore o uguale di 3''. Sappiamo che questi 2 eventi non sono disgiunti e che valgono:
+	\begin{itemize}
+		\item $\mid\Omega\mid=36$ 
+		\item $\mid A_1\mid=\mid A_2\mid=18$
+		\item $\mid A_1\cap A_2\mid=9$  
+	\end{itemize}
+	Sapendo che lo spazio è discreto vale la proposizione precedente e quindi:
+	\[
+		P(A)=P(A_1)+P(A_2)-P(A_1\cap A_2)=\frac{\mid A_1\mid}{\mid \Omega\mid}+\frac{\mid A_2\mid}{\mid \Omega\mid}-\frac{\mid A_1\cap A_2\mid}{\mid\Omega\mid}=\frac{18}{36}+\frac{18}{36}-\frac{9}{36}=\frac{27}{36}=75\%
+	\]
+\end{es}
+
+Prima di enunciare la prossima proposizione diamo 2 notazioni che ci torneranno utili:
+\begin{align*}
+	&A_n\nearrow A\stackrel{\text{def}}{\iff} A_n\subseteq A_{n+1}\forall n\quad\text{e}\quad \bigcup\limits_{n\geq1}A_n=A \\
+	&A_n\searrow A\stackrel{\text{def}}{\iff} A_n\supseteq A_{n+1}\forall n\quad\text{e}\quad \bigcup\limits_{n\geq1}A_n=A
+\end{align*}
+
+\begin{prop}{Nome che mette manu}{}
+	$P:\mathcal F \rightarrow [0,1]$ additiva e tale che $P(\varnothing)=0$ allora sono equivalenti:
+	\begin{enumerate}
+		\item $P$ è $\sigma$-additiva
+		\item $P$ è $\sigma$-subadditiva
+		\item $P$ è continua dal basso ossia vale la seguente implicazione:
+			\[
+				\forall (A_n)\in\mathcal F: A_n\nearrow A\quad \Rightarrow\quad \lim_{n\to+\infty} P(A_n)=P(A)
+			\]
+		\item $P$ è continua dall'alto ossia vale la seguente implicazione:
+			\[
+				\forall (A_n)\in\mathcal F: A_n\searrow A\quad \Rightarrow\quad \lim_{n\to+\infty} P(A_n)=P(A)
+			\]
+	\end{enumerate}
+\end{prop}
+\begin{proof}
+	$1\Rightarrow 2$ l'abbiamo fatta nella proposizione\hyperref[sub-additività]{1.2.2}
+
+	$2\Rightarrow 3$ Ovvero $P$ è $\sigma$-subadditiva $\Rightarrow P$ è continua dal basso, vediamo se vale la condizione. 
+	\[
+		\text{Sia }A_n\nearrow A\Rightarrow A_n\subseteq A_{n+1}\forall n\quad\stackrel{\text{Monotonia}}{\implies}\quad P(A_n)\leq P(A_{n+1})\leq P(A) \Rightarrow \exists \lim_{n\to +\infty} P(A_n)\leq P(A)
+	\]
+	Ora definiamo $\overline A_1=A_1$ e $\overline A_n=A_n\setminus A_{n-1}$ questo implica che $A=\biguplus\limits_{n\geq1} \overline A_n$. Utilizzando la $\sigma$-subadditività otteniamo:
+	\[
+		P(A)\leq\sum\limits_{n\geq 1} P(\overline A_n)= \lim_{n\to +\infty}\sum\limits_{k=1}^n P(\overline A_n)= \lim_{n\to +\infty} P(A_n)
+	\]
 \end{proof}
 
 \end{document}
