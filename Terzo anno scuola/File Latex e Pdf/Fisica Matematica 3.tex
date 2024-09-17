@@ -1,0 +1,61 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+\input{Template}
+
+\begin{document}
+
+\titolo{Fisica Matematica 3}
+
+\tableofcontents
+\newpage
+
+\section{Elementi Base}
+
+\subsection{Definizioni Principali}
+
+\begin{defn}{Punto secondo Euclide}{}
+	Un punto è un ente che non ha parti ovvero non ha dimensioni
+\end{defn}
+
+\begin{defn}{Punto Materiale}{}
+	Un $\textbf{Punto Materiale}$ è un punto Euclideo alla quale viene associato un valore di $\mathbb{R}^+$ chiamato Massa del punto materiale
+\end{defn}
+
+\begin{defn}{Massa del Punto Materiale}{}
+	Si fissa un punto materiale campione $P_0$ al quale viene associato un \textbf{numero positivo} $m_0>0$ (unità di misura). Ad un generico punto $P$ si associa un numero positivo $m(P)>0$ (\textit{$P$ può anche essere non specificato se non c'è possibilità di errore}), che dipende dal numero campione fissato e dalla natura della materia di cui è costituito.
+	\[ P \mapsto m(P) \]
+\end{defn}
+
+\begin{defn}{Densità del Corpo nel Punto $P$}{}
+	Si definisce \textbf{Densità del Corpo nel Punto $P$} la quantità:
+	\[\rho(P):= \frac{dm}{dv}\]
+\end{defn}
+
+\begin{defn}{Corpo Rigido}{}
+	Un \textbf{Corpo Rigido} $\mathscr C$ è un sistema meccanico (un insieme di punti materiali) costituito da infiniti punto tali che la loro distanza reciproca si mantiene costante nel tempo, cioè:
+	\[\forall P, Q \in \mathscr C, \|P-Q\| = \text{ costante}, \forall t\]
+\end{defn}
+
+Possiamo immaginarlo in questo modo
+\begin{center}
+	\begin{tikzpicture}
+		\shade[ball color = gray!40, opacity = 0.4] (0,-0) ellipse (2cm and 1.5cm);
+		\draw (0,0) circle (2cm and 1.5cm);
+		\filldraw (0.6,0.4) circle (1pt) node[above]{$R_0$} (1.4,0) circle (1pt) node[right]{$Q_0$} (0.8,-0.4) circle (1pt) node[below]{$S_0$} (0.4,0) circle(1pt) node[left]{$P_0$};
+		\draw (0,2) node{$t_0$} (-1.7, 1.4)node{$\mathscr C$} (2.5,0)node{$\Rightarrow$};
+		\draw (0.6,0.4) -- (1.4,0) -- (0.8,-0.4) -- cycle;
+		\draw[dashed] (0.4,0) -- (0.6,0.4) (0.4,0) -- (1.4,0) (0.4,0) -- (0.8,-0.4);
+	\end{tikzpicture}
+	\begin{tikzpicture}
+		\shade[ball color = gray!40, opacity = 0.4, rotate = 90] (0,-0) ellipse (2cm and 1.5cm);
+		\draw[rotate = 90] (0,0) circle (2cm and 1.5cm);
+		\filldraw[rotate = 90] (0.6,0.4) circle (1pt) node[left]{$R(t)$} (1.4,0) circle (1pt) node[right]{$Q(t)$} (0.8,-0.4) circle (1pt) node[right]{$S(t)$} (0.4,0) circle(1pt) node[below]{$P(t)$};
+		\draw[rotate = 90] (1.7,-1.4) node{$t$} (1.7, 1.4)node{$\mathscr C$};
+		\draw[rotate = 90] (0.6,0.4) -- (1.4,0) -- (0.8,-0.4) -- cycle;
+		\draw[dashed, rotate = 90] (0.4,0) -- (0.6,0.4) (0.4,0) -- (1.4,0) (0.4,0) -- (0.8,-0.4);
+	\end{tikzpicture}
+\end{center}
+
+
+
+\end{document}
