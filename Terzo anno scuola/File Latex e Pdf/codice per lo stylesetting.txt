@@ -1,0 +1,1 @@
+C:\Users\xene3\AppData\Local\Programs\MiKTeX\miktex\bin\x64\miktex-texworks.exe -stylesheet C:\Users\xene3\AppData\Local\Programs\MiKTeX\miktex\bin\x64\styles\test.css
