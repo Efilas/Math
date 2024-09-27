@@ -1,0 +1,497 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+\input{Template}
+\newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}}
+\begin{document}
+
+\titolo{Topologia Algebrica}
+
+\tableofcontents
+
+\newpage
+
+\section{Teoria dell'Omologia}
+
+\subsection{Omologia Singolare}
+
+\begin{defn}{Inviluppo Convesso della Base Canonica}{}
+	Sia $\mathbb{R}^{n+1}$ spazio vettoriale reale e $\{e_o,\dots,e_n\}$ la base canonica di $\mathbb{R}^{n+1}$ allora chiamiamo $\text{Inviluppo convesso}$ di $\{e_o,\dots,e_n\}$ l'insieme:
+	\[
+		\Delta^n:=\{(t_0,\dots,t_n)\,|\,t_i\geq 0\,\,\forall i,\quad\sum\limits_{i=0}^n t_i=1\}
+	\]
+\end{defn}
+
+\begin{es}{}
+	Caso $n=0$:	
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick, ->] (-1,0) -- (4.5,0) node[anchor=north west] {$\mathbb{R}$};
+			\foreach \Point/\PointLabel in {(2,0)/1}
+			\draw[fill=black] \Point circle (0.07) node[anchor=north] {$\PointLabel$};
+			\draw (0,0) node[anchor=north] {0};
+			\draw (0,0) circle (0.03);
+			\draw (2,0)  node[anchor=south west] 	{$\Delta^0$};
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+\begin{es}{}
+	Caso $n=1$:	
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick, ->] (0,0) -- (3,0) node[anchor=north west] {$\mathbb{R}$};
+			\draw[thick, ->] (0,0) -- (0,3) node[anchor=south east] {$\mathbb{R}$};
+			\draw[fill=red] (2,0) circle (0.07) node[anchor=north] {$e_0$};
+			\draw[fill=red] (0,2) circle (0.07) node[anchor=east] {$e_1$};
+			\draw[red, -] (2,0) -- (0,2);
+			\draw[red] (1,1) node[anchor=south west] {$\Delta^1$};
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+\begin{es}{}
+	Caso $n=2$(Considerare solo la faccia della piramide rossa, compresi i bordi):	
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick, ->] (0,0) -- (3,0) node[anchor=north west] {$\mathbb{R}$};
+			\draw[thick, ->] (0,0) -- (0,3) node[anchor=south east] {$\mathbb{R}$};
+			\draw[thick, ->] (0,0) -- (-1.4,-1.4) node[anchor=south east] {$\mathbb{R}$};
+			\draw[fill=red] (2,0) circle (0.07) node[anchor=north] {$e_1$};
+			\draw[fill=red] (0,2) circle (0.07) node[anchor=east] {$e_2$};
+			\draw[fill=red] (-0.7,-0.7) circle (0.07) node[anchor=east] {$e_0$};
+			\filldraw[red,nearly transparent] (2,0) -- (0,2) -- (-0.7,-0.7) -- (2,0);
+			\draw[red] (1,1) node[anchor=south west] {$\Delta^2$};
+			\draw[thick,-] (2,0) -- (0,2) -- (-0.7,-0.7) -- (2,0) ;
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+\begin{oss}
+	data questa definizione possiamo notare che fissato $n$ abbiamo $n+1$ funzioni affini naturali 
+\end{oss}
+
+\begin{defn}{$\partial_i$ facce}{}
+	$\forall i \in\{0,\dots, n\}$ definisco l'i-esima faccia dell'invilippo come la funzione:
+		\begin{align*}
+			\partial_i :\, &\Delta^{n-1}\rightarrow \Delta^n\\
+			              &(t_0,\dots,t_n)\mapsto (t_0,\dots,t_{i-1},0,t_{i+1},\dots,t_n)
+		\end{align*}
+
+\end{defn}
+
+\begin{oss}
+	Ogni sottoinsieme I$\subseteq\{0,\dots,k\}$ individua una faccia di $\Delta^{|\text{I}|-1}$
+\end{oss}
+
+\begin{es}{}
+	$n=2$:	
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick, ->] (0,0) -- (3,0) node[anchor=north west] {$\mathbb{R}$};
+			\draw[thick, ->] (0,0) -- (0,3) node[anchor=south east] {$\mathbb{R}$};
+			\draw[thick, ->] (0,0) -- (-1.4,-1.4) node[anchor=south east] {$\mathbb{R}$};
+			\draw[fill=red] (2,0) circle (0.07) node[anchor=north] {$e_1$};
+			\draw[fill=red] (0,2) circle (0.07) node[anchor=east] {$e_2$};
+			\draw[fill=red] (-0.7,-0.7) circle (0.07) node[anchor=east] {$e_0$};
+			\filldraw[red,nearly transparent] (2,0) -- (0,2) -- (-0.7,-0.7) -- (2,0);
+			\draw[red] (1,1) node[anchor=south west] {$\Delta^2$};
+			\draw[thick,-] (2,0) -- (0,2) -- (-0.7,-0.7) -- (2,0) ;
+			\draw[thick, ->] (2,0) -- (1,1);
+			\draw[thick, ->] (-0.7,-0.7) -- (0.65,-0.35);
+			\draw[thick, ->] (-0.7,-0.7) -- (-0.35,0.65);
+		\end{tikzpicture}
+	\end{center}
+	Quindi notiamo in questo caso abbiamo che:
+	\begin{center}
+		\begin{align*}
+			\partial_0(t_0,t_1)&=(0,t_0,t_1)  & &\partial_0(1,0)=e_1,\,\partial_0(0,1)=e_2 \\
+			\partial_1(t_0,t_1)&=(t_0,0,t_1)  & &\partial_1(1,0)=e_0,\,\partial_1(1,0)=e_2 \\
+			\partial_2(t_0,t_1)&=(t_0,t_1,0)  & &\partial_2(1,0)=e_0,\,\partial_2(1,0)=e_1 
+		\end{align*}
+	\end{center}
+\end{es}
+
+\begin{defn}{$n$-simplesso singolare}{}
+	Sia X uno spazio topologico un \textbf{n-simplesso singolare} è una funzione continua $\sigma$ tale che:
+	 \[
+		\sigma : \Delta^n\rightarrow X
+	\]
+\end{defn}
+
+\begin{es}
+	Le facce $\partial_i$ sono $n-1$ Simplessi singolari di $\Delta^n$
+\end{es}
+
+\begin{defn}{Gruppo Abeliano libero generato}{}
+	Sia E un insieme il \textbf{Gruppo Abeliano libero generato da E } si definisce come:
+	\[
+		\mathbb{Z}^E=\{\varphi:E\to \mathbb{Z}\, | \, \varphi(e)=0 \text{ tranne che per un numero finito di elementi di E}\}
+	\] 
+\end{defn}
+
+\begin{defn}{$n$-catene singolari}{} \label{catene singolari}
+	Il Gruppo abeliano libero generato dagli n-simplessi singolari, indicato con $C_n(X)$ si dice il Gruppo delle \textbf{n-catene singolari} di X
+\end{defn}
+ 
+\begin{oss}
+	Sia $\sigma\in C_n(X)\Rightarrow\sigma=a_1\sigma_1+\dots+a_k\sigma_k$ con $a_1,\dots,a_k\in\mathbb{Z}$ e $\sigma_1,\dots,\sigma_k:\Delta^n\rightarrow X$
+\end{oss}
+
+\begin{oss}
+	Sia $f:X\rightarrow Y$ funzione continua tra spazi topologici allora se $\sigma :\Delta^n\rightarrow X$ è un $n$-simplesso singolare di X allora vale che $f\circ\sigma :\Delta^n\rightarrow Y$ è continua quindi è un $n$-simplesso singolare di Y.
+
+	Quindi è ben posto il morfismo di Gruppi $f_*$: 
+
+	\begin{align*}
+		f_* :\,  C_n(X)&\rightarrow C_n(Y)\\
+			\sigma&\mapsto f\circ\sigma 
+	\end{align*}
+
+\end{oss}
+
+\begin{oss}
+	Siano $v_0,\dots,v_k\in\mathbb{R}^n$ con $n>k$ allora esiste un unica funzione affine (ovvero lineare sommata ad una traslazione) che manda elementi di $\Delta^k$ nell'inviluppo convesso di $v_0,\dots,v_k$ t.c:
+	\begin{align*}
+		\Delta^k&\rightarrow\text{Inviluppo convesso di }v_0,\dots,v_k\\
+		(t_0,\dots,t_n)&\mapsto \sum\limits_{i=0}^k t_i v_i\\
+		e_0&\mapsto v_0\\
+		&\vdots\\
+		e_k&\mapsto v_k
+	\end{align*}
+	La mappa è omeomorfismo $\iff v_1-v_0,\dots,v_k-v_0$ sono linearmenti indipendenti. 
+	Chiamiamo tale mappa $<v_0,\dots,v_k>$.
+\end{oss}
+\begin{defn}{$\partial$}{}\label{partial}
+	Definiamo $\partial:\,C_n(X)\rightarrow C_{n-1}(X)$ come:
+	\[
+		\partial\sigma=\sum\limits_{i=0}^{n}(-1)^i\sigma\circ\partial_i=\sum\limits_{i=0}^{n}(-1)^i\sigma\vert_{<e_0,\dots,\hat{e_i},\dots,e_n>}
+	\]
+\end{defn}
+
+La notazione finale si può interpretare come: restringo la funzione $\sigma$ alle sue facce togliendo un vertice.
+
+\begin{es}
+	Sia $\sigma\in C_{2}(X)$ allora vale:
+	\begin{align*}
+		\partial\sigma&=\sigma\vert_{<e_1,e_2>}-\sigma\vert_{<e_0,e_2>}+\sigma\vert_{<e_0,e_1>}\\
+		\partial\sigma\vert_{<e_1,e_2>}&=\sigma\vert_{<e_2>}-\sigma\vert_{<e_1>}\\
+		\partial\sigma\vert_{<e_0,e_2>}&=\sigma\vert_{<e_2>}-\sigma\vert_{<e_0>}\\
+		\partial\sigma\vert_{<e_0,e_1>}&=\sigma\vert_{<e_1>}-\sigma\vert_{<e_0>}\\
+		\partial^2\sigma&=\sigma\vert_{<e_2>}-\sigma\vert_{<e_1>}-(\sigma\vert_{<e_2>}-\sigma\vert_{<e_0>})+\sigma\vert_{<e_1>}-\sigma\vert_{<e_0>}\\
+		\partial^2\sigma&=0
+	\end{align*}
+\end{es} 
+
+\begin{prop}{$\partial^2=0$}{}
+	\[
+		\partial^2=0 
+	\]
+\end{prop}
+\begin{proof}
+	Utilizzando la seconda notazione il teorema è molto immediato poichè se prendiamo $\partial\sigma=\sum\limits_{i=0}^{n}(-1)^i\sigma\vert_{<e_0,\dots,\hat{e_i},\dots,e_n>}$ calcolare nuovamente la funzione $\partial$ su tale quantità mi darà somme (con segni) di $\sigma\vert_{<e_0,\dots,\hat{e_i},\dots,\hat{e_j},\dots,e_n>}$ ed ognuno di questi simplessi appare 2 volte:
+	\begin{enumerate}
+		\item  In $\partial\sigma\vert_{<e_0,\dots,\hat{e_i},\dots>}\rightarrow$ con segno $(-1)^{i+j-1}$
+		\item  In $\partial\sigma\vert_{<e_0,\dots,\hat{e_j},\dots>}\rightarrow$ con segno $(-1)^{i+j}$
+	\end{enumerate}
+	Allora avendo segno opposto la somma si annulla a 2 a 2 ogni volta ottenendo la Tesi.
+\end{proof}
+
+\begin{oss}
+	Questo fatto equivale a dire:
+	\[
+		\text{Im}(\partial:\,C_{n+1}(\text{X})\rightarrow C_n(\text{X}))\subseteq \text{Ker}(\partial:\, C_{n}(\text{X})\rightarrow C_{n-1}(\text{X}))
+	\]
+\end{oss}
+
+\begin{defn}{$n$-esimo Gruppo di Omologia Singolare}{}\label{Commuta}
+	 Sia X spazio topologico, chiamiamo l'$\textbf{n-esimo Gruppo di Omologia Singolare}$ di X:
+	\[
+		\text{H}_n(\text{X})=\bigslant{\text{Ker}(\partial:\, C_{n}(\text{X})\rightarrow C_{n-1}(\text{X}))}{\text{Im}(\partial:\,C_{n+1}(\text{X})\rightarrow C_n(\text{X}))}
+	\] 
+\end{defn}
+
+\begin{prop}{}
+	Sia $f:X\rightarrow Y$ funzione continua tra spazi topologici e sia $f_*:C_n(\text{X})\rightarrow  C_n(\text{Y})$ il morfismo di gruppi indotto da $f$ allora vale $\partial f_*=f_*\partial$. Equivalentemente il seguente diagramma commuta:
+	\begin{center}
+		\begin{tikzcd} 
+			C_n(\text{X}) \arrow[r, "\partial"] \arrow[d, "f_*"] 
+				& C_{n-1}(\text{X}) \arrow[d, "f_*" ] \\ 
+			C_n(\text{Y}) \arrow[r, "\partial"] 
+				&  C_{n-1}(\text{Y})
+		\end{tikzcd}
+	\end{center}
+\end{prop}
+\begin{proof}
+	Sia $\sigma\in C_n(\text{X})$ allora vale:
+	\begin{align*}
+		f_*(\partial\sigma)&=\sum\limits_{i=0}^n(-1)^i f_*(\sigma\circ\partial_i)=\sum\limits_{i=0}^n(-1)^i f\circ(\sigma\circ\partial_i)\\
+					 &=\sum\limits_{i=0}^n(-1)^i (f\circ\sigma)\circ\partial_i=\sum\limits_{i=0}^n(-1)^i f_*(\sigma)\circ\partial_i\\
+					 &=\partial(f_*(\sigma))
+	\end{align*}
+\end{proof}
+
+\begin{defn}{Cicli e Bordi}{}
+	\begin{itemize}
+		\item $\sigma \in \text{Ker}(\partial:\, C_{n}(\text{X})\rightarrow C_{n-1}(\text{X}))$ è detto $n$-ciclo
+		\item $\sigma\in\text{Im}(\partial:\,C_{n+1}(\text{X})\rightarrow C_n(\text{X}))$ è detto $n$-bordo
+	\end{itemize}
+\end{defn}
+
+\begin{thm}{Morfismi tra $\text{H}_n(\text{X})$ e $\text{H}_n(\text{Y})$}{}
+	Sia $f:X\rightarrow Y$ funzione continua tra spazi topologici, allora $f$ induce un morfismo tra $\text{H}_n(\text{X})$ e $\text{H}_n(\text{Y})$. Equivalentemente è ben definita:
+
+	\begin{align*}
+		\text{H}_n(f):\,\text{H}_n(\text{X}) &\rightarrow \text{H}_n(\text{Y}): \\ 
+			              \text{[c]}&\mapsto \text{[}f_*(c)\text{]}
+	\end{align*}
+
+\end{thm}
+\begin{proof}
+	Utilizziamo la Proposizione \hyperref[Commuta]{1.1.9} sugli n-cicli e sugli n-bordi:
+	\begin{align*}
+		&\text{Sia }\sigma \in \text{Ker}(\partial:\, C_{n}(\text{X})\rightarrow C_{n-1}(\text{X}))\Rightarrow \partial f_*(\sigma)=f_*\partial(\sigma)=0\Rightarrow f_*(\sigma)\in \text{Ker}(\partial:\, C_{n}(\text{Y})\rightarrow C_{n-1}(\text{Y}))\\
+		&\text{Se c}=\partial\omega\Rightarrow f_*c=f_*\partial\omega=\partial(f_*\omega) \text{ quindi ottengo un n-bordo }
+	\end{align*}
+	Otteniamo così la Tesi.
+\end{proof}
+\newpage
+\begin{oss}
+	Si può dimostrare che $\text{H}_n$ è un funtore e quindi se tra 2 spazi topologici ho un Omeomorfismo esso induce un isomorfismo tra i loro Gruppi di Omologia Singolare.\footnote{Trovate la dimostrazione a pagina 67 di ''An Introduction to Algebraic Topology'' di Joseph J. Rotman}
+\end{oss}
+
+\begin{ese}
+	Calcolare il Gruppo di Omologia Singolare di $X=\{p\}$ spazio topologico con un punto.
+\end{ese}
+\begin{sol}
+	Notiamo per prima cosa che fissato un $k\in\mathbb{N}$ allora i k-simplessi singolari sono tutti funzioni costanti e quindi vale $C_k(\text{X})\cong\mathbb{Z}$ inoltre vale che: 
+	\[
+		\partial\sigma_k=\left[\sum\limits_{i=0}^k(-1)^i\right]\sigma_{k-1}=
+		 \begin{cases}
+			0 & \text{se k è dispari} \\
+			1 & \text{se k è pari}
+		\end{cases}
+	\]
+	\begin{center}
+		\begin{tikzcd}
+			\cdots \arrow[r] & \mathbb{Z}\arrow[r, "1" ] & \mathbb{Z}\arrow[r, "0" ] & \mathbb{Z}\arrow[r, "1"]& \mathbb{Z}\arrow[r, "0" ] & \mathbb{Z}\arrow[r]& 0
+		\end{tikzcd}
+	\end{center}
+	Caso $k>0$:
+	\begin{enumerate}
+		\item $k$ pari allora non ci sono $k$-cicli $\Rightarrow \text{H}_k(\{p\})=0$
+		\item $k$ dispari allora $\text{Ker}\partial=\mathbb{Z}$ e $\text{Im}\partial=\mathbb{Z}\Rightarrow \text{H}_k(\{p\})=0$
+	\end{enumerate} 
+	Caso $k=0$:
+	\[
+		 \text{Ker}\partial=\mathbb{Z} \quad \text{Im}\partial=0\quad\Rightarrow \quad\text{H}_0(\{p\})=\mathbb{Z}
+	\]
+	Il gruppo di omologia singolare di un punto è:
+	\begin{itemize}
+		\item $\text{H}_0(\{p\})=\mathbb{Z}$
+		\item $\text{H}_k(\{p\})=0\quad \forall k>0$
+	\end{itemize}
+\end{sol}
+
+\begin{prop}{}
+	Sia X$=\coprod\limits_{\alpha}\text{X}_{\alpha}$ spazio topologico scomposto lungo le sue componenti connesse per archi. Allora:
+	\[
+		\forall k \quad \text{H}_k(\text{X})\cong\bigoplus\limits_{\alpha}\text{H}_k(\text{X}_{\alpha})
+	\]
+\end{prop}
+\begin{proof}
+	Se $\sigma:\Delta^k\rightarrow \text{X}$ è un $k$-simplesso singolare essendo $\Delta^k$ connesso per archi, allora dalla continuità di $\sigma$ segue che $\sigma(\Delta^k)$ è connesso per archi e quindi è totalmente contenuto in una delle componenti connesse per archi di X. Questo mi implica che:
+	\[
+		\text{C}_k(\text{X})\cong\bigoplus\limits_{\alpha}\text{C}_k(\text{X}_{\alpha})
+	\]
+	Inoltre  dalla continuità di $\partial$:
+	\[
+		\sigma \in\text{C}_k(\text{X}_{\alpha})\quad \Rightarrow \quad \partial\sigma\in\text{C}_{k-1}(\text{X}_{\alpha})
+	\]
+	Questo implica che il nucleo e l'immagine di $\partial$ possono essere decomposti lungo le componenti connesse per archi, così facendo otteniamo la Tesi.
+\end{proof}
+
+\subsection{Omologia Simpliciale}
+
+\begin{defn}{Complesso Omologico}{}
+	Un $\textbf{Complesso Omologico}$, o complesso a catena, è una coppia, $(\text{C}_{\bullet},d_{\bullet})$, formata da:
+	\begin{enumerate}
+		\item Una successione di Gruppi Abeliani  $\text{C}_k$;
+		\item Morfismi $\text{d}_k:\,\text{C}_k\rightarrow\text{C}_{k-1}$ tale che $\forall k\in\mathbb{N},\quad d_{k-1}\circ d_{k}=0$
+		\begin{center}
+			\begin{tikzcd}
+				\cdots \arrow[r] & \text{C}_k\arrow[r, "d_k" ] & \text{C}_{k-1}\arrow[r, "d_{k-1}" ] & \text{C}_{k-2}\arrow[r, "d_{k-2}"]& \cdots\arrow[r] & \text{C}_0\arrow[r]& 0
+			\end{tikzcd}
+		\end{center}
+	\end{enumerate}
+\end{defn}
+
+\begin{es}
+	Le catene singolari \hyperref[catene singolari]{1.1.5} e la funzione $\partial$ \hyperref[partial]{1.1.6} costituiscono un complesso omologico.
+\end{es}
+
+\begin{defn}{Cicli di un Complesso Omologico}{}
+	Sia $(\text{C}_{\bullet},d_{\bullet})$ un Complesso Omologico allora definiamo i $k$-cicli di un Complesso Omologico come:
+	\[
+		\text{Z}_k:=\text{Ker}(d_k)
+	\]
+\end{defn}
+
+\begin{defn}{Bordi di un Complesso Omologico}{}
+	Sia $(\text{C}_{\bullet},d_{\bullet})$ un Complesso Omologico allora definiamo i $k$-bordi di un Complesso Omologico come:
+	\[
+		\text{B}_k:=\text{Im}(d_{k+1})
+	\]
+\end{defn}
+
+\begin{oss}
+	$d_{k-1}\circ d_k=0\Rightarrow$ ogni $k$-bordo è un $k$-ciclo
+\end{oss}
+
+\begin{defn}{Gruppo di Omologia singolare di un Complesso Omologico}
+	Il Gruppo di Omologia singolare di un Complesso Omologico $(\text{C}_{\bullet},d_{\bullet})$ è definito come:
+	\[
+		\text{H}_k(\text{C}_{\bullet}):= \bigslant{\text{Z}_k}{\text{B}_k}
+	\]
+\end{defn}
+
+\begin{defn}{Morfismi di Complessi Omologici}{}
+	$\text{Siano } (\text{C}_{\bullet},d_{\bullet}) \text{ e }  (\text{D}_{\bullet},d'_{\bullet}) \text{ Complessi Omologici allora un } \textbf{Morfismo di Complessi Omologici }$ $\varphi_{\bullet}:\,\text{C}_{\bullet}\rightarrow\text{D}_{\bullet}$ è una famiglia $\varphi_k:\,\text{C}_{k}\rightarrow\text{D}_{k}$ di morfismi tale che $\forall k$ $d'_{k}\circ\varphi_{k}=\varphi_{k-1}\circ d_{k}$ equivalentemente il seguente diagramma commuti per ogni k:
+	\begin{center}
+		\begin{tikzcd}
+			\text{C}_k \arrow[r, "\varphi_{k}"] \arrow[d, "d_k"] 
+				& \text{D}_k \arrow[d, "d'_k" ] \\ 
+			\text{C}_{k-1}\arrow[r, "\varphi_{k-1}"] 
+				&  \text{D}_{k-1}
+		\end{tikzcd}
+	\end{center}
+\end{defn}
+
+\begin{oss}
+	$\varphi_k$ manda $k$-cicli in $k$-cicli e $k$-bordi in $k$-bordi quindi tramite il funtore $\text{H}_k$ definisce un morfismo tra gruppi:
+	\[
+		\text{H}_k(\varphi_k):\,\text{H}_k(\text{C}_{\bullet})\rightarrow\text{H}_k(\text{D}_{\bullet})
+	\]
+\end{oss}
+
+\begin{es}
+	Sia $f:\,\text{X}\rightarrow \text{Y}$ funzione continua tra spazi topologici allora essa definisce un morfismo tra complessi omologici:
+	\[
+		f_*:\,\text{C}_{\bullet}(\text{X})\rightarrow\text{C}_{\bullet}(\text{Y})
+	\]
+\end{es}
+
+\begin{defn}{Complesso Simpliciale Finito}{}
+	Un $\textbf{Complesso Simpliciale Finito}$ è il dato di:
+	\begin{enumerate}
+		\item Un insieme finito I non vuoto;
+		\item Una famiglia $\Sigma$ di sottoinsiemi di I (eccetto il vuoto) con le proprietà:
+		\begin{enumerate}
+			\item Ogni elementi di I, considerato come sottoinsieme di cardinalità 1, appartiene a $\Sigma$;
+			\item se $\sigma\in\Sigma$ e $\tau\subseteq\sigma\quad\Rightarrow\quad\tau\in\Sigma$
+		\end{enumerate}
+	\end{enumerate}
+\end{defn}
+
+\begin{es}
+	Sia $\text{I}=\{0,1,2,3,4\}$ allora se $\{0,2,3\}\in\Sigma\,\Rightarrow\,\{0,2\},\,\{0,3\},\,\{2,3\}\in\Sigma$ quindi avremmo in questo caso il complesso simpliciale $(I,\Sigma)$ dato da: 
+	\begin{itemize}
+		\item  $\text{I}=\{0,1,2,3,4\}$;
+		\item  $\Sigma=\{\{0\},\{1\},\{2\},\{3\},\{4\},\{0,2,3\},\{0,2\},\{0,3\},\{2,3\}\}$.
+	\end{itemize} 
+\end{es}
+
+Fissando una biezione di I è possibile associale ad un complesso simpliciale un complesso omologico: 
+\begin{defn}{$l$-simplessi}{}
+	Dato $(I,\Sigma)$ Complesso Simpliciale Finito definiamo gli $l$-simplessi:
+	\[
+		\Sigma_{l}=\{\sigma\in\Sigma\,:\,|\sigma|=l+1\}
+	\]
+\end{defn}
+
+\begin{defn}{Gruppo Abeliano libero generato da $\Sigma_{l}$}{}
+	Chiamiamo $\text{C}_l^{\Sigma}$ il Gruppo abeliano libero generato da $\Sigma_{l}$, ed i suoi elementi della base sono: 
+	\[
+		\sigma=<i_0,\dots,i_l>
+	\]
+\end{defn}
+
+\begin{es}\label{es 10}
+	Prendiamo $\text{I}=\{a,b,c\}$ e consideriamo $\Sigma=\mathscr{P}(\text{I})\setminus\{\varnothing\}$ allora troviamo che gli elementi della base sono:
+	\begin{itemize}
+		\item Per $C_0^{\Sigma}$ sono $\{<a>,<b>,<c>\}$ quindi $C_0^{\Sigma}\cong \mathbb{Z}^3$
+		\item Per $C_1^{\Sigma}$ sono $\{<a,b>,<b,c>,<a,c>\}$ quindi $C_1^{\Sigma}\cong \mathbb{Z}^3$
+		\item Per $C_2^{\Sigma}$ sono $\{<a,b,c>\}$ quindi $C_2^{\Sigma}\cong \mathbb{Z}$
+	\end{itemize}
+\end{es}
+
+\begin{oss}
+	Notiamo che $C_l^{\Sigma}\cong \mathbb{Z}^{|\Sigma_l|}$
+\end{oss}
+
+\begin{defn}{$\partial^\Sigma$}{}
+	Definiamo la funzione $\partial^\Sigma:\,\text{C}_l^{\Sigma}\rightarrow\text{C}_{l-1}^{\Sigma}$ sugli elementi della base come: 
+	\[
+		\forall\sigma=<i_0,\dots,i_l>\quad \Rightarrow\quad\partial^\Sigma\sigma:=\sum\limits_{k=0}^l (-1)^k <i_0,\dots,\hat{i}_k,\dots,i_l>
+	\]
+\end{defn}
+
+\begin{oss}
+	Utilizzando la stessa dimostrazione di prima troviamo $\partial^\Sigma\partial^\Sigma=0$
+\end{oss}
+
+\begin{ese}
+	Calcolare l'omologia di $C_{\bullet}^\Sigma$ nel caso di:
+	\begin{enumerate}
+		\item $I=\{a,b,c\}\quad\Sigma=\mathscr{P}(\text{I})\setminus\{\varnothing\}$;
+		\item $I=\{a,b,c\}\quad\Sigma=\mathscr{P}(\text{I})\setminus\{\{\varnothing\},\{a,b,c\}\}$;
+	\end{enumerate}
+\end{ese}
+\begin{sol}
+	Partiamo scrivendo la catena del primo aiutandoci con le osservazioni precedenti:
+	\begin{center}
+		\begin{tikzcd}
+			0 \arrow[r,"\partial^\Sigma_3"] & \text{C}_2^\Sigma\arrow[r, "\partial^\Sigma_2" ] & \text{C}_{1}^\Sigma\arrow[r, "\partial^\Sigma_1" ] & \text{C}_{0}^\Sigma\arrow[r, "\partial^\Sigma_0"]& 0
+		\end{tikzcd}
+	\end{center}
+	Che grazie all'esempio \hyperref[es 10]{10} diventa:
+	\begin{center}
+		\begin{tikzcd}
+			0 \arrow[r,"\partial^\Sigma_3"] & \mathbb{Z}\arrow[r, "\partial^\Sigma_2" ] &\mathbb{Z}^3\arrow[r, "\partial^\Sigma_1" ] & \mathbb{Z}^3\arrow[r, "\partial^\Sigma_0"]& 0
+		\end{tikzcd}
+	\end{center}
+	Notiamo innanzitutto che il $Ker(\partial^\Sigma_0)\cong\mathbb{Z}^3$ quindi ora cerchiamo il $Ker(\partial^\Sigma_1)$ per determinarne anche l'immagine. Scriviamo una combinazione lineare degli elementi della base di $\text{C}_{1}^\Sigma$con coefficienti in $\mathbb{Z}$ come generico elemento di tale gruppo e andiamo a vedere quando tale elemento, calcolato con $\partial^\Sigma_1$ è nullo:
+	\begin{align*}
+		&\partial^\Sigma_1(a_1(<a,b>)+a_2(<b,c>)+a_3(<a,c>))=0\iff \\ 
+		&a_1(<b>-<a>)+a_2(<c>-<b>)+a_3(<c>-<a>)=0 \iff
+		\begin{cases}
+			a_1+a_3=0\\ 
+			a_1-a_2=0\\
+			a_2+a_3=0
+		\end{cases}
+	\end{align*} 
+	Il sistema si risolve facilmente in quanto la matrice associata ha rango 2 questo mi da necessariamente che $Ker(\partial^\Sigma_1)\cong\mathbb{Z}$ e che $Im(\partial^\Sigma_1)\cong\mathbb{Z}^2$.
+
+	Quindi intanto abbiamo trovato $\text{H}_0^\Sigma=\bigslant{\mathbb{Z}^3}{\mathbb{Z}^2}\cong\mathbb{Z}$.
+	Ora cerchiamo invece il $Ker(\partial^\Sigma_2)$ e quindi la sua immagine.
+	Ragioniamo come prima ovvero: 
+	\[
+		\partial^\Sigma_2(a_1(<a,b,c>))=0\iff a_1(<b,c>-<a,c>+<a,b>)=0 \iff a_1=0
+	\]
+	Quindi la funzione è iniettiva e di conseguenza questo mi implica che $\text{Im}(\partial^\Sigma_2)\cong\mathbb{Z}$ quindi abbiamo trovato che:
+	\begin{itemize}
+		\item $\text{H}_0^\Sigma=\bigslant{\mathbb{Z}^3}{\mathbb{Z}^2}\cong\mathbb{Z}$;
+		\item $\text{H}_1^\Sigma=\bigslant{\mathbb{Z}}{\mathbb{Z}}\cong\{0\}$
+		\item $\text{H}_2^\Sigma=\bigslant{\{0\}}{\{0\}}\cong\{0\}$.
+	\end{itemize}
+	Il secondo punto si risolve in modo analogo e da come risultati:
+	\begin{itemize}
+		\item $\text{H}_0^\Sigma\cong\mathbb{Z}$;
+		\item $\text{H}_1^\Sigma\cong\mathbb{Z}$;
+		\item $\text{H}_2^\Sigma\cong\{0\}$.
+	\end{itemize}
+\end{sol}
+\end{document}

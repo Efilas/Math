@@ -1,0 +1,512 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+\input{Template}
+\usetikzlibrary{bending}
+\usetikzlibrary{lindenmayersystems}
+
+\pgfdeclarelindenmayersystem{cayley}{
+	\rule{F -> F [ R [F] [+F] [-F] ]}
+	\symbol{R}{
+		\pgflsystemstep=0.5\pgflsystemstep
+	}
+}
+
+\begin{document}
+
+\titolo{Geometria 3}
+
+\tableofcontents
+
+\newpage
+
+\section{Teoria dei Rivestimenti}
+
+\subsection{Gruppo Fondamentale}
+
+\begin{defn}{Gruppo Fondamentale}{}
+	Sia $(X, \mathcal T)$ uno spazio topologico e sia $x_0 \in X$. Definiamo $\pi_1(X,x_0)$ il \textbf{Gruppo Fondamentale} come:
+	\[ \pi_1(X,x_0)=\{ \text{Classi di omotopia a estremi fissati di cammini }\gamma:[0,1] \to X : \gamma(0) = \gamma(1) = x_0 \} \]
+	Questo è un gruppo con l'operazione di giunzione tra cammini
+\end{defn}
+
+\begin{es}[$S^1$]
+	Sappiamo che il gruppo fondamentale di $S^1$ è:
+	\[ \pi_1(S^1,x_0) \cong \pi_1(S^1) \cong \mathbb Z \]
+	Infatti, possiamo considerare il gruppo fondamentale della circonferenza in base al numero di giri che vengono fatti partendo da un punto.
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,-1) arc (-90:270:2cm and 1cm);
+			\filldraw (0,-1) circle(1pt) node[above]{$x_0$} node[below]{$\rightarrow$};
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+In questo caso possiamo omettere il punto base, e indicare astrattamente che tipo di gruppo è, in quanto $X = S^1$ è connesso per archi, quindi:
+\[ \forall x_0,x_1 \in S^1 \qquad \pi_1(S^1, x_0) \cong \pi_1(S_1, x_1) \]
+È sufficiente trovare un cammino che leghi $x_0$ e $x_1$. Bisogna fare tuttavia attenzione che non esiste un isomorfismo canonico, in quanto dipende dalla scelta di tale cammino $\gamma \in \Omega(X, x_0,x_1)$
+\begin{center}
+	\begin{tikzpicture}
+		\draw (0,-1) arc (-90:270:2cm and 1cm);
+		\filldraw (0,-1) circle(1pt) node[above]{$x_0$};
+		\filldraw (2,0) circle(1pt) node[right]{$x_1$};
+		\begin{scope}[decoration={
+			markings,
+			mark=at position 0.5 with {\arrow{>}}}]
+			\draw[thick, postaction = {decorate}] (0,-1) arc(-90:0:2cm and 1cm) node[pos = 0.5, above]{$\gamma$};
+		\end{scope}
+	\end{tikzpicture}
+\end{center}
+
+\begin{es}[$S^1 \vee S^1$]
+	Il bouquet di $2$ circonferenze (o wedge di $2$ circonferenze) ha gruppo fondamentale il prodotto libero di $\mathbb Z$ con sé stesso. Cioè:
+	\[ \pi_1(S^1 \vee S^1) = \mathbb Z * \mathbb Z \]
+	Con gruppo libero intendiamo una concatenazione di elementi da un parte e elementi dall'altra.
+\end{es}
+
+Esiste un teorema formidabile che permette di calcolare il gruppo fondamentale degli spazi topologici:
+
+\begin{thm}{Teorema di Van Kampen}{}
+	Sia $X = A\cup B$, dove $A,B$ sono degli aperti in $X$ connessi per archi la cui intersezione è connessa per archi e sia $x_0 \in A \cap B$. Allora:
+	\[ \pi_1(X, x_0) \cong \frac{\pi_1(A, x_0) * \pi_1(B, x_0)}{\langle i_*([\gamma])*(j_*([\gamma]))^{-1} \sim id : [\gamma] \in \pi_1(A \cap B, x_0) \rangle} \]
+	Dove abbiamo che:
+	\begin{center}
+		\begin{tikzcd}
+			& A \arrow[hook, dr]\\
+			A\cap B \arrow[hook, ur, "i"] \arrow[hook, dr, "j"'] && X\\
+			& B \arrow[hook, ur]
+		\end{tikzcd}
+	\end{center}
+\end{thm}
+
+\begin{es}[$\mathbb R^n$]
+	Sapendo che $\mathbb R^n$ è contraibile, cioè omotopicamente equivalente ad un punto abbiamo che:
+	\[ \pi_1(\mathbb R^n) \cong \{1\} \]
+\end{es}
+
+\begin{es}[$S^n, n\geq 2$]
+	Il gruppo fondamentale della sfera $n-$dimensionale, per $n\neq 1$ è $\pi_1(S^n) = \{1\}$ in quanto è semplicemente connesso:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}
+				\clip (0,0) circle(1cm);
+				\draw[dashed] (180:1) arc(180:0:1cm and 0.25cm) (90:1) arc(90:-90:0.25cm and 1cm);
+				\fill[green, very nearly transparent] (195:1) arc(180:360:0.97 and 0.23) arc(-15:195:1);
+				\draw[green] (195:1) arc (180:360:0.97 and 0.23);
+				\draw[green, dashed] (195:1) arc(180:0:0.97 and 0.23);
+				\fill[blue, very nearly transparent] (150:1) arc(150:390:1 and 0.25) arc (390:150:1);
+				\draw[blue] (150:1) arc(150:390:1 and 0.25) arc (390:150:1);
+				\draw[blue, dashed] (165:1) arc(180:0: 0.97 and 0.23);
+			\end{scope}
+			\draw (0,0) circle(1cm) (180:1) arc (180:360:1cm and 0.25cm) (90:1) arc (90:270:0.25cm and 1cm);
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+Questo era un esempio in cui si vede che il gruppo fondamentale ci da informazioni limitate su che tipo di spazio topologico stiamo lavorando.
+
+\begin{es}[$\mathbb P^2(\mathbb R)$]
+	Sappiamo che il gruppo fondamentale dello spazio proiettivo reale è:
+	\[ \pi_1(\mathbb P^2(\mathbb R)) = \mathbb Z/_2 \]
+
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,0) circle(1cm);
+			\filldraw[green, very nearly transparent] (0,0) circle(1cm);
+			\filldraw (0,1) circle(1pt) (0,-1) circle(1pt);
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}] (0,-1) arc(-90:90:1cm);
+				\draw[thick, postaction = {decorate}] (0,1) arc(90:270:1cm);
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+Prima di dare il prossimo teorema, ricordiamo delle definizioni:
+
+\begin{defn}{Retrazione}{}
+	Se $A \subseteq X$ $r:X \to A$ è una \textbf{Retrazione} se $r|_A = id_A$ ed è continua
+\end{defn}
+
+\begin{defn}{Retrazione per Deformazione}{}
+	Sia $r:X \times [0,1] \to X$. Questa è una \textbf{Retrazione per Deformazione} se $r$ è continua tale che:
+	\begin{itemize}
+		\item $r|_{X \times \{0\}} = id_X$
+		\item $Im(r|_{X \times \{1\}}) = A$
+		\item $r(x,t) = x, \forall x \in A, \forall t \in [0,1]$
+	\end{itemize}
+\end{defn}
+
+Osserviamo che la prima è istantanea, mentre la seconda è più graduale. Inoltre vale:
+\[ r|_{X \times \{1\}} \text{ è una retrazione}\]
+Quindi una retrazione per deformazione è un'omotopia tra identità e retrazione che tiene fissi tutti i punti di $A$, per ogni $t \in [0,1]$
+
+\begin{thm}{di non retrazione}{}\label{nonretraz}
+	Non esiste alcuna retrazione del tipo:
+	\[ \gamma: D^2 \to S^1 = \partial D^2 \]
+\end{thm}
+
+Quello che il teorema ci dice è che non esiste nessuna funzione continua che porti tutti i punti del disco sul suo bordo
+
+\begin{proof}
+	Supponiamo tale retrazione esista, allora, con un diagramma, abbiamo che:
+	\begin{center}
+		\begin{tikzcd}
+			S^1 \arrow[r, hook, "i"] & D^2 \arrow[l, bend left = 30, "r"]
+		\end{tikzcd}
+	\end{center}
+	In particolare, questo ci dice che:
+	\[r\circ i = id_{S^1}\]
+	Ma allora, sfruttando la funtorialità di $\pi_1$, abbiamo che:
+	\[ r_* \circ i_* = (id_{S^1})_* = id_{\pi_1(S^1, x)} \]
+	Quindi il nostro diagramma diventa:
+	\begin{center}
+		\begin{tikzcd}
+			{\pi_1(S^1, x_0)} \arrow[r, bend left = 30, "i_*"] \arrow[d, dotted, "{\cong}" description] & {\pi_1(D^2,x_0)} \arrow[l, bend left = 30, "r_*"] \arrow[d, dotted, "{\cong}" description]\\
+			\mathbb Z & \{1\}
+		\end{tikzcd}
+	\end{center}
+	Ma questo è assurdo perché $\pi_1(D^2, x_0)$ è banale, quindi $r_* \circ i_*$ deve mandare tutto in $1_{\pi_1(S^1,x_0)}$, quindi non può essere un'identità
+\end{proof}
+
+\begin{ese}
+	Se $r:X \to A$ è una retrazione, con $x_0 \in A \subseteq X$, allora, posta $i:A \hookrightarrow X$ inclusione:
+	\[ i_*:\pi_1(A,x_0) \to \pi_1(X,x_0) \text{ è iniettiva} \]
+\end{ese}
+
+\begin{thm}{del punto fisso di Brower}{}
+	Ogni funzione continua $f:D^2 \to D^2$ ha un punto fisso
+\end{thm}
+\begin{proof}
+	Supponiamo per assurdo che non ci siano punti fissi, cioè che:
+	\[ f(x)\neq x \quad \forall x \in D^2 \]
+	Definiamo allora una retrazione $r:D^2 \to S^1$ nel seguente modo:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,0) circle(1cm);
+			\filldraw (0,-0.5) circle(1pt) node[left]{$f(x_0)$} (0.5,-0.25) circle(1pt) node[above]{$x_0$} (1,0) circle(1pt) node[right]{$r(x)$};
+			\filldraw (0,1) circle(1pt) node[above]{$x_1 = r(x_1)$} (-0.5,0.5) circle(1pt) node[below]{$f(x_1)$};
+			\draw (0,-0.5) -- (1,0) (0,1) -- (-0.5,0.5);
+		\end{tikzpicture}
+	\end{center}
+	Cioè consideriamo i punti in $D^2$ e consideriamo la retta che unisce il punto nel dominio con la sua immagine. Prolunghiamo poi tale retta finché non incontri $S^1$, a quel punto abbiamo trovato $r(x)$. Questa è la retrazione che stavamo cercando. Inoltre è continua, in quanto, intuitivamente, spostando di poco il punto spostiamo di poco la retta. Tuttavia questo è assurdo, in quanto, per il teorema precedente \hyperref{nonretraz}[1.1.5], avevamo che non esistevano retrazioni $\gamma:D^2 \to S^1$.\\
+	Più precisamente, possiamo definire $r$ nel seguente modo:
+	\[ r(x) = x + \lambda(x-f(x))\qquad \text{per }\lambda \geq 0, x \in D^2 \]
+	A questo punto ci resta da trovare $\lambda$ e per farlo ci basta imporre $\|r(x)\| = 1$, cioè dobbiamo risolvere:
+	\[ \|x + \lambda(x-f(x))\|^2 = 1 \]
+	\textit{Possiamo mettere il valore assoluto per comodità.} A questo punto ci basta risolvere quest'equazione di secondo grado e trovare il termine positivo. Infatti, l'equazione diventa:
+	\[ \|x\|^2 + 2\lambda \langle x, x-f(x) \rangle + \lambda^2 \| x- f(x)\|^2 = 0 \]
+\end{proof}
+
+% Da finire
+
+\begin{thm}{di Invarianza della Dimensione}{}
+	$\mathbb R^2$ non è omeomorfo a $\mathbb R^n$ se $n \neq 2$
+\end{thm}
+\begin{proof}
+	Supponiamo per assurdo di avere un omeomorfismo $f:\mathbb R^2 \to \mathbb R^n$. Se rimuoviamo un punto $x$ da $\mathbb R^2$, allora abbiamo che $f$ si restringe su $\mathbb R^2 \setminus \{x\}$ ed è ancora un omeomorfismo, cioè:
+	\[ \mathbb R^2 \setminus \{x\} \cong \mathbb R^n \setminus \{f(x)\} \]
+	Tuttavia sappiamo che:
+	\[ \pi_1(\mathbb R^2 \setminus \{x\}) \cong \pi_1(S^1) \cong \mathbb Z \]
+	Mentre abbiamo che:
+	\[ \pi_1(\mathbb R^n \setminus \{ f(x) \}) \cong \pi_1(S^{n-1}) \cong
+		\begin{cases}
+			\{1\} & \text{se }n\neq 2\\
+			\mathbb Z & \text{se }n = 2
+		\end{cases}
+	\]
+\end{proof}
+
+\begin{oss}
+	Questo teorema vale anche per dimensioni maggiori di $2$. Infatti si possono fari dimostrazioni simili usando gruppi di omotopia superiori $\pi_k$ oppure usando gruppi di omologia $H_k$ invece di $\pi_1$
+\end{oss}
+
+\begin{thm}{Fondamentale dell'Algebra}{}
+	Ogni polinomio complesso $f(x) \in \mathbb C[x]$ di grado $\geq 1$ ha almeno una radice, in particolare se è di grado $n$ ha $n$ radici contate con le loro molteplicità
+\end{thm}
+
+\begin{proof}[Idea della Dimostrazione]
+	Supponiamo per assurdo che esista un polinomio senza radici, cioè che $f(x) \neq 0, \forall x \in \mathbb C$. Immaginiamo di prendere di prendere un cammino chiuso $\gamma$ in $\mathbb C$ che abbracci l'origine e che sia "sufficientemente lontano" da $0$. Per $|x|$ grande abbiamo che possiamo approssimare $f(x) = x^n$, se $f(x)$ è monico. Quindi per $|x|$ grande, possiamo dire che $f \circ \gamma$ è un cammino che fa $n$ giri attorno all'origine in $\mathbb C^*$, \textit{in quanto l'argomento del numero complesso viene moltiplicato per $n$}.
+	Tuttavia, questo è assurdo, in quanto abbiamo che:
+	\[ [\gamma] \in \pi_1(\mathbb C) \qquad \mapsto \qquad [f \circ \gamma] \in \pi_1(\mathbb C^*) \]
+	Ma questo è un omomorfismo di gruppi che manda l'identità in un elemento che non è l'elemento neutro di $\pi_1(\mathbb C^*)$. Questo è assurdo, quindi deve avere necessariamente avere una radice
+\end{proof}
+
+\subsection{Rivestimenti}
+
+L'esempio di $\mathbb R$ con $S^1$ è un esempio di rivestimento. Guardiamola nel dettaglio:
+\begin{center}
+	\begin{tikzpicture}[domain = -3:3]
+		\draw[decoration={aspect=0.3, segment length=7.5mm, amplitude=1cm,coil},decorate,opacity=0.9, thin, rotate = -90] (0,0) -- (4,0);
+		\draw[thick, rotate = -90] (2,0) circle(0.25cm and 1cm);
+	\end{tikzpicture}
+\end{center}
+Sia $\gamma$ un cammino chiuso in $S^1$, in particolare $\gamma \in \Omega(S^1,1,1)$ dove $1$ viene visto come elemento in $\mathbb C$. Allora, per un teorema visto in Geometria 2, possiamo sollevare in modo unico un cammino $\tilde \gamma$ che parte da $0 \in \mathbb R$. (\textit{È lo stesso principio della formula 1.}) In particolare, con un diagramma commutativo, abbiamo che:
+\begin{center}
+	\begin{tikzcd}
+		& \mathbb R \arrow[d, "p"]\\
+		{[0,1]} \arrow[ur, dashed, "\tilde \gamma"] \arrow[r, "\gamma"] & S^1
+	\end{tikzcd}
+\end{center}
+Abbiamo quindi che $\tilde \gamma$ è un sollevamento se e solo se $\gamma = p \circ \gamma$, cioè se il diagramma commuta. Per definizione di sollevamento, abbiamo quindi che $\tilde \gamma(1) \in \mathbb Z$. Grazie a questa cosa, possiamo definire un isomorfismo tra $\pi_1(S^1,1)$ e $\mathbb Z$. (Infatti ci basta considerare un qualsiasi $[\gamma]$ elemento del gruppo fondamentale e considerare $\tilde \gamma(1)$)
+
+Questa mappa è un sollevamento e quest'idea dei sollevamenti verrà applicata in generale ai rivestimenti.
+
+\begin{defn}{Rivestimento}{}
+	Un \textbf{Rivestimento} di uno spazio topologico $X$ è uno spazio $\tilde X$ con una mappa di "proiezione" $p:\tilde X \to X$ tale che ogni $x \in X$ ha un intorno $U$ (detto \textbf{Aperto Banalizzante} o \textbf{Aperto Ben Rivestito}) tale che $p^{-1}(U)$ è unione disgiunta di aperti di $\tilde X$, ciascuno mappato omeomorficamente su $U$ tramite $p$, cioè:
+	\[ p^{-1} = \coprod_{i \in I} \tilde U_i, \tilde U_i \subseteq \tilde X \text{ aperto}\qquad \text{con }p|_{\tilde U_i}:\tilde U_i \to U \text{ omeomorfismi} \]
+\end{defn}
+
+\textit{In parole semplici, $\tilde X$ è uno spazio in cui la topologia locale coincide con quella di $X$, ma non quella globale}
+
+\begin{oss}
+	Dato $p:\tilde X \to X$ rivestimento, la cardinalità di $p^{-1}(x)$, per $x \in X$, che viene detta \textbf{Numero di Fogli sopra }$x$, è localmente costante. Quindi è costante se $X$ è connesso.
+\end{oss}
+
+\begin{defn}{Locale Costanza}{}
+	Una funzione $f:X \to Y$ è detta \textbf{Localmente Costante} (tra $X$ spazio topologico e $Y$ insieme qualsiasi) se ogni $x \in X$ ha un intorno $U$ su cui $f$ è costante. Equivalentemente se $f$ è continua dando a $Y$ la topologia discreta.
+\end{defn}
+
+\begin{lemma}{}{}
+	Se $f:X \to Y$ è localmente costante e $X$ è connesso, allora $f$ è costante.
+\end{lemma}
+\begin{proof}
+	Sia $X$ connesso, allora, essendo $f$ continua, abbiamo che $f(X)$ è commesso rispetto alla topologia indotta da $Y$. Ma la topologia di $Y$ è quella discreta, quindi abbiamo necessariamente che $|f(X)| = 1$, quindi $f$ è costante.
+\end{proof}
+
+Nel caso del numero di fogli, abbiamo che $Y = \{\text{ cardinalità }\leq |X|\}$, oppure più semplicemente $\mathbb N \cup \{+\infty\}$. Tutto questo è diretta conseguenza della definizione di rivestimento.
+
+\begin{es}
+	Banalmente lo stesso insieme $X \amalg X$ è un rivestimento di $X$. Ma non solo con due:
+	\[ \coprod_{n \in N}X \text{ è ancora un rivestimento di }X \]
+	Questo perché gli stessi aperti di $X$ sono aperti banalizzanti
+\end{es}
+
+\begin{es}
+	Consideriamo $p:\mathbb R \to S^1$ tramite $p(x) = e^{2 \pi ix}$. Per verificare che è un rivestimento, possiamo usare due aperti banalizzanti che ricoprono $S^1$
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick] (0,0) circle (1cm);
+			\filldraw[green, very nearly transparent] (100:0.9) arc (100:-100:0.9) to[out = 170, in = 170] (-100:1.1) arc (-100:100:1.1) to[out = 190, in = 190] (100:0.9);
+			\filldraw[blue, very nearly transparent] (80:0.9) arc (80:280:0.9) to[out = 10, in = 10] (-80:1.1) arc (280:80:1.1) to[out = -10, in = -10] (80:0.9);
+		\end{tikzpicture}
+	\end{center}
+	In questo caso, le controimmagini $p^{-1}(U)_1$ e $p^{-1}(U_2)$ sono unioni disgiunte di segmenti aperti di $\mathbb  R$. In questo caso abbiamo che il numero di fogli è pari a $\aleph_0$
+\end{es}
+
+\begin{es}
+	Anche la mappa $\mathbb C \xrightarrow{exp} \mathbb C^*$ è un rivestimento, infatti possiamo vederlo come:
+	\begin{center}
+		\begin{tikzcd}
+			\mathbb C \arrow[d, dotted, "\cong" description] \arrow[r, "exp"] & {\mathbb C^*} \arrow[d, dotted, "\cong" description]\\
+			{\mathbb R \times \mathbb R} & {\mathbb R^+ \times S^1}
+		\end{tikzcd}
+	\end{center}
+	In particolare abbiamo che:
+	\[ z \in \mathbb C, z = x + 2\pi i y \quad \mapsto \quad e^{x + 2\pi iy} = e^{x} e^{2 \pi i y} \]
+	Quindi, sfruttando la proprietà universale del prodotto, può essere vista come un prodotto di due funzioni, una $\mathbb R \to \mathbb R^+$, che manda $x$ in $e^x$ che è un omeomorfismo, e una mappa $\mathbb R \to S^1$, che manda $y \in e^{i y}$ che è un rivestimento. Essendo questi due rivestimenti (in generale un omeomorfismo è un rivestimento), allora anche il prodotto stesso è un rivestimento
+\end{es}
+
+\begin{ese}
+	Dati $p_1:\tilde X_1 \to X_1$ e $p_2:\tilde X_2 \to X_2$ rivestimenti, allora:
+	\[ (p_1,p_2):\tilde X_1 \times \tilde X_2 \to X_1\times X_2 \text{ è un rivestimento} \]
+\end{ese}
+
+\begin{es}
+	Una funzione $S^1 \to S^1$. Dato $n\geq 1$ naturale, $p(z) = z^n$. Per esempio con $n=3$ si ha che:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[domain=0:1, smooth, variable = \t,white, very thick, double=black] plot({-sin(\t*(30))}, {1 + \t*(30/1080-1)}, {-cos(\t*(30))});
+			\draw[domain=30:360,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=360:720,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=720:1080,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=0:360,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},-1,{-cos(\t)});
+			\draw[->] (0,0,0) -- (0,-1,0) node[pos = 0.35, right]{$p$};
+			\draw (1.75,0.5) node{$n=3$} (1.5,-1) node{$S^1$};
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+\begin{oss}
+	Tutti i rivestimenti connessi $\tilde X$ di $S^1$ sono o $\mathbb R$ o $S^1$. Per averli sconnessi ci basta prendere l'unione disgiunta di $\mathbb R$ oppure di $S^1$
+\end{oss}
+
+\begin{defn}{Numero di Fogli}{}
+	Il \textbf{Numero di Fogli}, sopra ad un punto $x \in X$ di un rivestimento $p:\tilde X \to X$ è $|p^{-1}(x)|$
+\end{defn}
+
+Grazie alla connessione, abbiamo che il numero di fogli è costante. Per esempio nel seguente ricoprimento, si ha che il numero di fogli è costante ed è uguale a $3$
+\begin{center}
+	\begin{tikzpicture}
+		\draw[domain=0:1, smooth, variable = \t,white, very thick, double=black] plot({-sin(\t*(30))}, {1 + \t*(30/1080-1)}, {-cos(\t*(30))});
+		\draw[domain=30:360,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+		\draw[domain=360:720,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+		\draw[domain=720:1080,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},\t/1080,{-cos(\t)});
+		\draw[domain=0:360,smooth,variable=\t,white,very thick,double=black] plot({-sin(\t)},-1,{-cos(\t)});
+		\draw[thin, dashed] (0,-1,1) -- (0,1,1);
+		\filldraw (0,-1,1) circle(1pt) (0, 180/1080, 1) circle(1pt) (0,540/1080,1) circle(1pt) (0,900/1080,1) circle(1pt);
+	\end{tikzpicture}
+\end{center}
+Se, invece, così non fosse, esisterebbe un punto che non avrebbe un intorno banalizzante, quindi verrebbe a mancare la definizione di rivestimento. Se invece lo spazio di partenza non è connesso, allora il numero di fogli varia a seconda del punto scelto:
+
+\begin{es}[$X$ non connesso]
+	Un esempio semplice di insieme non connesso è $X = S^1 \vee S^1$, che può avere un ricoprimento tale che una circonferenza abbia $3$ fogli mentre l'altra solo $2$.
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[domain=0:1, smooth, variable = \t,white, very thick, double=green] plot({-sin(\t*(30))}, {1 + \t*(30/1080-1)}, {-cos(\t*(30))});
+			\draw[domain=30:360,smooth,variable=\t,white,very thick,double=green] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=360:720,smooth,variable=\t,white,very thick,double=green] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=720:1080,smooth,variable=\t,white,very thick,double=green] plot({-sin(\t)},\t/1080,{-cos(\t)});
+			\draw[domain=0:360,smooth,variable=\t,white,very thick,double=green] plot({-sin(\t)},-1,{-cos(\t)});
+			\draw[domain=0:1, smooth, variable = \t,white, very thick, double=blue] plot({-sin(\t*(30)) +2.5}, {2/3 + \t*(30/1080-2/3)}, {-cos(\t*(30))});
+			\draw[domain=30:360,smooth,variable=\t,white,very thick,double=blue] plot({-sin(\t)+2.5},\t/1080,{-cos(\t)});
+			\draw[domain=360:720,smooth,variable=\t,white,very thick,double=blue] plot({-sin(\t)+2.5},\t/1080,{-cos(\t)});
+			\draw[domain=0:360,smooth,variable=\t,white,very thick,double=blue] plot({-sin(\t)+2.5},-1,{-cos(\t)});
+		\end{tikzpicture}
+	\end{center}
+\end{es}
+
+Un esempio interessante può essere dato dal rivestimento di $S^1 \vee S^1$
+
+\begin{es}[$X=S^1 \vee S^1$]
+	Vediamo un po' di rivestimenti di $X$. In particolare, se possiamo vedere $X$ come:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}, blue] (0,0) arc(0:-360:1cm) node[pos = 0.5, left]{$a$} node(a)[pos = 0.85]{};
+				\draw[thick, postaction = {decorate}, green] (0,0) arc(-180:180:1cm) node[pos = 0.5, right]{$b$};
+			\end{scope}
+			\filldraw (0,0) circle(2pt);
+			\filldraw[red, very nearly transparent] (0,0) circle(0.5cm);
+			\filldraw[purple] (a) circle(2pt);
+		\end{tikzpicture}
+	\end{center}
+	Un esempio di rivestimento può essere:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}, blue] (0,0) arc(0:-360:1cm) node[pos = 0.5, left]{$a$} node(a)[pos = 0.85]{};
+				\draw[thick, postaction = {decorate}, green] (0,0) arc(180:0:1cm) node[pos = 0.5, above]{$b$};
+				\draw[thick, postaction = {decorate}, green] (2,0) arc(0:-180:1cm) node[pos = 0.5, below]{$b$};
+				\draw[thick, postaction = {decorate}, blue] (2,0) arc(180:-180:1cm) node[pos = 0.5, right]{$a$} node(b)[pos = 0.85]{};
+			\end{scope}
+			\filldraw (0,0) circle(2pt) (2,0) circle(2pt);
+			\filldraw[red, very nearly transparent] (0,0) circle(0.5cm) (2,0) circle(0.5cm);
+			\filldraw[purple] (a) circle(2pt);
+			\filldraw[purple] (b) circle(2pt);
+		\end{tikzpicture}
+	\end{center}
+	Possiamo vedere che questo è facilmente un rivestimento in quanto gli aperti banalizzanti sono principalmente di tre tipi:
+	\begin{itemize}
+		\item La stessa circonferenza {\color{blue} $a$} tolto il punto di contatto delle circonferenze (equivalentemente ogni suo aperto)
+		\item La stessa circonferenza {\color{green} $b$} tolto il punto di contatto delle circonferenze (in modo analogo con ogni suo aperto)
+		\item Un qualsiasi aperto simile a quello rosso in figura, purché non contenga completamente nessuna delle circonferenze
+	\end{itemize}
+	Nei primi due casi abbiamo che l'aperto ottenuto dalla controimmagine della mappa $p$ del rivestimento coincide esattamente ad un tratto di circonferenza (che sia di $a$ o che sia di $b$, purché siano le stesse). Nel terzo caso invece abbiamo invece che ogni aperto contiene $4$ tratti di circonferenza: un tratto entrante e uno uscente della circonferenza $a$ e uno entrante e uno uscente della circonferenza $b$. Se le frecce di $b$ fossero state invertite, non sarebbe più stato omeomorfismo, perché preso un qualunque aperto in $S^1\vee S^1$, contenente solamente $3$ archi di circonferenza, avrebbe avuto come controimmagine un aperto contenente $4$ archi di circonferenza. Non essendo omeomorfismo, non sarebbe stato neanche rivestimento. Tuttavia, in questo caso abbiamo che il numero di fogli è $2$.
+
+	Questo non è l'unico esempio di rivestimento di $S^1 \vee S^1$, in quanto anche il seguente è un rivestimento di $X$:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}, blue] (-2,0) arc(180:0:1cm) node[pos = 0.5, above]{$a$};
+				\draw[thick, postaction = {decorate}, blue] (0,0) arc(0:-180:1cm) node[pos = 0.5, below]{$a$};
+				\draw[thick, postaction = {decorate}, green] (0,0) arc(180:0:1cm) node[pos = 0.5, above]{$b$};
+				\draw[thick, postaction = {decorate}, green] (2,0) arc(0:-180:1cm) node[pos = 0.5, below]{$b$};
+				\draw[thick, postaction = {decorate}, blue] (2,0) arc(180:0:1cm) node[pos = 0.5, above]{$a$};
+				\draw[thick, postaction = {decorate}, blue] (4,0) arc(0:-180:1cm) node[pos = 0.5, below]{$a$};
+				\draw[thick, postaction = {decorate}, green] (4,0) arc(180:0:1cm) node[pos = 0.5, above]{$b$};
+				\draw[thick, postaction = {decorate}, green] (6,0) arc(0:-180:1cm) node[pos = 0.5, below]{$b$};
+			\end{scope}
+			\draw[thick, green] (-2,0) arc(0:60:1cm) (-2,0) arc(0:-60:1cm);
+			\draw[thick, blue] (6,0) arc(180:120:1cm) (6,0) arc(180:240:1cm);
+			\filldraw (0,0) circle(2pt) (2,0) circle(2pt) (-2,0) circle(2pt) (4,0) circle(2pt) (6,0) circle(2pt);
+			\filldraw[red, very nearly transparent] (0,0) circle(0.5cm) (2,0) circle(0.5cm) (-2,0) circle(0.5cm) (4,0) circle(0.5cm) (6,0) circle(0.5cm);
+			\draw (-3,0) node{$\cdots$} (7,0) node{$\cdots$};
+		\end{tikzpicture}
+	\end{center}
+	Qui invece abbiamo che il numero di fogli è $+\infty$. Ovviamente, come nel caso precedente, si deve avere che le frecce devono essere orientate in modo diverso, altrimenti non si ha un omeomorfismo tra gli aperti banalizzanti.
+
+	Un altro esempio di rivestimento a due fogli può essere:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}, blue] (0,1) arc(90:270:0.5cm and 1cm);
+				\draw[thick, postaction = {decorate}, green] (0,1) arc(90:-90:1cm);
+				\draw[thick, postaction = {decorate}, green] (0,-1) arc(-90:90:0.5cm and 1cm);
+				\draw[thick, postaction = {decorate}, blue] (0,-1) arc(-90:-270:1cm);
+			\end{scope}
+			\filldraw (0,1) circle(2pt) (0,-1) circle(2pt);
+			\filldraw[red, very nearly transparent] (0,1) circle(0.5cm) (0,-1) circle(0.5cm);
+		\end{tikzpicture}
+	\end{center}
+	Un esempio di sollevamento a $3$ fogli può essere:
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{scope}[decoration={
+				markings,
+				mark=at position 0.5 with {\arrow{>}}}]
+				\draw[thick, postaction = {decorate}, blue] (0,0) arc(0:-360:1cm) node[pos = 0.5, left]{$a$};
+				\draw[thick, postaction = {decorate}, green] (0,0) arc(180:0:1cm) node[pos = 0.5, above]{$b$};
+				\draw[thick, postaction = {decorate}, green] (2,0) arc(0:-180:1cm) node[pos = 0.5, below]{$b$};
+				\draw[thick, postaction = {decorate}, blue] (2,0) arc(180:0:1cm) node[pos = 0.5, above]{$a$};
+				\draw[thick, postaction = {decorate}, blue] (4,0) arc(0:-180:1cm) node[pos = 0.5, below]{$a$};
+				\draw[thick, postaction = {decorate}, green] (4,0) arc(180:-180:1cm) node[pos = 0.5, right]{$b$};
+			\end{scope}
+			\filldraw (0,0) circle(2pt) (2,0) circle(2pt) (4,0) circle(2pt);
+		\end{tikzpicture}
+	\end{center}
+	In questo caos possiamo notare che se prendiamo un cammino chiuso lungo $a$ in $S^1 \vee S^1$, allora nel suo sollevamento, tale cammino può essere aperto come può essere chiuso. Dipende dalla controimmagine del punto
+\end{es}
+
+\begin{ese}
+	Sia $\tilde X$ un qualsiasi grafo orientato con archi etichettati con $a$ e $b$ tali che ogni punto abbia un arco $a$ entrante, un arco $a$ uscente, un arco $b$ entrante e un arco $b$ uscente, allora $p:\tilde X \to S^1\vee S^1$, definita da orientazione ed etichette, è un rivestimento. Inoltre tutti i rivestimenti di $S^1 \vee S^1$ hanno questa struttura
+\end{ese}
+
+\begin{es}[Rivestimento Semplicemente Connesso di $S^1 \vee S^1$]
+	Esiste un rivestimento semplicemente connesso di $S^1 \vee S^1$:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw l-system [l-system={cayley, axiom=[F] [+F] [-F] [++F], step=1cm, order=4}];
+		\end{tikzpicture}
+	\end{center}
+	Dove ogni arco orizzontale coincide con $a$, orientato verso destra, mentre ogni arco verticale coincide con $b$, orientato verso l'alto. In questo modo abbiamo che ogni punto ha un intorno con quattro archi, definito come sopra. Questa figura può essere vista o come grafo o come elemento in $\mathbb R^2$
+\end{es}
+
+\begin{defn}{Rivestimento Universale}{}
+	Un rivestimento semplicemente connesso si chiama \textbf{Rivestimento Universale}
+\end{defn}
+
+\begin{oss}
+	Il rivestimento universale di uno spazio topologico $X$ riveste qualsiasi altro rivestimento di $X$
+\end{oss}
+
+\begin{es}
+	$\mathbb R$ è un rivestimento universale di $S^1$, così come $\mathbb C$ è un rivestimento universale di $\mathbb C^*$
+\end{es}
+
+\begin{oss}
+	Se $p:\tilde X \to X$ è un qualsiasi rivestimento, allora abbiamo che $p_*:\pi_1(\tilde X, \tilde x_0) \to \pi_1(X,x_0)$ è iniettiva. Potremo quindi interpretare che $\pi_1(\tilde X, \tilde x_0)$ è un sotto gruppo di $\pi_1(X,x_0)$. Dimostreremo poi che c'è una corrispondenza fra rivestimenti e gruppi.
+\end{oss}
+
+\begin{es}
+	Posto $X = S^1$, abbiamo allora che $\mathbb R \to S^1$ è un rivestimento che manda l'unico elemento di $\pi_1(\mathbb R)$, l'elemento neutro, nell'elemento neutro di $S^1$, mentre $S^1 \to S^1$, tale che $z \mapsto z^n$, manda $[1] \mapsto [n]$, cioè è il sottogruppo $n \mathbb Z$
+\end{es}
+
+\begin{oss}
+	Dall'osservazione precedente, abbiamo che $\mathbb F_2= \mathbb Z * \mathbb Z = \pi_1(S^1 \vee S^1)$ contiene sottogruppi liberi di $m$ generatori, per $m \geq 2$.
+\end{oss}
+
+\begin{oss}
+	Alcuni rivestimenti sembrano più simmetrici di altri. Dimostreremo poi che i loro gruppi fondamentali non sono altro che sottogruppi normali del gruppo fondamentale
+\end{oss}
+
+\end{document}

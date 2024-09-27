@@ -27,6 +27,7 @@
 \raisebox{-2.1pt}{\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
 \usetikzlibrary{cd,decorations.pathmorphing,patterns}
 \usepackage[T1]{fontenc}
+\usetikzlibrary{decorations.markings}
 
 % Pacchetti TCB
 \tcbuselibrary{documentation}
@@ -127,17 +128,17 @@
 	\tikzset{pgfornamentstyle/.style={draw = black, fill = teal!50}}
 	\unitlength=1cm
 	\begin{center}
-	\begin{picture}(12,12)%
+	\begin{picture}(10,10)%
 		\color{white}%
-			\put(0,0){\framebox(12,12){%
-			\rput[tl](-4,6){\pgfornament[width=8cm]{71}}%
-			\rput[bl](-4,-6){\pgfornament[width=8cm,,symmetry=h]{71}}%
-			\rput[tl](-6,6){\pgfornament[width=2cm]{63}}%
-			\rput[tr](6,6){\pgfornament[width=2cm,,symmetry=v]{63}}%
-			\rput[bl](-6,-6){\pgfornament[width=2cm,,symmetry=h]{63}}%
-			\rput[br](6,-6){\pgfornament[width=2cm,,symmetry=c]{63}}%
-			\rput[bl]{-90}(-6,4){\pgfornament[width=8cm]{46}}%
-			\rput[bl]{90}(6,-4){\pgfornament[width=8cm]{46}}%
+			\put(0,0){\framebox(10,10){%
+			\rput[tl](-3,5){\pgfornament[width=6cm]{71}}%
+			\rput[bl](-3,-5){\pgfornament[width=6cm,,symmetry=h]{71}}%
+			\rput[tl](-5,5){\pgfornament[width=2cm]{63}}%
+			\rput[tr](5,5){\pgfornament[width=2cm,,symmetry=v]{63}}%
+			\rput[bl](-5,-5){\pgfornament[width=2cm,,symmetry=h]{63}}%
+			\rput[br](5,-5){\pgfornament[width=2cm,,symmetry=c]{63}}%
+			\rput[bl]{-90}(-5,3){\pgfornament[width=6cm]{46}}%
+			\rput[bl]{90}(5,-3){\pgfornament[width=6cm]{46}}%
 			\rput(0,0){\Huge \color{black} #1}%
 			\rput[t](0,-0.5){\pgfornament[width=5cm]{75}}%
 			\rput[b](0,0.5){\pgfornament[width=5cm]{69}}%
