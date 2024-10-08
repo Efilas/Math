@@ -1,7 +1,7 @@
 \documentclass[11pt, a4paper, twoside]{article}
 
 \input{Template}
-
+\let\amsamp=&
 \begin{document}
 \section{My Section}
 \label{sec:my-section}
@@ -37,5 +37,7 @@ Lorem impsum... \hyperref[sec:my-section]{First Topic}
 \begin{sol}
 \end{sol}
 
-
+\begin{tikzcd}[ampersand replacement=\&]
+A \arrow{r}{ciao}[swap]{\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}} \& B
+\end{tikzcd}
 \end{document}

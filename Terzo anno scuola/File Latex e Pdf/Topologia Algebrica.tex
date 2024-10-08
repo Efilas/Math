@@ -2,6 +2,12 @@
 
 \input{Template}
 \newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}}
+\let\amsamp=&
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary {intersections}
+\usetikzlibrary{calc}
+\usepackage{physics}
+\usepackage{mathtools}
 \begin{document}
 
 \titolo{Topologia Algebrica}
@@ -10,7 +16,7 @@
 
 \newpage
 
-\section{Teoria dell'Omologia}
+\section{Primi passi sulla teoria dell'Omologia}
 
 \subsection{Omologia Singolare}
 
@@ -494,4 +500,469 @@ Fissando una biezione di I è possibile associale ad un complesso simpliciale un
 		\item $\text{H}_2^\Sigma\cong\{0\}$.
 	\end{itemize}
 \end{sol}
+
+\begin{defn}{$\Sigma^{(l)}$}{}
+	Sia $(\text{I},\Sigma)$ complesso simpliciale con $\text{I}=\{0,\dots,n\}$ insieme dei vertici definiamo $\Sigma^{(l)}$ come:
+	\[
+		\Sigma^{(l)}=\{\sigma\in\Sigma:\,|\sigma|\leq l+1\}
+	\]
+\end{defn}
+
+\begin{defn}{$l$-scheletro}{}
+	Sia $\text{K}=(\text{I},\Sigma)$ complesso simpliciale chiamiamo $l$-scheletro di K il complesso simpliciale:
+	\[
+		\text{K}^{(l)}=(\text{I},\Sigma^{(l)})\quad l\geq 0
+	\]
+\end{defn}
+
+\begin{oss}
+	Se il complesso omologico associato a K è:
+	\begin{center}
+		\begin{tikzcd}
+			\cdots \arrow[r] & 0 \arrow[r] & \mathbb{Z}^{|\Sigma_l|}\arrow[r] &\mathbb{Z}^{|\Sigma_{l-1}|} \arrow[r] & \cdots
+		\end{tikzcd}
+	\end{center}
+	allora il complesso omologico associato a $\text{K}^{(l)}$ è:
+	\begin{center}
+		\begin{tikzcd}
+			\cdots \arrow[r] & 0 \arrow[r] & \Sigma^{|\Sigma_l|}\arrow[r] & \Sigma^{|\Sigma_{l-1}|} \arrow[r] & \cdots
+		\end{tikzcd}
+	\end{center}
+	Inoltre questo è un esempio di $\textbf{sottocomplesso simpliciale}$.
+\end{oss}
+Cerchiamo di costruire Geometricamente un complesso simpliciale e di conseguenza un complesso omologico, partiamo con le funzioni:
+\begin{defn}{$|\sigma|$}{}
+	Sia $\text{K}=(I,\Sigma)\text{ Complesso Simpliciale } \text{I}=\{0,\dots,n\}$ e consideriamo $\mathbb{R}^{n+1}$ con base canonica $\{e_0,\dots,e_n\}$, allora se abbiamo $\sigma\in\Sigma$ un elemento della base $\sigma=<i_0,\dots,i_k>$ allora definisco $|\sigma|$ come l'unica funzione affine tale che: \footnote{ Attenzione: non è il valore assoluto per indicare la cardinalità, da ora la cardinalità la indicheremo con $\#$}
+	\begin{center}
+		\begin{align*}
+			\mid\sigma\mid:\Delta^k&\rightarrow\mathbb{R}^n+1\\
+			e_0&\mapsto e_{i_0}\\
+			\vdots&\quad\,\,\,\vdots\\
+			e_k&\mapsto e_{i_k}
+		\end{align*}
+	\end{center}
+\end{defn}
+
+\begin{defn}{Realizzazione Geometrica di un Complesso Simpliciale}{}
+	Sia $\text{K}=(I,\Sigma)$ complesso simpliciale allora chiamiamo 
+	
+$|\text{K}|\,\,\textbf{Realizzazione Geometrica di un Complesso Simpliciale}$:
+	\[
+		|\text{K}|\stackrel{def}=\bigcup\limits_{\sigma\in\Sigma} \mid\sigma\mid(\Delta^{\#\sigma-1})
+	\]
+	
+\end{defn}
+\newpage
+\begin{oss}
+	Insiemisticamente si può dimostrare che vale:
+	\[
+		|\text{K}|=\bigsqcup\limits_{\sigma\in\Sigma}\mid\sigma\mid(\text{int}(\Delta^{\#\sigma-1}))
+	\]
+	da ciò inoltre possiamo comprendere che $|\text{K}|$ nella topologia indotta è compatto e $\text{T}2$.
+\end{oss}
+
+\begin{oss}
+	se $\sigma\in\Sigma$ allora $\#\sigma=l+1$ e $\sigma=<i_0,\dots,i_k>$ quindi la funzione $|\sigma|\in\text{C}_l^{\Sigma}(|\text{K}|)$ è un simplesso della base. 
+	In questo modo possiamo definire un morfismo tra complessi ( tra il complesso omologico di K e il complesso omologico di $|\text{K}|$):
+	\begin{align*}
+		\text{C}_{\bullet}^{\Sigma}(\text{K})&\rightarrow\text{C}_{\bullet}(|\text{K}|)\\
+		\sigma\in\Sigma_l&\mapsto|\sigma|
+	\end{align*}
+	Inoltre possiamo vedere che se ho $\partial\sigma=\sum\limits_{k=0}^{l}(-1)^k<i_0,\dots,\hat{i}_k,\dots,i_l>$ allora vale $|\partial\sigma|=\partial|\sigma|$.
+\end{oss}
+
+\begin{defn}{Triangolare}{}
+	Uno spazio topologico si dice $\textbf{Triangolare}$ se è omeomorfo alla realizzazione geometrica di un complesso simpliciale.
+\end{defn}
+
+\begin{defn}{Triangolazione}{}
+	Una $\textbf{Triangolazione}$ è un omeomorfismo tra uno spazio topologico e una realizzazione geometrica.
+\end{defn}
+\newpage
+\subsection{$\Delta$-Complessi}
+
+\begin{defn}{$\Delta$-Complesso finito}{}\label{due}
+	Un $\Delta$-Complesso finito è uno spazio topologico X tale che $\forall k\geq 0$ è dato un insieme $I_k$ finito di indici e funzioni continue(potrebbe confondere ma stiamo chiamando l'insieme delle funzioni continue e degli indici allo stesso modo), $\varphi_\alpha^{(k)}:\Delta^k\rightarrow X\quad \alpha$ tale che: 
+	\begin{enumerate}
+		\item Ogni $\varphi_\alpha^{(k)}$ è omeomorfismo ristretta alla parte interna del $k$-simplesso e 
+			\[
+				\text{X}=\bigsqcup\limits_{\alpha\in I_k}\varphi_\alpha^{(k)}\left(\text{int}\Delta^k\right);
+			\]
+		\item Per ogni $\varphi_\alpha^{(k)}$, per ogni $i=0,\dots,k$ allora: 
+			\[
+				\varphi_\alpha^{(k)}\circ\partial_i\in I_{k-1}\quad \text{(dove }I_{k-1}\text{ è l'insieme delle funzioni )} 
+			\]
+	\end{enumerate}
+\end{defn}
+
+
+\begin{es}{Toro.}
+	Un esempio di spazio topologico che può essere visto come $\Delta$-Complesso è il toro nel seguente modo: 
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick,-] (-2,-1) -- (2,-1) -- (2,1) -- (-2,1) -- (-2,-1);
+			\draw[thick,->] (-2,-1) -- (0,-1) node[anchor=north] {$\text{b}$};
+			\draw[thick,->] (-2,1) -- (0,1) node[anchor=south] {$\text{b}$};
+			\draw[thick,->] (-2,-1) -- (-2,0) node[anchor=east] {$\text{a}$};
+			\draw[thick,->] (2,-1) -- (2,0) node[anchor=west] {$\text{a}$};
+			\draw[thick,-] (-2,-1) -- (2,1);
+			\draw[thick,->] (-2,-1) -- (0,0) node[anchor=south] {$\text{c}$};
+			\draw[fill=black] (2,-1) circle(0.03) node[anchor=west] {p$\quad \varphi_{B}(1)$};
+			\draw[fill=black] (2,1) circle(0.03) node[anchor=west] {$\varphi_{A}(2)=\varphi_{B}(2)$};
+			\draw[fill=black] (-2,1) circle(0.03) node[anchor=east] {$\varphi_{A}(1)$};
+			\draw[fill=black] (-2,-1) circle(0.03) node[anchor=east] {$\varphi_{A}(0)=\varphi_{B}(0)$};
+			\draw (-1,0.5) node {$\Large\text{A}$};
+			\draw (1,-0.5) node {$\Large\text{B}$};
+			\draw[fill=black] (-5,0) circle (0.07) node[anchor=north] {1};
+			\draw[fill=black] (-7,2) circle (0.07) node[anchor=south] {2};
+			\draw[fill=black] (-7.7,-0.7) circle (0.07) node[anchor=north] {0};
+			\draw[thick,-] (-5,0) -- (-7,2) -- (-7.7,-0.7) -- (-5,0) ;
+			\draw[thick, ->] (-5,0) -- (-6,1);
+			\draw[thick, ->] (-7.7,-0.7) -- (-6.35,-0.35);
+			\draw[thick, ->] (-7.7,-0.7) -- (-7.35,0.65);
+			\draw (-6,1.5) node[anchor=south] {$\varphi_A$};
+			\draw [->] (-6,1.5) to [out=30] (-1,1.2);
+			\draw (-6.35,-0.7) node[anchor=north] {$\varphi_B$};
+			\draw[->] (-6.35,-0.7) to [out=-30,in=210] (1,-1.2);
+		\end{tikzpicture}
+	\end{center} 
+	Quindi possiamo usare un abuso di notazione per indicare sia indici (o le facce) che le funzioni stesse sulla quale poi calcoliamo la nostra $\partial$: 
+	\begin{itemize}
+		\item $I_2=\{A,B\}$ è l'insieme che contiene le funzioni che mandano (mantenendo l'orientamento delle frecce) l'inviluppo convesso sopra nei rispettivi 2 ''triangoli'' A e B;
+		\item $I_1=\{a,b,c\}$ sono le funzioni che mandano i lati del inviluppo nei ''lati'' a,b,c;
+		\item $I_0=\{p\}$ la funzione che manda i vertici dell'inviluppo nel ''vertice'' p (ho un unico vertice e non 4 in quanto tutti e 4 i vertici sono in relazione tra loro).
+	\end{itemize} 
+	Grazie all'abuso di notazioni e al fatto che questi li possiamo vedere, come elementi che generano dei gruppi liberi abeliani, allora possiamo calcolare il gruppo di omologia del complesso omologico descritto sopra (del toro).
+\end{es}
+
+\begin{oss}
+	$\varphi_{\alpha}^{(k)}$ sono k-simplessi singolari e quindi defininedo $\text{C}_k^{\Delta}(X)\stackrel{def}=\text{Span}_{\mathbb{Z}}\{\varphi_{\alpha}^{(k)}\}\subseteq\text{C}_k(X)$ e considerando \hyperref[due]{(2)} vale $\partial\left(\text{C}_k^{\Delta}(X)\right)\subseteq\text{C}_{k-1}^{\Delta}(X)$ allora possiamo definire il seguente complesso omologico:
+	\begin{center}
+		\begin{tikzcd}
+			 \arrow[r,"\partial"] & \text{C}_k^{\Delta}(X)\arrow[r, "\partial" ] &\text{C}_{k-1}^{\Delta}(X)\arrow[r, "\partial" ] & \dots\arrow[r, "\partial"]& \text{C}_0^{\Delta}(X)\arrow[r, "\partial"]& 0
+		\end{tikzcd}
+	\end{center}
+\end{oss}
+
+\begin{ese}
+	Calcolare i gruppi di omologia del Toro.
+\end{ese}
+
+\begin{sol}
+	Prendiamo $I_2=\{A,B\}$ e consideriamo il gruppo abeliano libero generato da $I_2$ allora essendo finito è isomorfo a $\mathbb{Z}^2$ con base $\{A,B\}$ se consideriamo anche $I_1$ e $I_0$ otteniamo il seguente complesso omologico:
+	\begin{center}
+		\begin{tikzcd}
+			0 \arrow[r,"\partial"] & \underset{\text{A,B}}{\mathbb{Z}^2}\arrow[r, "\partial" ] &\underset{\text{a,b,c}}{\mathbb{Z}^3}\arrow[r, "\partial" ] & \underset{\text{p}}{\mathbb{Z}}\arrow[r, "\partial"]& 0
+		\end{tikzcd}
+	\end{center}
+	Quindi, aiutandoci con l'algebra lineare, possiamo scrivere le matrici associate alle nostre funzioni $\partial$ e quindi calcolare nucleo e immagine. Partendo da sinistra, la prima, è la funzione che manda 0 in 0 e quindi possiamo già dire che $\text{H}_{2}^{\Delta}(X)=\text{Ker}(\partial)$, dove il nucleo è della seconda funzione da sinistra. 
+	Calcoliamo la matrice associata della seconda funzione della catena, ovvero, prendiamo la base $\{A,B\}$ e calcoliamo la funzione su tale base (stiamo sempre usando l'abuso di notazione di prima):
+	\begin{itemize}
+		\item $\partial A=\varphi_A(<1,2>)-\varphi_A(<0,2>)+\varphi_A(<0,1>)=b-c+a=a+b-c$
+		\item $\partial B=\varphi_B(<1,2>)-\varphi_B(<0,2>)+\varphi_B(<0,1>)=b+a-c=a+b-c$
+	\end{itemize}
+	La matrice associata è quindi: $\text{M}(\partial)=\begin{pmatrix} 1&1\\1&1\\-1&-1\end{pmatrix}$ che ha rango 1 di conseguenza Im$(\partial)\cong\mathbb{Z}$ e di conseguenza Ker$(\partial)\cong\mathbb{Z}<A-B>$ ovvero generato da A-B.
+	Ora calcoliamo la matrice associata alla terza funzione della catena sapendo che $\partial a =\partial b =\partial c= p-p=0$ e quindi: $M(\partial)=\begin{pmatrix}0&0&0\end{pmatrix}$ di conseguenza Ker$(\partial)\cong\mathbb{Z}^3$
+	Quindi abbiamo $\text{H}_{1}^{\Delta}(X)\cong\bigslant{\mathbb{Z}^3}{\mathbb{Z}}\cong{\mathbb{Z}^2}$ con generatori a,b. 
+	Per ultimo abbiamo banalmente $\text{H}_{0}^{\Delta}(X)\cong\mathbb{Z}$ con generatore p. 
+
+	Ricapitolando:
+	\begin{center}
+		\begin{tikzcd}[ampersand replacement=\&]
+			0 \arrow[r,"\partial"] \& \underset{\text{A,B }}{\mathbb{Z}^2}\arrow{r}{\partial}[swap]{\begin{pmatrix}1 &1\\1 &1\\-1 &-1\end{pmatrix}} \&\underset{\text{ a,b,c }}{\mathbb{Z}^3}\arrow{r}{\partial }[swap]{(0,0,0)} \& \underset{\text{ p}}{\mathbb{Z}}\arrow[r, "\partial"]\& 0
+		\end{tikzcd}
+	\end{center}
+	\begin{itemize}
+		\item $\text{H}_{2}^{\Delta}(X)\cong\mathbb{Z}<A-B>$;
+		\item $\text{H}_{1}^{\Delta}(X)\cong\mathbb{Z}^2<a,b>$;
+		\item $\text{H}_{0}^{\Delta}(X)\cong\mathbb{Z}<p>$.
+	\end{itemize}
+\end{sol}
+
+\newpage
+
+\begin{ese}\label{Bottiglia di Klein}
+	Calcolare i gruppi di omologia della Bottiglia di Klein.
+\end{ese}
+\begin{sol}
+	Partiamo con il disegnare la bottiglia ed elencare gli insiemi $I_k$:
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick,-] (-2,-1) -- (2,-1) -- (2,1) -- (-2,1) -- (-2,-1);
+			\draw[thick,->] (-2,-1) -- (0,-1) node[anchor=north] {$\text{b}$};
+			\draw[thick,->] (-2,1) -- (0,1) node[anchor=south] {$\text{b}$};
+			\draw[thick,->>] (-2,-1) -- (-2,0) node[anchor=east] {$\text{a}$};
+			\draw[thick,->>]  (2,1) -- (2,0) node[anchor=west] {$\text{a}$};
+			\draw[thick,-] (-2,-1) -- (2,1);
+			\draw[thick,->] (-2,-1) -- (0,0) node[anchor=south] {$\text{c}$};
+			\draw[fill=black] (2,-1) circle(0.03) node[anchor=west] {p$\quad \varphi_{B}(2)$};
+			\draw[fill=black] (2,1) circle(0.03) node[anchor=west] {$\varphi_{A}(2)=\varphi_{B}(1)$};
+			\draw[fill=black] (-2,1) circle(0.03) node[anchor=east] {$\varphi_{A}(1)$};
+			\draw[fill=black] (-2,-1) circle(0.03) node[anchor=east] {$\varphi_{A}(0)=\varphi_{B}(0)$};
+			\draw (-1,0.5) node {$\Large\text{A}$};
+			\draw (1,-0.5) node {$\Large\text{B}$};
+			\draw[red] (0.2,1.7) node[anchor=west]{$\Delta^2$};
+			\draw[red,->] (0.2,1.7) to [out=150, in=50](-1,0.8);
+			\draw[red,->] (0.7,1.5) to [out=-30, in=70](1,-0.2);
+			\draw[green] (-2.5,1.7) node[anchor=east]{$\Delta^1$};
+			\draw[green,->] (-3.1,1.6) to [out=210, in=150] (-2.4,0);
+			\draw[green,->] (-2.65,1.75) to [out=20, in=160] (0,1.5);
+			\draw[green,->] (-2.7,1.55) to (0,0.4);
+			\draw[orange] (3,0) node[anchor=west]{$\Delta^0$};
+			\draw[orange,->] (3.1,-0.1) to[out=160, in=70] (2,-1);
+		\end{tikzpicture}
+	\end{center}
+	\begin{itemize}
+		\item $I_2=\{A,B\}$;
+		\item $I_1=\{a,b,c\}$;
+		\item $I_0=\{p\}$;
+	\end{itemize}
+	Quindi il complesso omologico associato è ''simile'' a quello del toro\footnote{ATTENZIONE!! anche se i gruppi liberi sono isomorfi le funzioni $\partial$ sono diverse!!}:
+	\begin{center}
+		\begin{tikzcd}
+			0 \arrow[r,"\partial"] & \underset{\text{A,B}}{\mathbb{Z}^2}\arrow[r, "\partial" ] &\underset{\text{a,b,c}}{\mathbb{Z}^3}\arrow[r, "\partial" ] & \underset{\text{p}}{\mathbb{Z}}\arrow[r, "\partial"]& 0
+		\end{tikzcd}
+	\end{center}
+	Seguendo i passi dell'esercizio precedente calcoliamo le matrici:
+	\begin{itemize}
+		\item $\partial A=\varphi_A(<1,2>)-\varphi_A(<0,2>)+\varphi_A(<0,1>)=b-c+a=a+b-c$
+		\item $\partial B=\varphi_B(<1,2>)-\varphi_B(<0,2>)+\varphi_B(<0,1>)=a-b+c$
+		\item $\partial a =\partial b =\partial c= p-p=0$
+	\end{itemize}
+	Quindi la matrice della seconda $\partial$ è $\text{M}(\partial)=\begin{pmatrix}1&1\\1&-1\\-1&1\end{pmatrix}$ e invece per la terza funzione è come prima la funzione nulla:
+	\begin{center}
+		\begin{tikzcd}[ampersand replacement=\&]
+			0 \arrow[r,"\partial"] \& \underset{\text{A,B }}{\mathbb{Z}^2}\arrow{r}{\partial}[swap]{\begin{pmatrix}1 &1\\1 &-1\\-1 &1\end{pmatrix}} \&\underset{\text{ a,b,c }}{\mathbb{Z}^3}\arrow{r}{\partial }[swap]{(0,0,0)} \& \underset{\text{ p}}{\mathbb{Z}}\arrow[r, "\partial"]\& 0
+		\end{tikzcd}
+	\end{center}
+	Intanto sappiamo che $\text{H}_2^{\Delta}=\text{Ker}\begin{pmatrix}1 &1\\1 &-1\\-1 &1\end{pmatrix}=0$ quindi è il gruppo banale. 
+
+	Ora per calcolare  $\text{H}_1^{\Delta}=\bigslant{\mathbb{Z}^3}{\text{Im}\begin{pmatrix}1 &1\\1 &-1\\-1 &1\end{pmatrix}}\cong\bigslant{<a,b,c>}{<a+b-c,a-b+c>}$ cerchiamo di capire quali sono le classi di equivalenza usando le relazioni:
+	\begin{itemize}
+		\item $[a]=[b-c]=[c-b]\rightarrow [2a]=[0]$
+		\item $[2b]=[2c]$
+	\end{itemize}
+	Sviluppiamo un po' di conti e calcoliamo la classe di un generico elemento di $<a,b,c>$ siano $x,y,z\in\mathbb{Z}$ calcoliamo $[ax+by+cz]$:
+	\begin{center}
+		\begin{align*}
+			[ax+by+cz]&=[b-c]x+[b]y+[c]z=[b](x+y)+[c](y-x)\\&=[b](x+y \text{ mod } 2)+[c]m=[b]n+[c]m \quad n\in\mathbb{Z}_2\,\,m\in\mathbb{Z}
+		\end{align*}
+	\end{center}
+	Quindi abbiamo dimostrato che vale $\text{H}_1^{\Delta}\cong\mathbb{Z}\bigoplus\mathbb{Z}_2$. Invece il gruppo $\text{H}_0^{\Delta}$ è come nel caso del Toro. 
+
+	Ricapitolando:
+	\begin{itemize}
+		\item $\text{H}_{2}^{\Delta}(X)\cong\{0\}$;
+		\item $\text{H}_{1}^{\Delta}(X)\cong\mathbb{Z}\bigoplus\mathbb{Z}_2$;
+		\item $\text{H}_{0}^{\Delta}(X)\cong\mathbb{Z}<p>$.
+	\end{itemize}
+	Volendo possiamo considerare invece di gruppi abeliani liberi con cofficienti in $\mathbb{Z}$(i procedimenti sono analoghi) considerando gruppi abeliani liberi con coefficienti in $\mathbb{Z}_2$ otteniamo:
+	\begin{itemize}
+		\item $\text{H}_{2}^{\Delta}(X)\cong\mathbb{Z}_2$;
+		\item $\text{H}_{1}^{\Delta}(X)\cong\mathbb{Z}_2\bigoplus\mathbb{Z}_2$;
+		\item $\text{H}_{0}^{\Delta}(X)\cong\mathbb{Z}_2$.
+	\end{itemize}
+\end{sol}
+
+\begin{ese}
+	Calcolare i gruppi di omologia del Piano Proiettivo: $\mathbb{P}^2(\mathbb{R})$. 
+\end{ese}
+\begin{sol}
+	Partiamo con il disegno e poi andiamo a calcolare le matrici: 
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[thick,-] (-2,-1) -- (2,-1) -- (2,1) -- (-2,1) -- (-2,-1);
+			\draw[thick,->>] (-2,-1) -- (0,-1) node[anchor=north] {$\text{b}$};
+			\draw[thick,->>] (2,1) -- (0,1) node[anchor=south] {$\text{b}$};
+			\draw[thick,->] (-2,-1) -- (-2,0) node[anchor=east] {$\text{a}$};
+			\draw[thick,->]  (2,1) -- (2,0) node[anchor=west] {$\text{a}$};
+			\draw[thick,-] (-2,-1) -- (2,1);
+			\draw[thick,->] (-2,-1) -- (0,0) node[anchor=south] {$\text{c}$};
+			\draw[fill=black] (2,-1) circle(0.03) node[anchor=west] {$\varphi_{B}(2)$};
+			\draw[fill=black] (2,1) circle(0.03) node[anchor=west] {$\varphi_{A}(1)=\varphi_{B}(1)$};
+			\draw[fill=black] (-2,1) circle(0.03) node[anchor=east] {$\varphi_{A}(2)$};
+			\draw (-2,1) node[anchor=south] {q};
+			\draw[fill=black] (-2,-1) circle(0.03) node[anchor=east] {$\varphi_{A}(0)=\varphi_{B}(0)$};
+			\draw (-2,-1) node[anchor=north] {p};
+			\draw (-1,0.5) node {$\Large\text{A}$};
+			\draw (1,-0.5) node {$\Large\text{B}$};
+		\end{tikzpicture}
+	\end{center}
+		\begin{itemize}
+		\item $I_2=\{A,B\}$;
+		\item $I_1=\{a,b,c\}$;
+		\item $I_0=\{p,q\}$;
+		\item $\partial A=\varphi_A(<1,2>)-\varphi_A(<0,2>)+\varphi_A(<0,1>)=c+b-a=-a+b+c$;
+		\item $\partial B=\varphi_B(<1,2>)-\varphi_B(<0,2>)+\varphi_B(<0,1>)=c+a-b=a-b+c$;
+		\item $\partial a =q-p=-p+q$;
+		\item $\partial b =q-p=-p+q$;
+		\item $\partial c =p-p=0$;
+	\end{itemize}
+	Quindi il complesso omologico che otteniamo è: 
+	\begin{center}
+		\begin{tikzcd}[ampersand replacement=\&]
+			0 \arrow[r,"\partial"] \& \underset{\text{A,B }}{\mathbb{Z}^2}\arrow{r}{\partial}[swap]{\left(\begin{smallmatrix}-1 &1\\1 &-1\\1 &1\end{smallmatrix}\right)} \&\underset{\text{ a,b,c }}{\mathbb{Z}^3}\arrow{r}{\partial }[swap]{\left(\begin{smallmatrix}-1&-1&0\\1&1&0\end{smallmatrix}\right)} \& \underset{\text{ p,q}}{\mathbb{Z}^2}\arrow[r, "\partial"]\& 0
+		\end{tikzcd}
+	\end{center}
+	$\text{H}_2^{\Delta}=\text{Ker}\begin{pmatrix}-1 &1\\1 &-1\\1 &1\end{pmatrix}=0$ quindi è il gruppo banale (il rango per colonne è 2) vediamo di trovare dei generatori dell'immagine di tale funzione in particolare vediamo che l'immagine è un sottogruppo del $\text{Ker}\begin{pmatrix}-1 &-1& 0\\1 &1&0\end{pmatrix}=<a-b,c>$ riprendendo le equazioni di prima possiamo vedere che se chiamiamo $x:=a-b$ e $y:=c$ allora otteniamo: 
+	\begin{itemize}
+		\item $\partial A=y-x$ 
+		\item $\partial B=x+y$ 
+	\end{itemize} 
+	Che equivale a ridefinire la matrice della funzione $\partial:\mathbb{Z}^2\rightarrow\mathbb{Z}^2\cong\text{Ker}(\partial)$ nel seguente modo(facilitandoci i conti):
+	\[
+		M(\partial)=\begin{pmatrix}-1&1\\1&1\end{pmatrix}
+	\]
+	Da ciò possiamo vedere che $\text{H}_1^{\Delta}=\bigslant{\text{Ker}(\partial)}{\text{Span}\left\{\begin{pmatrix}-1\\1\end{pmatrix},\begin{pmatrix}1\\1\end{pmatrix}\right\}}\cong\bigslant{<x,y>}{<x-y,x+y>}\cong \mathbb{Z}_2$
+	Infine $\text{H}_0^{\Delta}=\bigslant{<p,q>}{<p-q>}\cong\mathbb{Z}$.
+	
+	Ricapitolando:
+	\begin{itemize}
+		\item $\text{H}_{2}^{\Delta}(X)\cong\{0\}$;
+		\item $\text{H}_{1}^{\Delta}(X)\cong\mathbb{Z}_2$;
+		\item $\text{H}_{0}^{\Delta}(X)\cong\mathbb{Z}<p-q>$.
+	\end{itemize}
+\end{sol}
+\begin{ese}
+	Calcolare il gruppo di omologia del seguente $\Delta-$complesso:
+\begin{center}
+	\begin{tikzpicture}
+		\draw[thick,-] (-1,2.4142135) -- (-2.4142135,1) -- (-2.4142135,-1)--(-1,-2.4142135) -- (1,-2.4142135)--(2.4142135,-1) -- (2.4142135,1) -- (1,2.4142135) -- (-1,2.4142135);
+		\draw[thick,-] (1,-2.4142135)--(-2.4142135,-1);
+		\draw[thick,->] (1,-2.4142135)--(-0.7071,-1.7071) node[anchor=south] {e};
+		\draw[thick,-] (1,-2.4142135)--(-2.4142135,1);
+		\draw[thick,->] (1,-2.4142135)--(-0.7071,-0.7071) node[anchor=south] {f};
+		\draw[thick,-] (1,-2.4142135)-- (-1,2.4142135);
+		\draw[thick,->] (1,-2.4142135)-- (0,0) node[anchor=south west] {g};
+		\draw[thick,-] (1,-2.4142135)-- (1,2.4142135);
+		\draw[thick,->] (1,-2.4142135)-- (1,0) node[anchor=south west] {h};
+		\draw[thick,-] (1,-2.4142135)-- (2.4142135,1);
+		\draw[thick,->] (1,-2.4142135)-- (1.7071,-0.7071) node[anchor=west] {i};
+		\draw[thick,->] (1,-2.4142135)--(0,-2.4142135) node[anchor=north] {a};
+		\draw[thick,->] (-1,-2.4142135)--(-1.7071,-1.7071) node[anchor=north east ] {b};
+		\draw[thick,->] (-2.4142135,1)--(-2.4142135,0) node[anchor=east ] {a};
+		\draw[thick,->] (-1,2.4142135)--(-1.7071,1.7071) node[anchor=south east ] {b};
+		\draw[thick,->] (-1,2.4142135)--(0,2.4142135) node[anchor=south] {d};
+		\draw[thick,->] (1,2.4142135)--(1.7071,1.7071) node[anchor=south west] {c};
+		\draw[thick,->] (2.4142135,-1)--(2.4142135,0) node[anchor=west] {d};
+		\draw[thick,->] (1,-2.4142135)--(1.7071,-1.7071) node[anchor= north west] {c};
+		\draw[fill=black] (1,-2.4142135) circle(0.05) node[anchor=north] {p};
+		\draw[red] (-0.8,-2) node {$\Large \text{A}$};
+		\draw[red] (-1.2,-0.9) node {$\Large \text{B}$};
+		\draw[red] (-0.5,0) node {$\Large \text{C}$};
+		\draw[red] (0.6,0.1) node {$\Large \text{D}$};
+		\draw[red] (1.4,-0.3) node {$\Large \text{E}$};
+		\draw[red] (2.07,-1.07) node {$\Large \text{F}$};
+	\end{tikzpicture}
+\end{center}
+\end{ese}
+\begin{sol}
+\end{sol}
+
+\newpage
+
+\section{Gruppi Abeliani}
+\subsection{Gruppi Abeliani Liberi}
+
+\begin{defn}{Gruppo Abeliano finitamente generato}{}
+	Sia G un Gruppo abeliano allora G è finitamente generato se esistono: $g_1,\dots,g_r\in \text{G}$ tale che ogni $g\in\text{G}$ si scrive come:
+	\[
+		g=a_1g_1+\dots+a_rg_r\quad\text{con }a_1,\dots,a_r\in\mathbb{Z}
+	\]
+	Equivalentemente esiste un omomorfismo(di gruppi) suriettivo $\varphi:\,\mathbb{Z}^r\rightarrow \text{G}$ 
+\end{defn}
+
+\begin{defn}{Gruppo abeliano libero}{}
+	Un gruppo abeliano si dice libero se esistono:$g_1,\dots,g_r\in \text{G}$ tale che ogni $g$ si scrive in $\color{red}{\text{modo unico}}$ come:  
+	\[
+		g=a_1g_1+\dots+a_rg_r\quad\text{con }a_1,\dots,a_r\in\mathbb{Z}
+	\]
+	Equivalentemente esiste un omomorfismo(di gruppi) suriettivo e iniettivo $\varphi:\,\mathbb{Z}^r\rightarrow \text{G}$ ovvero $\text{G}\cong\mathbb{Z}^r$.
+\end{defn}
+	Chiamiamo Rango di G (gruppo abeliano libero) $r$, ovvero il numero di elementi che scrivono ogni elemento di G in modo unico e l'insieme di tali elementi (analogamente agli spazi vettoriali) si definisce base di G.\footnote{l'esistenza e l'unicità vengono dimostrate nel libro ''An introduction to Algebraic Topology'' di Joseph J. Rotman a pagina 60}. 
+
+\begin{oss}
+	Dal primo teorema di isomorfismo otteniamo che un gruppo abeliano finitamente generato è un quoziente di $\mathbb{Z}^r$:
+	\[
+		\text{G}\cong\bigslant{\mathbb{Z}^r}{\text{Ker}(\varphi)}
+	\]
+	Questo implica per esempio che $\mathbb{Q}$ non è finitamente generato in quanto non è isomorfo a $\mathbb{Z}$ ma sono solo in biezione (numerabile).
+\end{oss}
+
+\begin{es}
+	$\mathbb{Z}$ è un gruppo abeliano libero con base $\{1\}$.
+\end{es}
+\label{sottogruppi}
+\begin{thm}{}
+	pOgni sottogruppo di un gruppo abeliano libero G (finitamente generato) è ancora un gruppo abeliano libero (finitamente generato e con rango $\leq$ rango di G)  
+\end{thm}
+\begin{proof}
+	Dimostriamolo per induzione sul r=rango di G. Per semplificare le notazioni scegliamo una base di G e identifichiamo esso con $\mathbb{Z}^r$ in quanto isomorfi.
+
+	Caso r=1: $\text{G}\cong\mathbb{Z}$ allora i sottogruppi non vuoti di G sono tutti del tipo $n\mathbb{Z}$ per un qualche $n$ e sappiamo che $n\mathbb{Z}\cong\mathbb{Z}$ (basta prendere $\varphi:\mathbb{Z}\rightarrow n\mathbb{Z}$ t.c. $\varphi(z)=nz$)
+
+	Prendiamo che per ogni le ipotesi valgono per rango $\leq$ r-1. Sia H sottogruppo di $\text{G}\cong \mathbb{Z}^r$ quindi possiamo vederlo come sottogruppo di $\mathbb{Z}^r$ definiamo $\pi: \mathbb{Z}^r\rightarrow\mathbb{Z}$ tale che $\pi\left(\begin{smallmatrix}a_1\\\vdots\\a_r\end{smallmatrix}\right)=a_r$, consideriamo l'insieme Ker$\left(\eval{\pi}_{\text{H}}\right)$=Ker$(\pi)\cap\text{H}=\left\{\left(\begin{smallmatrix}a_1\\ \vdots \\a_{r-1}\\ 0\end{smallmatrix}\right)\in\text{H}\right\}$ questo è un sottogruppo di $\mathbb{Z}^{r-1}$ e quindi per ipotesi induttiva è libero di rango s $\leq$ r-1, ovvero ammette una base $\{\gamma_1,\dots,\gamma_s\}$.
+
+	Consideriamo Im$\left(\eval{\pi}_{\text{H}}\right)$ sottogruppo di $\mathbb{Z}$ allora avremo 2 casi:
+	\begin{enumerate}
+		\item Im$\left(\eval{\pi}_{\text{H}}\right)$=$\{0\}\Rightarrow \text{H}\subseteq \text{Ker}\pi\cong\mathbb{Z}^{r-1}$
+		\item Im$\left(\eval{\pi}_{\text{H}}\right)=n_0\mathbb{Z}$
+	\end{enumerate}
+	Nel primo caso per ipotesi induttiva H è gruppo libero. 
+
+	Nel secondo caso prendiamo $\gamma_{s+1}\in\text{H}$ tale che $\pi(\gamma_{s+1})=n_0$ mostriamo che $\{\gamma_1,\dots,\gamma_s,\gamma_{s+1}\}$ è una base di H: 
+	\begin{align*}
+		&\text{sia }\gamma\in\text{H}\Rightarrow \\ 
+		&\pi(\gamma)=kn_0 \Rightarrow \pi(\gamma-k\gamma_{s+1})=0 \Rightarrow \\ 
+		& \gamma-k\gamma_{s+1}\in\text{Ker}\cap\text{H}\Rightarrow\\ 
+		&\gamma-k\gamma_{s+1}=a_1\gamma_1+\dots+a_s\gamma_s\quad \text{con }a_i\in\mathbb{Z}\text{ unici}\\ 
+		&\gamma=a_1\gamma_1+\dots+a_s\gamma_s+k\gamma_{s+1}.
+	\end{align*}
+	La scrittura è unica banalmente e dall'ipotesi s $\leq$ r-1 otteniamo s+1 $\leq$ r.
+\end{proof}
+
+\begin{cor}{}
+	pSia H sottogruppo di $\mathbb{Z}^n$ allora H è libero e H$\cong\mathbb{Z}^r$ con r$\leq$ n.
+\end{cor}
+\begin{oss}
+	Il rango di un gruppo abeliano libero(finitamente generato) è unico ovvero prese 2 basi esse hanno lo stesso numero di elementi. Questo implica che presa una matrice di cambiamento di base essa è invertibile e il determinante vale $\pm$1.
+\end{oss}
+
+\begin{thm}{}
+	pSia G un gruppo libero di rango r, sia H un sottogruppo di G di rango s allora esiste una base $\{\gamma_1,\dots,\gamma_r\}$ di G e degli interi $t_1,\dots,t_s\in\mathbb{Z}$ tali che $\{t_1\gamma_1,\dots,t_s\gamma_s\}$ è una base di H 
+\end{thm}
+
+Prima di dimostrare il teorema dimostriamo il seguente corollario del teorema molto utile 
+\begin{cor}{}
+	pSia G gruppo abeliano finitamente generato allora:
+	\[
+		\text{G}\cong\mathbb{Z}^{r-s} \oplus \left(\bigoplus\limits_{i=1}^s\bigslant{\mathbb{Z}}{t_i\mathbb{Z}}\right)
+	\]
+\end{cor}
+
+\begin{es}
+	Un esempio di gruppo abeliano finitamente generato di questo tipo è il gruppo di omologia $\text{H}_1^{\Delta}$ del complesso omologico associato alla bottiglia di Klein nell \hyperref[Bottiglia di Klein]{Esercizio 4}.
+\end{es}
+
+\newpage
+
+\begin{proof}{Corollario.}
+	Dalla definizione di gruppo abeliano finitamente generato abbiamo che G è il quoziente di un gruppo abeliano libero F ovvero $G\cong \bigslant{\text{F}}{\text{H}}$ inoltre dal teorema \hyperref[sottogruppi]{2.1.3} sappiamo che H è un gruppo libero a sua volta. Sia $\{t_1\gamma_1,\dots,t_s\gamma_s\}$ base di H con $\{\gamma_1,\dots,\gamma_r\}$ base di F (teorema precedente) allora: $\text{G}=\bigslant{\text{F}}{\text{H}\cong \bigslant{<\gamma_1,\dots,\gamma_r>}{<t_1\gamma_1,\dots,t_s\gamma_s>}}$. 
+
+	Calcoliamo le classi di equivalenza di un generico elemento di F sapendo che valgono:
+	$\begin{cases}
+		&[t_1\gamma_1]=[0]\Rightarrow [a\gamma_1]=(a \text{ mod } t_1)[\gamma_1] \quad \forall a\in \mathbb{Z}\\ 
+		&\vdots\\
+		&[t_s\gamma_s]=[0]\Rightarrow [a\gamma_s]=(a  \text{ mod } t_s)[\gamma_s] \quad \forall a\in \mathbb{Z}
+	\end{cases}$
+	
+	Quindi sia $a_1\gamma_1+\cdots+a_r\gamma_r$ con $a_1,\dots,a_r\in\mathbb{Z}$ allora vale:
+	\[
+		[a_1\gamma_1+\cdots+a_r\gamma_r]=(a_1  \text{ mod } t_1)[\gamma_1]+\cdots+(a_s  \text{ mod } t_s)[\gamma_s] +a_{s+1}[\gamma_{s+1}]+\cdots+a_r[\gamma_r] 
+	\]
+	Allora abbiamo dimostrato che:
+	\[
+		\text{G}\cong\bigslant{\text{F}}{\text{H}}\cong \mathbb{Z}^{r-s} \oplus \left(\bigoplus\limits_{i=1}^s\bigslant{\mathbb{Z}}{t_i\mathbb{Z}}\right)
+	\]
+\end{proof}
 \end{document}
