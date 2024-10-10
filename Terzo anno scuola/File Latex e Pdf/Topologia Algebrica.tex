@@ -788,7 +788,7 @@ $|\text{K}|\,\,\textbf{Realizzazione Geometrica di un Complesso Simpliciale}$:
 			\draw (1,-0.5) node {$\Large\text{B}$};
 		\end{tikzpicture}
 	\end{center}
-		\begin{itemize}
+	\begin{itemize}
 		\item $I_2=\{A,B\}$;
 		\item $I_1=\{a,b,c\}$;
 		\item $I_0=\{p,q\}$;
@@ -857,6 +857,59 @@ $|\text{K}|\,\,\textbf{Realizzazione Geometrica di un Complesso Simpliciale}$:
 \end{center}
 \end{ese}
 \begin{sol}
+	La catena omologica è:
+	\begin{center}
+		\begin{tikzcd}
+			0 \arrow[r,"\partial"] & \underset{\substack{\text{A,B,C} \\ \text{D,E,F}}}{\mathbb{Z}^6} \arrow[r,"\partial"] & \underset{\substack{\text{a,b,c} \\ \text{d,e,f}\\ \text{g,h,i}}}{\mathbb{Z}^9}\arrow[r,"\partial"] &\underset{p}{\mathbb{Z}}\arrow[r,"\partial"] & 0
+		\end{tikzcd}
+	\end{center}
+	\begin{itemize}
+		\item $I_2=\{A,B,C,D,E,F\}$;
+		\item $I_1=\{a,b,c,d,e,f,g,h,i\}$;
+		\item $I_0=\{p\}$;
+		\item $\partial A=b-a+e=-a+b-e$;
+		\item $\partial B=a-e+f$;
+		\item $\partial C =b-f+g$;
+		\item $\partial E =c-i+h=c+h-i$;
+		\item $\partial F =d-i+c=c+d-i$;
+		\item $\partial a=\partial b=\partial c=\partial d=\partial e=\partial f=\partial g=\partial h=\partial i=0$
+	\end{itemize}
+	Quindi abbiamo la matrice $\text{M}(\partial)=\left(\begin{smallmatrix}1&1&0&0&0&0\\ 1&0&1&0&0&0\\ 0&0&0&0&1&1\\ 0&0&0&1&0&1\\ -1&-1&0&0&0&0\\ 0&1&-1&0&0&0\\ 0&0&1&1&0&0 \\ 0&0&0&-1&1&0\\0&0&0&0&-1&-1\end{smallmatrix}\right)$ cerchiamo il nucleo e il rango. 
+	Sappiamo che il suo rango (per colonne) può essere al massimo 6 inoltre notiamo che è presente una sottomatrice $\left(\begin{smallmatrix}0&0&0&0&1\\ 0&0&0&1&0\\-1&-1&0&0&0\\0&1&-1&0&0\\0&0&1&1&0\end{smallmatrix}\right)$ invertibile quindi il rango è almeno 5. 
+
+	Facendo un po' operazioni sulle colonne si trova che (1)+(4)+(5)=(2)+(3)+(6) equivalentemente un generatore del Ker$(\partial)$ è A-B+D-C+E-F quindi il rango di  $\text{M}(\partial)$ è 5. La sesta colonna è combinazione lineare delle prime 5 quindi Im$(\partial)=<a+b-e,a-e+f,b-f+g,c+h-i,c+d-i>$.
+
+	Quindi $H_2^{\Delta}\cong \text{Ker}(\partial)=\mathbb{Z}<A-B+D-C+E-F >$
+
+	$H_1^{\Delta}\cong \bigslant{<a,b,c,d,e,f,g,h,i>}{<a+b-e,a-e+f,b-f+g,c+h-i,c+d-i>}$ 
+	
+	Cerchiamo $[a_1a+a_2b+a_3c+a_4d+a_5e+a_6f+a_7g+a_8h+a_9i]$:
+
+	$\begin{cases}
+		&[a]=[e-b] \\ 
+		&[a]=[e-f] \\ 
+		&[g]=[b-f] \\ 
+		&[d]=[h-g] \\
+		&[c]=[i-h]
+	\end{cases} \Rightarrow
+	\begin{cases}
+		&[a]=[e-b] \\
+		&[b]=[f] \\
+		&[g]=[b-f]=[0] \\	
+		&[d]=[h-g]=[h]\\
+		&[c]=[i-h]		
+	\end{cases}$
+
+	Di conseguenza la classe di equivalenza diventa:
+	\begin{align}
+		[a_1a+a_2b+a_3c+a_4d+a_5e+a_6f+a_7g+a_8h+a_9i]&=a_1[a]+a_2[b]+a_3[c]+a_4[d]+a_5[e]+\\
+											     &+a_6[f]+a_7[g]+a_8[h]+a_9[i]\\
+											     &=a_1[e-b]+a_2[b]+a_3[i-h]+a_4[h]+\\
+											     &+a_5[e]+a_6[f]+a_8[h]+a_9[i] \\
+											     &=(a_2-a_1+a_6)[b]+(a_1+a_5)[e]+\\
+											     &+(a_4+a_8-a_3)[h]+(a_3+a_9)[i]
+	\end{align}
+	Quindi Abbiamo dimostrato che $\text{H}_1^\Delta\cong\mathbb{Z}^4$ e Banalmente $\text{H}_0^\Delta\cong\mathbb{Z}$. 
 \end{sol}
 
 \newpage
@@ -927,7 +980,7 @@ $|\text{K}|\,\,\textbf{Realizzazione Geometrica di un Complesso Simpliciale}$:
 \begin{oss}
 	Il rango di un gruppo abeliano libero(finitamente generato) è unico ovvero prese 2 basi esse hanno lo stesso numero di elementi. Questo implica che presa una matrice di cambiamento di base essa è invertibile e il determinante vale $\pm$1.
 \end{oss}
-
+\label{Teorema 2.1.5}
 \begin{thm}{}
 	pSia G un gruppo libero di rango r, sia H un sottogruppo di G di rango s allora esiste una base $\{\gamma_1,\dots,\gamma_r\}$ di G e degli interi $t_1,\dots,t_s\in\mathbb{Z}$ tali che $\{t_1\gamma_1,\dots,t_s\gamma_s\}$ è una base di H 
 \end{thm}
@@ -965,4 +1018,65 @@ Prima di dimostrare il teorema dimostriamo il seguente corollario del teorema mo
 		\text{G}\cong\bigslant{\text{F}}{\text{H}}\cong \mathbb{Z}^{r-s} \oplus \left(\bigoplus\limits_{i=1}^s\bigslant{\mathbb{Z}}{t_i\mathbb{Z}}\right)
 	\]
 \end{proof}
+
+\begin{oss}
+	La parte $\bigoplus\limits_{i=1}^s\bigslant{\mathbb{Z}}{t_i\mathbb{Z}}$ è detta torsione e r-s è il rango di G gruppo finitamente generato. Usando il teorema cinese del resto la torsione può essere scritto come $\bigoplus\bigslant{\mathbb{Z}}{p_i^{r_i}\mathbb{Z}}$ 
+\end{oss}
+
+\begin{proof}\hyperref[Teorema 2.1.5]{Teorema 2.1.5}
+	: identifichiamo G con $\mathbb{Z}^r$ scegliendo una base $\{e_1,\dots,e_r\}$ ora consideriamo la matrice A che ha come colonne una base di H (ovvero la matrice della funzione identità che ha come base di partenza la base di H e in arrivo la base di G):
+	\[
+		A=\begin{pmatrix}a_{1,1}&\cdots&a_{1,s}\\ \vdots& &\vdots\\a_{r,1}&\cdots& a_{r,s}\end{pmatrix}
+	\]
+
+	Quello che vogliamo fare è applicare ad essa una matrice del cambiamento di base per ottenere una base di G tale che: 
+	\[
+		A=\begin{pmatrix}t_1&0&\cdots&0\\ 
+					  0&t_2 &\cdots&0\\ 
+					  \vdots&\vdots&\vdots& \vdots\\ 
+		     			  0& 0&0 & t_s 
+		     \end{pmatrix}
+	\]
+
+	Sappiamo dall'algebra lineare che fare un cambiamento di base equivale al poter compiere le seguenti operazioni sulla matrice A:
+	\begin{enumerate}
+		\item Posso permutare gli elementi della base $\{e_1,\dots,e_r\}$ e quindi sulla matrice ottenere una permutazione delle righe;
+		\item Posso sommare a un elemento $e_i$ un multiplo di $e_j$ con $i\neq j$ che sulla matrice equivale a sommare a una riga il multiplo di un altra;
+		\item Posso permutare gli elementi della base di H ovvero (base in partenza) cambiare l'ordine delle colonne;
+		\item Posso sommare a un elemento della base di H un multiplo di un altro elemento che equivale a sommare a una colonna un multiplo di un altra. 
+	\end{enumerate}
+
+	Se A=0 allora abbiamo già fatto in quanto H è sottogruppo banale. 
+	
+	Sia A$\neq$0 allora prendiamo l'elemento più piccolo, in valore assoluto, di A: usando (1) e (3) questo elemento lo possiamo supporre come $a_{1,1}$. 
+
+	Distinguiamo 2 casi possibili:
+
+	Caso 1, tutti gli elementi della prima riga e della prima colonna sono divisibili per $a_{1,1}$ e quindi usando (2) e (4) otteniamo:
+	\[
+		A=\begin{pmatrix}a_{1,1}&0&\cdots&0\\ 0& & &\\ \vdots& &\Large\text{A'}&\\0& & & \end{pmatrix}
+	\]
+
+	Caso 2, ho un elemento $a_{1,k}$ (o $a_{t,1}$) non divisibile per $a_{1,1}$ allora usiamo la divisione con resto per ottenere $a_{1,k}=qa_{1,1}+r$ con $r\neq 0$ e $|r|<|a_{1,1}|$ quindi posso sostituire la prima colonna con $C_k -qC_1$ (stessa cosa potevo farla con le righe eventualmente) e poi portare $r$ alla posizione 1,1.
+	 
+	Fatto ciò posso rifare il tutto e se rientro di nuovo nel secondo caso usiamo di nuovo la divisione euclidea. La divisione euclidea in $\mathbb{Z}$ è un algoritmo ben definito ed ha una fine ovvero tra due numeri ho sempre un massimo comun divisore, quindi dopo un numero finito di passi arriverò per forza al Caso 1. 
+	Otteniamo alla fine necessariamente, tramite un cambio base, una matrice della forma:
+	\[
+		A=\begin{pmatrix}t_{1}&0&\cdots&0\\ 0& & &\\ \vdots& &\Large\text{A'}&\\0& & & \end{pmatrix}
+	\]
+	Quindi possiamo fare lo stesso procedimento su A' fino a quando non completiamo la matrice. In particolare potevamo anche dimostrarlo formalmente usando l'induzione sulla dimensione della matrice e applicando il processo iterativo. 
+\end{proof}
+
+\newpage
+
+\section{Omologia e Omotopia}
+\subsection{Invarianza Omotopica}
+\begin{defn}{Complessi simpliciali di ricoprimenti aperti}{}
+	Sia X spazio topologico, $U_0,\dots,U_n$ un ricoprimento aperto $\mathfrak{N}$ definiamo il complesso simpliciale N($\mathfrak{N}$):
+	\begin{itemize}
+		\item $I=\{0,\dots,n\}$
+		\item $<i_0,\dots,i_k>\in \text{N}(\mathfrak{N})$ se $U_{i_0}\cap\dots\cap U_{i_k}\neq \varnothing$.
+	\end{itemize}
+\end{defn}
+
 \end{document}
